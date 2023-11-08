@@ -1,10 +1,14 @@
-import Dashboard from "@/pages/dashboard/dashboard";
+import Dashboard from "@/pages/dashboard";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 export default function Router() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/dashboard",
       element: <Dashboard />,
+    },
+    {
+      path: "/fundraising",
+      element: <fundraising />,
     },
     {
       path: "*",
