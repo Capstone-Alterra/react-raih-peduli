@@ -1,9 +1,9 @@
 import Dashboard from "@/pages/dashboard";
 import FundraisingForm from "@/pages/fundraising/form";
 import Fundraising from "@/pages/fundraising/index";
-import EditUser from "@/pages/customer/edit.jsx"
+import EditUser from "@/pages/customer/edit.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import User from "@/pages/customer/index"
+import User from "@/pages/customer/index";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -15,10 +15,18 @@ export default function Router() {
       path: "/user/edit/:id",
       element: <EditUser />,
     },
-    
+
     {
       path: "/dashboard",
       element: <Dashboard />,
+    },
+    {
+      path: "/transaction",
+      element: <Transaction />,
+    },
+    {
+      path: "/transaction/1",
+      element: <TransactionDetail />,
     },
     {
       path: "/fundraising",
