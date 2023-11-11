@@ -1,16 +1,14 @@
 import "../styles/index.css";
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";
-import Header from "./header";
 
 function Layout({ children }) {
   return (
-    <div className="flex">
+    <div className="flex w-full h-screen">
       <Sidebar />
-      <div className="flex-1 h-screen">
+      <div className="flex-1 w-full h-full">
         <Navbar />
-        <Header />
-        <div>{children}</div>
+        <div className="w-full grow">{children}</div>
       </div>
     </div>
   );
