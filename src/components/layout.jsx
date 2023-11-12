@@ -15,7 +15,7 @@ function Layout({ children, currentPage }) {
       <Sidebar currentPage={currentPage} isOpen={isOpen} />
       <div className="w-full overflow-y-auto">
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="container">{children}</div>
+        <div className="px-8">{children}</div>
       </div>
     </div>
   );
