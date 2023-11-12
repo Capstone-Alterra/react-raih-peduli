@@ -1,4 +1,5 @@
 import Dashboard from "@/pages/dashboard";
+import Edit from "@/pages/customer/edit";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 export default function Router() {
   const router = createBrowserRouter([
@@ -7,8 +8,8 @@ export default function Router() {
       element: <Dashboard />,
     },
     {
-      path: "/fundraising",
-      element: <fundraising />,
+      path: "/user",
+      element: <Edit />,
     },
     {
       path: "*",
