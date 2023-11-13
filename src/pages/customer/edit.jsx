@@ -1,6 +1,6 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { Input } from "@/components/input-with-label";
+import { InputLabel } from "@/components/input-with-label";
 import { Textarea } from "@/components/textarea-with-label";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -45,35 +45,36 @@ function CustomerEdit() {
               className="p-3 font-bold flex flex-row items-center cursor-pointer"
               onClick={handleGoBack}
             >
-              <img src={backIcon} className="mr-2" alt="Back Icon" />
+              <img src={backIcon} className="mr-2" alt="Back Icon" id="btn-back"/>
               Edit Pelanggan
             </p>
           </div>
           <div>
             <form onSubmit={handleSubmit}>
               <div className="flex flex-row gap-5 p-6">
-                <Input label="Username" name=""/>
-                <Input label="Fullname" name=""/>
+                <InputLabel label="Username" name="username" id="form-username" />
+                <InputLabel label="Fullname" name="fullname" id="form-fullname" />
               </div>
               <div className="px-6">
-                <Textarea label="Alamat" name=""/>
+                <Textarea label="Alamat" name="alamat" id="form-alamat" />
               </div>
               <div className="flex flex-row gap-5 p-6">
-                <Input label="No. Handphone" name=""/>
-                <Input label="Jenis Kelamin" name=""/>
+                <InputLabel label="No. Handphone" name="no. handphone" id="form-no-handphone" />
+                <InputLabel label="Jenis Kelamin" name="jenis kelamin" id="form-jeniskelamin" />
               </div>
               <div className="px-6">
-                <Input type="file" label="Foto Profil" name=""/>
+                <InputLabel type="file" label="Foto Profil" name="foto profil" id="form-fotoprofil" />
               </div>
               <div className="flex flex-row justify-end gap-5 p-6">
                 <Button
+                  id="form-btn-cancel"
                   type="button"
                   variant="secondary"
                   onClick={handleCancel}
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Submit</Button>
+                <Button type="submit" id="form-btn-submit">Submit</Button>
               </div>
             </form>
           </div>
