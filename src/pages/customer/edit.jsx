@@ -5,6 +5,7 @@ import { Textarea } from "@/components/textarea-with-label";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/logos/back-icon.svg";
+import Swal from "sweetalert2";
 
 function CustomerEdit() {
   const navigate = useNavigate();
@@ -15,13 +16,23 @@ function CustomerEdit() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add your logic to handle form submission
-    console.log("Form submitted!");
+    Swal.fire({
+      title: "Apakah Anda Yakin Ingin Mengupdate Data?",
+      text: ``,
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Batal",
+      confirmButtonText: "Simpan",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Formulir disubmit!");
+      }
+    });
   };
 
   const handleCancel = () => {
-    // Add your logic to handle cancellation
-    console.log("Form canceled!");
+    navigate(-1);
   };
 
   return (
