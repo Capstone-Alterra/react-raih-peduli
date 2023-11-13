@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { columns } from './columns';
-import { Link } from 'react-router-dom';
 import data from './MOCK_DATA.JSON';
+import { Link } from 'react-router-dom';
 import Header from '@/components/header';
 import Layout from '@/components/layout';
 import DataTable from './fundraising-table';
@@ -8,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 function Fundraising() {
+  const [filtering, setFiltering] = useState('');
+
   return (
     <Layout currentPage="fundraising">
       <Header titleHeader="Penggalangan Dana" />
@@ -21,9 +24,21 @@ function Fundraising() {
           <Button className="rounded-full">Export CSV</Button>
         </div>
         <div className="px-8 flex items-center gap-2 py-6">
-          Cari : <Input className="w-52" type="text" placeholder="Masukkan kata pencarian" />
+          Cari :{' '}
+          <Input
+            value={filtering}
+            onChange={(e) => setFiltering(e.target.value)}
+            className="w-52"
+            type="text"
+            placeholder="Masukkan kata pencarian"
+          />
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          columns={columns}
+          data={data}
+          filtering={filtering}
+          setFiltering={setFiltering}
+        />
       </div>
     </Layout>
   );

@@ -19,17 +19,22 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-function DataTable({ columns, data }) {
+function DataTable({ columns, data, filtering, setFiltering }) {
   const table = useReactTable({
     data,
     columns,
-    debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      globalFilter: filtering,
+    },
+    onGlobalFilterChange: setFiltering,
   });
 
   return (
@@ -41,9 +46,7 @@ function DataTable({ columns, data }) {
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead className="whitespace-nowrap" key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                    {flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 );
               })}
