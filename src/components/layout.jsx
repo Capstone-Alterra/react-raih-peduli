@@ -1,14 +1,21 @@
 import "../styles/index.css";
-import Sidebar from "./sidebar";
 import Navbar from "./navbar";
+import Sidebar from "./sidebar";
+import { useState } from "react";
 
-function Layout({ children }) {
+function Layout({ children, currentPage }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="flex w-full h-screen">
-      <Sidebar />
-      <div className="flex-1 w-full h-full">
-        <Navbar />
-        <div className="w-full grow">{children}</div>
+    <div className="flex w-screen max-h-screen">
+      <Sidebar currentPage={currentPage} isOpen={isOpen} />
+      <div className="w-full overflow-y-auto">
+        <Navbar toggleSidebar={toggleSidebar} />
+        <div className="px-8">{children}</div>
       </div>
     </div>
   );
