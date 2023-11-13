@@ -1,6 +1,6 @@
-import Navbar from './navbar';
-import Sidebar from './sidebar';
-import { useState } from 'react';
+import Navbar from "./navbar";
+import Sidebar from "./sidebar";
+import { useState } from "react";
 
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(true);
