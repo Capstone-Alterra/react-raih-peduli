@@ -4,7 +4,7 @@ import { InputLabel } from "@/components/input-with-label";
 import { Textarea } from "@/components/textarea-with-label";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import backIcon from "@/assets/logos/back-icon.svg";
+import backIcon from "@/assets/icons/back-icon.svg";
 import Swal from "sweetalert2";
 
 function CustomerEdit() {
