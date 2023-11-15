@@ -11,7 +11,7 @@ import hamburgerIcon from '@/assets/logos/hamburger.svg';
 
 function Navbar({ toggleSidebar }) {
   return (
-    <div className="sticky top-0 z-10 h-16 bg-primary flex items-center justify-between shadow-md px-8">
+    <div className="sticky top-0 z-10 h-16 bg-[#293066] flex items-center justify-between shadow-md px-8">
       <img className="w-7 h-7 cursor-pointer" src={hamburgerIcon} onClick={toggleSidebar} />
       <DropdownMenu>
         <DropdownMenuTrigger className="text-white flex items-center gap-x-2 mr-10">
