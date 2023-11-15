@@ -1,5 +1,7 @@
-import icon from '@/assets/logos/home.svg';
+import InfoIcon from '@/assets/icons/info';
+import TrashIcon from '@/assets/icons/trash';
 import { Badge } from '@/components/ui/badge';
+import PencilIcon from '@/assets/icons/pencil';
 import { Button } from '@/components/ui/button';
 import convertToRupiah from '@/utils/formatter/convertToRupiah';
 
@@ -31,15 +33,15 @@ export const columns = [
     cell: ({ row }) => {
       const label = row.original.status;
 
-      if (label === 'Female') {
+      if (label === 'Menunggu') {
         return (
-          <Badge className="flex w-24 py-2 justify-center" variant="secondary">
+          <Badge className="font-bold flex w-24 py-2 justify-center border border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white">
             {label}
           </Badge>
         );
       } else {
         return (
-          <Badge className="flex w-24 py-2 justify-center" variant="default">
+          <Badge className="font-bold flex w-24 py-2 justify-center border border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white">
             {label}
           </Badge>
         );
@@ -52,35 +54,27 @@ export const columns = [
       <div className="flex gap-2">
         <Button
           size="icon"
-          className="bg-yellow-500 hover:bg-yellow-400"
+          className="bg-[#E28100] hover:bg-[#E28100]/80"
           style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
           onClick={() => console.log(row.original.no)}
         >
-          <img src={icon} className="w-4 h-4" />
+          <PencilIcon className="w-4 h-4" />
         </Button>
         <Button
           size="icon"
-          className="bg-green-600 hover:bg-green-500"
+          className="bg-[#166648] hover:bg-[#166648]/80"
           style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
           onClick={() => console.log(row.original.no)}
         >
-          <img src={icon} className="w-4 h-4" />
+          <InfoIcon className="w-4 h-4" />
         </Button>
         <Button
           size="icon"
-          className="bg-indigo-600 hover:bg-indigo-500"
+          className="bg-[#BF1616] hover:bg-[#BF1616]/80"
           style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
           onClick={() => console.log(row.original.no)}
         >
-          <img src={icon} className="w-4 h-4" />
-        </Button>
-        <Button
-          size="icon"
-          className="bg-red-700 hover:bg-red-600"
-          style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
-          onClick={() => console.log(row.original.no)}
-        >
-          <img src={icon} className="w-4 h-4" />
+          <TrashIcon className="w-4 h-4" />
         </Button>
       </div>
     ),
