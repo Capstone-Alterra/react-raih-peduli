@@ -56,7 +56,7 @@ function DataTable({ columns, data, filtering, setFiltering }) {
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -73,12 +73,12 @@ function DataTable({ columns, data, filtering, setFiltering }) {
           )}
         </TableBody>
       </Table>
-      <div className="flex justify-between items-center jus py-4 border-t-2">
+      <div className="flex justify-between items-center jus px-4 py-4 border-t-2">
         <div className="flex items-center gap-1 text-sm ">
           <div>Halaman ke</div>
           {table.getState().pagination.pageIndex + 1} dari {table.getPageCount()}
         </div>
-        <div className="flex gap-5">
+        <div className="flex gap-3">
           <div className="flex items-center gap-2 text-sm">
             Tampilkan
             <Select
@@ -104,13 +104,13 @@ function DataTable({ columns, data, filtering, setFiltering }) {
           </div>
           <div className="flex gap-1">
             <Button
-              className="w-9 h-9"
+              className="w-9 h-9 p-0 bg-[#F4F6F9] hover:bg-[#293066]/20"
               variant="default"
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <ChevronLeft className="w-24" />
+              <ChevronLeft className="w-5 h-5 text-[#293066]" />
             </Button>
             {table
               .getPageOptions()
@@ -120,7 +120,7 @@ function DataTable({ columns, data, filtering, setFiltering }) {
               )
               .map((page, index) => (
                 <Button
-                  className="w-9 h-9"
+                  className="w-9 h-9 disabled:bg-[#293066] disabled:opacity-100 disabled:text-[#E3EAEF]  bg-[#F4F6F9] text-[#293066] hover:bg-[#293066]/20"
                   key={index}
                   variant="default"
                   size="sm"
@@ -131,13 +131,13 @@ function DataTable({ columns, data, filtering, setFiltering }) {
                 </Button>
               ))}
             <Button
-              className="w-9 h-9"
+              className="w-9 h-9 p-0 bg-[#F4F6F9] hover:bg-[#293066]/20"
               variant="default"
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <ChevronRight />
+              <ChevronRight className="w-5 h-5 text-[#293066]" />
             </Button>
           </div>
         </div>
