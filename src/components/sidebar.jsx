@@ -1,54 +1,13 @@
-import { Link } from 'react-router-dom';
-import homeIcon from '@/assets/logos/home.svg';
-import userIcon from '@/assets/logos/user.svg';
-import coinIcon from '@/assets/logos/coin.svg';
-import handIcon from '@/assets/logos/hand.svg';
-import newsIcon from '@/assets/logos/news.svg';
+import { User } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import CoinIcon from '@/assets/icons/coin';
+import HandIcon from '@/assets/icons/hand';
+import HomeIcon from '@/assets/icons/home';
+import NewsIcon from '@/assets/icons/news';
 import raihPeduliLogo from '@/assets/logos/logo.svg';
-import transactionIcon from '@/assets/logos/transaction.svg';
+import TransactionIcon from '@/assets/icons/transaction';
 
-const menu1 = [
-  {
-    link: '/dashboard',
-    icon: homeIcon,
-    desc: 'Dashboard',
-  },
-];
-
-const menu2 = [
-  {
-    link: '/user',
-    page: 'user',
-    icon: userIcon,
-    desc: 'Pengguna',
-  },
-  {
-    link: '/fundraising',
-    page: 'fundraising',
-    icon: coinIcon,
-    desc: 'Penggalangan Dana',
-  },
-  {
-    link: '/volunteer',
-    page: 'volunteer',
-    icon: handIcon,
-    desc: 'Lowongan Relawan',
-  },
-  {
-    link: '/news',
-    page: 'news',
-    icon: newsIcon,
-    desc: 'Berita',
-  },
-  {
-    link: '/transaction',
-    page: 'transaction',
-    icon: transactionIcon,
-    desc: 'Transaksi',
-  },
-];
-
-function Sidebar({ isOpen, currentPage }) {
+function Sidebar({ isOpen }) {
   return (
     <div
       style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
@@ -70,54 +29,184 @@ function Sidebar({ isOpen, currentPage }) {
           <p className={`text-slate-500 text-xs font-medium ms-3 ${!isOpen && 'hidden'}`}>
             DASHBOARD
           </p>
-          {menu1.map((menu, index) => (
-            <Link
-              key={index}
-              to={menu.link}
-              className="text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200"
-            >
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
+                isActive ? 'bg-[#E5E9F4]' : ''
+              }`
+            }
+          >
+            {({ isActive }) => (
               <div
                 className={`flex w-full py-2 self-center gap-3 border-l-[5px] ${
-                  currentPage === 'dashboard' ? 'border-blue-800' : 'border-white'
+                  isActive ? 'border-[#293066]' : 'border-transparent'
                 } ${!isOpen ? 'justify-center' : 'gap-2'}`}
               >
-                <img src={menu.icon} className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'}`} />
+                <HomeIcon
+                  className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                />
                 <span
-                  className={`font-bold whitespace-nowrap  ${!isOpen && 'hidden'} duration-200`}
+                  className={`font-bold whitespace-nowrap ${!isOpen && 'hidden'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
                 >
-                  {menu.desc}
+                  Dashboard
                 </span>
               </div>
-            </Link>
-          ))}
+            )}
+          </NavLink>
         </li>
 
         <li>
           <p className={`text-slate-500 text-xs font-medium ms-3 ${!isOpen && 'hidden'}`}>MENU</p>
-          {menu2.map((menu, index) => (
-            <Link
-              key={index}
-              to={menu.link}
-              className={`text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
-                currentPage === menu.page && 'bg-slate-200'
-              }`}
-            >
+          <NavLink
+            to="/user"
+            className={({ isActive }) =>
+              `text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
+                isActive ? 'bg-[#E5E9F4]' : ''
+              }`
+            }
+          >
+            {({ isActive }) => (
               <div
                 className={`flex w-full py-2 self-center gap-3 border-l-[5px] ${
-                  currentPage === menu.page ? 'border-blue-800' : 'border-white'
+                  isActive ? 'border-[#293066]' : 'border-transparent'
                 } ${!isOpen ? 'justify-center' : 'gap-2'}`}
               >
-                <img src={menu.icon} className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'}`} />
+                <User
+                  className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                />
                 <span
                   className={`font-bold whitespace-nowrap ${!isOpen && 'hidden'} ${
-                    currentPage === menu.page ? 'text-[#293066]' : ''
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
                   }`}
                 >
-                  {menu.desc}
+                  Pelanggan
                 </span>
               </div>
-            </Link>
-          ))}
+            )}
+          </NavLink>
+          <NavLink
+            to="/fundraising"
+            className={({ isActive }) =>
+              `text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
+                isActive ? 'bg-[#E5E9F4]' : ''
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <div
+                className={`flex w-full py-2 self-center gap-3 border-l-[5px] ${
+                  isActive ? 'border-[#293066]' : 'border-transparent'
+                } ${!isOpen ? 'justify-center' : 'gap-2'}`}
+              >
+                <CoinIcon
+                  className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                />
+                <span
+                  className={`font-bold whitespace-nowrap ${!isOpen && 'hidden'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                >
+                  Penggalangan Dana
+                </span>
+              </div>
+            )}
+          </NavLink>
+          <NavLink
+            to="/volunteer"
+            className={({ isActive }) =>
+              `text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
+                isActive ? 'bg-[#E5E9F4]' : ''
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <div
+                className={`flex w-full py-2 self-center gap-3 border-l-[5px] ${
+                  isActive ? 'border-[#293066]' : 'border-transparent'
+                } ${!isOpen ? 'justify-center' : 'gap-2'}`}
+              >
+                <HandIcon
+                  className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                />
+                <span
+                  className={`font-bold whitespace-nowrap ${!isOpen && 'hidden'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                >
+                  Lowongan Relawan
+                </span>
+              </div>
+            )}
+          </NavLink>
+          <NavLink
+            to="/news"
+            className={({ isActive }) =>
+              `text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
+                isActive ? 'bg-[#E5E9F4]' : ''
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <div
+                className={`flex w-full py-2 self-center gap-3 border-l-[5px] ${
+                  isActive ? 'border-[#293066]' : 'border-transparent'
+                } ${!isOpen ? 'justify-center' : 'gap-2'}`}
+              >
+                <NewsIcon
+                  className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                />
+                <span
+                  className={`font-bold whitespace-nowrap ${!isOpen && 'hidden'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                >
+                  Berita
+                </span>
+              </div>
+            )}
+          </NavLink>
+          <NavLink
+            to="/transaction"
+            className={({ isActive }) =>
+              `text-slate-400 text-sm cursor-pointer h-14 flex hover:bg-slate-200 ${
+                isActive ? 'bg-[#E5E9F4]' : ''
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <div
+                className={`flex w-full py-2 self-center gap-3 border-l-[5px] ${
+                  isActive ? 'border-[#293066]' : 'border-transparent'
+                } ${!isOpen ? 'justify-center' : 'gap-2'}`}
+              >
+                <TransactionIcon
+                  className={`w-5 h-5 ${isOpen ? 'ms-3' : 'ms-[-5px]'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                />
+                <span
+                  className={`font-bold whitespace-nowrap ${!isOpen && 'hidden'} ${
+                    isActive ? 'text-[#293066]' : 'text-[#4B4B4B99]'
+                  }`}
+                >
+                  Transaksi
+                </span>
+              </div>
+            )}
+          </NavLink>
         </li>
       </ul>
     </div>
