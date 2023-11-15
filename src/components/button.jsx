@@ -1,30 +1,31 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/utils';
+import { cn } from "@/utils";
+import { Button } from "@/components/ui/button";
 
-const Button = React.forwardRef(({ className, type, id, label, width, height,textColor, bgColor, ...props }, ref) => {
-    const buttonStyle = {
-        width: width,
-        height: height,
-        color: textColor,
-        backgroundColor: bgColor,
-    }
+const ButtonClick = React.forwardRef(
+  (
+    { className, type, id, label, width, height, textColor, bgColor, ...props },
+    ref
+  ) => {
     return (
       <div className="flex justify-center items-center">
-        <button
-        className={cn(
-            "bg-black text-white py-5 rounded-lg text-base font-bold flex justify-center items-center text-center",
+        <Button
+          className={cn(
+            " py-5 rounded-lg text-base font-bold flex justify-center items-center text-center",
             className
           )}
           id={id}
           type={type}
           ref={ref}
           {...props}
-          style={buttonStyle}
-          >{label}</button>
+        >
+          {label}
+        </Button>
       </div>
     );
-  });
-  Button.displayName = "Button";
+  }
+);
+ButtonClick.displayName = "Button";
 
-  export { Button }
+export { ButtonClick };
