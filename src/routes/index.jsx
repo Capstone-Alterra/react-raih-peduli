@@ -1,19 +1,24 @@
-import Dashboard from '@/pages/dashboard';
-import Fundraising from '@/pages/fundraising/index';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Dashboard from "@/pages/dashboard";
+import FundraisingForm from "@/pages/fundraising/fundaraising-form";
+import Fundraising from "@/pages/fundraising/index";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function Router() {
   const router = createBrowserRouter([
     {
-      path: '/dashboard',
+      path: "/dashboard",
       element: <Dashboard />,
     },
     {
-      path: '/fundraising',
+      path: "/fundraising",
       element: <Fundraising />,
     },
     {
-      path: '*',
+      path: "/fundraising-form",
+      element: <FundraisingForm />,
+    },
+    {
+      path: "*",
       element: <div>404 page found</div>,
     },
   ]);
