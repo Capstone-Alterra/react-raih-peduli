@@ -1,7 +1,7 @@
 import Dashboard from "@/pages/dashboard";
-import FundraisingForm from "@/pages/fundraising/fundaraising-form";
+import FundraisingForm from "@/pages/fundraising/form";
 import Fundraising from "@/pages/fundraising/index";
-import User from "@/pages/customer/index"
+import User from "@/pages/customer/edit.jsx"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function Router() {
@@ -19,7 +19,7 @@ export default function Router() {
       element: <Fundraising />,
     },
     {
-      path: "/fundraising-form",
+      path: "/fundraising/form",
       element: <FundraisingForm />,
     },
     {
