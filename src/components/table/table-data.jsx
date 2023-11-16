@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -22,9 +21,14 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useState } from 'react';
+import { Input } from '../ui/input';
+import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-function DataTable({ columns, data, filtering, setFiltering }) {
+function TableData({ columns, data }) {
+  const [filtering, setFiltering] = useState('');
+
   const table = useReactTable({
     data,
     columns,
@@ -39,6 +43,16 @@ function DataTable({ columns, data, filtering, setFiltering }) {
 
   return (
     <>
+      <div className="px-8 flex items-center gap-2 py-6">
+        Cari :{' '}
+        <Input
+          value={filtering}
+          onChange={(e) => setFiltering(e.target.value)}
+          className="w-52 h-8"
+          type="text"
+          placeholder="Masukkan kata pencarian"
+        />
+      </div>
       <Table>
         <TableHeader className="bg-[#F5F5F5]">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -67,7 +81,7 @@ function DataTable({ columns, data, filtering, setFiltering }) {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                Data kosong.
+                Data tidak tersedia.
               </TableCell>
             </TableRow>
           )}
@@ -146,4 +160,4 @@ function DataTable({ columns, data, filtering, setFiltering }) {
   );
 }
 
-export default DataTable;
+export default TableData;
