@@ -1,11 +1,13 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { InputLabel } from "@/components/input-with-label";
-import { Textarea } from "@/components/textarea-with-label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
 import Swal from "sweetalert2";
+import { Label } from "@/components/ui/label";
+import InputFile from "@/components/input-file";
 
 function CustomerEdit() {
   const navigate = useNavigate();
@@ -39,42 +41,75 @@ function CustomerEdit() {
     <>
       <Layout>
         <Header titleHeader="Pelanggan" />
-        <div className="bg-white drop-shadow-md my-6">
-          <div className="border-y-2">
+        <div className="rounded shadow my-5">
+          <div className="rounded-t border-y-2">
             <p
               className="p-3 font-bold flex flex-row items-center cursor-pointer"
               onClick={handleGoBack}
             >
-              <img src={backIcon} className="mr-2" alt="Back Icon" id="btn-back"/>
+              <img
+                src={backIcon}
+                className="mr-2"
+                alt="Back Icon"
+                id="btn-back"
+              />
               Edit Pelanggan
             </p>
           </div>
           <div>
             <form onSubmit={handleSubmit}>
               <div className="flex flex-row gap-5 p-6">
-                <InputLabel label="Username" name="username" id="form-username" />
-                <InputLabel label="Fullname" name="fullname" id="form-fullname" />
+                <div className="w-full">
+                  <Label htmlFor="form-username">Username</Label>
+                  <Input type="text" name="username" id="form-username" />
+                </div>
+                <div className="w-full">
+                  <Label htmlFor="form-fullname">Fullname</Label>
+                  <Input type="text" name="fullname" id="form-fullname" />
+                </div>
               </div>
               <div className="px-6">
-                <Textarea label="Alamat" name="alamat" id="form-alamat" />
+                <Label htmlFor="form-alamat">Alamat</Label>
+                <Textarea name="alamat" id="form-alamat" />
               </div>
               <div className="flex flex-row gap-5 p-6">
-                <InputLabel label="No. Handphone" name="no. handphone" id="form-no-handphone" />
-                <InputLabel label="Jenis Kelamin" name="jenis kelamin" id="form-jeniskelamin" />
+                <div className="w-full">
+                <Label htmlFor="form-no-handphone">No. Handphone</Label>
+                <Input
+                  type="text"
+                  name="no. handphone"
+                  id="form-no-handphone"
+                />
+                </div>
+                <div className="w-full">
+                <Label htmlFor="form-jenis-kelamin">Jenis Kelamin</Label>
+                <Input
+                  type="text"
+                  name="jenis kelamin"
+                  id="form-jenis-kelamin"
+                />
+                </div>
               </div>
-              <div className="px-6">
-                <InputLabel type="file" label="Foto Profil" name="foto profil" id="form-fotoprofil" />
+              <div className="px-6 py-3">
+                <Label htmlFor="form-foto-profil">Foto Profil</Label>
+                <InputFile word="Tambahkan Foto Profil di sini" name="foto-profil" id="form-foto-profil"/>
               </div>
               <div className="flex flex-row justify-end gap-5 p-6">
                 <Button
+                  className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
                   id="form-btn-cancel"
                   type="button"
-                  variant="secondary"
                   onClick={handleCancel}
                 >
                   Cancel
                 </Button>
-                <Button type="submit" id="form-btn-submit">Submit</Button>
+                <Button
+                  className="bg-[#293066] text-white hover:bg-[#293066]"
+                  type="submit"
+                  id="form-btn-submit"
+                >
+                  Submit
+                </Button>
               </div>
             </form>
           </div>

@@ -14,17 +14,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import DropZone from "@/components/drop-zone";
 import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
+import InputFile from "@/components/input-file";
 
 function FundraisingForm() {
   const navigate = useNavigate();
   const [date, setDate] = useState(undefined);
-
-  const handleDrop = (acceptedFiles) => {
-    console.log("Files dropped:", acceptedFiles);
-  };
 
   const handleGoBack = () => {
     navigate(-1);
@@ -130,18 +126,18 @@ function FundraisingForm() {
             </div>
           </div>
           <div className="px-6 py-3">
-            <Label htmlFor="gambar-fundraising">Gambar Penggalangan Dana</Label>
-            <DropZone
-              id="gambar-fundraising"
-              onDrop={handleDrop}
-              acceptedFileType="image/jpeg"
+            <Label htmlFor="form-image">Gambar Penggalangan Dana</Label>
+            <InputFile
+              word="Tambahkan Foto Penggalangan dana di sini"
+              name="image"
+              id="form-image"
             />
           </div>
           <div className="flex flex-row gap-5 justify-end px-6 py-3">
-            <Button className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white">
+            <Button className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white" id="btn-cancel">
               Batal
             </Button>
-            <Button className="bg-[#293066] text-white hover:bg-[#293066]">
+            <Button className="bg-[#293066] text-white hover:bg-[#293066]" id="btn-simpan">
               Simpan
             </Button>
           </div>
