@@ -1,6 +1,8 @@
 import Dashboard from "@/pages/dashboard";
 import FundraisingForm from "@/pages/fundraising/fundaraising-form";
+import Fundraising from "@/pages/fundraising/index";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -9,7 +11,7 @@ export default function Router() {
     },
     {
       path: "/fundraising",
-      element: <fundraising />,
+      element: <Fundraising />,
     },
     {
       path: "/fundraising-form",
