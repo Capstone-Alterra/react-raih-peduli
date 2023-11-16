@@ -1,9 +1,8 @@
-import '../styles/index.css';
 import Navbar from './navbar';
 import Sidebar from './sidebar';
 import { useState } from 'react';
 
-function Layout({ children, currentPage }) {
+function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -12,7 +11,7 @@ function Layout({ children, currentPage }) {
 
   return (
     <div className="flex w-screen max-h-screen">
-      <Sidebar currentPage={currentPage} isOpen={isOpen} />
+      <Sidebar isOpen={isOpen} />
       <div className="w-full overflow-y-auto">
         <Navbar toggleSidebar={toggleSidebar} />
         <div className="px-8">{children}</div>
