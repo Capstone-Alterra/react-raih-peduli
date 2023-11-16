@@ -23,7 +23,7 @@ function FundraisingForm() {
       <Header titleHeader="Penggalangan Dana" />
       <div className="px-6 py-6 w-full h-full">
         <div className="border">
-          <p className="text-2xl p-3 font-bold flex flex-row">Detail Transaction</p>
+          <p className="text-2xl p-3 font-bold flex flex-row">Penggalangan Dana</p>
         </div>
         <div className="border mb-5">
           <div className="px-6 py-3">
