@@ -12,9 +12,9 @@ function Breadcrumbs() {
         const isLast = index === pathnames.length - 1;
 
         return (
-          <>
+          <span key={index}>
             {isLast ? (
-              <span className="text-md text-gray-500 capitalize">{path}</span>
+              <p className="text-md text-gray-500 capitalize">{path}</p>
             ) : (
               <>
                 <Link to={route} className="text-md text-gray-950 capitalize">
@@ -23,7 +23,7 @@ function Breadcrumbs() {
                 <span className="mx-1">/</span>
               </>
             )}
-          </>
+          </span>
         );
       })}
     </div>
