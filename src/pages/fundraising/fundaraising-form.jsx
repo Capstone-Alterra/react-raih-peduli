@@ -21,7 +21,7 @@ function FundraisingForm() {
   return (
     <Layout>
       <Header titleHeader="Penggalangan Dana" />
-      <div className="px-6 w-full h-full">
+      <div className="px-6 py-6 w-full h-full">
         <div className="border">
           <p className="text-2xl p-3 font-bold flex flex-row">Detail Transaction</p>
         </div>
@@ -39,13 +39,12 @@ function FundraisingForm() {
             <Input type="number" id="target-fundraising" placeholder="Rp. 50.000.000" />
           </div>
           <div className="flex flex-row gap-5 p-6">
-            {/* Calendar 1 */}
             <div className="w-full">
               <Label htmlFor="calendar1">Tanggal Mulai Penggalangan Dana</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button id="calendar1" variant="outline" className={cn("w-full pl-3 text-left font-normal", !date && "text-muted-foreground")}>
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    {date ? format(date, "PPP") : <span>Pilih tanggal</span>}
                     <CalendarIcon className="ml-auto h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
@@ -55,13 +54,12 @@ function FundraisingForm() {
               </Popover>
             </div>
 
-            {/* Calendar 2 */}
             <div className="w-full">
               <Label htmlFor="calendar2">Tanggal Selesai Penggalangan Dana</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button id="calendar2" variant="outline" className={cn("w-full pl-3 text-left font-normal", !date && "text-muted-foreground")}>
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    {date ? format(date, "PPP") : <span>Pilih tanggal</span>}
                     <CalendarIcon className="ml-auto h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
@@ -74,6 +72,10 @@ function FundraisingForm() {
           <div className="px-6 py-3">
             <label htmlFor="gambar-fundraising">Gambar Penggalangan Dana</label>
             <DropZone id="gambar-fundraising" onDrop={handleDrop} acceptedFileType="image/jpeg" />
+          </div>
+          <div className="flex flex-row gap-5 justify-end px-6 py-3">
+            <Button className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white">Batal</Button>
+            <Button className="bg-[#293066] text-white hover:bg-[#293066]">Simpan</Button>
           </div>
         </div>
       </div>
