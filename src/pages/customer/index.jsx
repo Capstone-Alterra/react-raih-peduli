@@ -1,6 +1,6 @@
 import React from "react";
 import { columns } from "./columns";
-import data from "./MOCK_DATA.JSON";
+import data from "./MOCK_DATA.json";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
 import TableData from "@/components/table/table-data";

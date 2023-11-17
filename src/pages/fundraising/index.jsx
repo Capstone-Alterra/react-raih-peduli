@@ -1,5 +1,5 @@
 import { columns } from './columns';
-import data from './MOCK_DATA.JSON';
+import data from './MOCK_DATA.json';
 import { Link } from 'react-router-dom';
 import CsvIcon from '@/assets/icons/csv';
 import Header from '@/components/header';
