@@ -1,19 +1,21 @@
-import * as React from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+ 
+import { cn } from "@/utils"
 
-import { cn } from "@/utils";
-import { Label } from "@radix-ui/react-label";
-
-const InputLabel = React.forwardRef(({ className, type, id, label, name, ...props }, ref) => {
+export function InputLabel({register, error, label, id, placeholder, name, type, isLogin}) {
   return (
-    <div className="flex flex-col mb-4 w-full">
-      <Label className="text-black  tracking-wider mb-3" htmlFor={id}>
-        {label}
-      </Label>
-      <Input id={id} type={type} ref={ref} {...props} />
+    <div className="mb-[18px]">
+      <Label htmlFor={id} className={`${isLogin ? 'font-bold' : 'font-base'}`}>{label}</Label>
+      <Input type={type} id={id} name={name} placeholder={placeholder} {...(register ? register(name) : {})} 
+      className={cn("mt-2",`${error && 'border-red-500 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0'}`)} />
+        {error && (
+            <label>
+            <span className="break-words text-sm font-light text-red-500">
+                {error}
+            </span>
+            </label>
+        )}
     </div>
-  );
-});
-Input.displayName = "Input";
-
-export { InputLabel };
+  )
+}
