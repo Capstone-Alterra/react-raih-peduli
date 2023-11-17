@@ -1,39 +1,108 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { InputLabel } from "@/components/input-with-label";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
-import { Textarea } from "@/components/textarea-with-label";
+import Swal from "sweetalert2";
+import { Label } from "@/components/ui/label";
+import InputFile from "@/components/input-file";
+import { InputLabel } from "@/components/input-with-label";
+import { TextAreaLabel } from "@/components/textarea-with-label";
 
-function TransactionDetail() {
+function CustomerEdit() {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <Layout>
         <Header titleHeader="Transaksi" />
-        <div className="p-6 w-full h-full">
-          <div className="border ">
-            <p className="text-2xl p-3 font-bold flex flex-row">
-              <img src={backIcon} className="mr-2" alt="Back Icon" id="btn-back" /> Detail Transaction
+        <div className="rounded shadow my-5">
+          <div className="rounded-t border-y-2">
+            <p
+              className="p-3 font-bold flex flex-row items-center cursor-pointer"
+              onClick={handleGoBack}
+            >
+              <img
+                src={backIcon}
+                className="mr-2"
+                alt="Back Icon"
+                id="btn-back"
+              />
+              Detail Transaksi
             </p>
           </div>
-          <div className="border mb-5">
-            <div className="flex flex-row gap-5 p-6">
-              <InputLabel label="Username" id="username" name="" placeholder="Andi" disabled />
-              <InputLabel label="Full Name" id="fullname" name="" placeholder="Andi Susilo" disabled />
-            </div>
-            <div className="px-6">
-              <Textarea label="Alamat" name="" disabled />
-            </div>
-            <div className="flex flex-row gap-5 p-6">
-              <InputLabel label="No. Handphone" id="nohandphone" name="" placeholder="0812-3456-7890" disabled />
-              <InputLabel label="Jenis Kelamin" id="jeniskelamin" name="" placeholder="Laki-laki" disabled />
-            </div>
-            <div className="px-6">
-              <Textarea label="Foto Profil" id="fotoprofil" name="" disabled />
-            </div>
-            <div className="flex flex-row gap-5 p-6">
-              <InputLabel label="jumlah" id="jumlahtransaksi" name="" placeholder="Rp.500.000,00" disabled />
-              <InputLabel label="Virtual Account" id="virtualaccount" name="" placeholder="Mandiri" disabled />
-            </div>
+          <div>
+              <div className="flex flex-row gap-5 p-6">
+                <div className="w-full">
+                  <InputLabel
+                  label="Username"
+                  type="text"
+                  name="username"
+                  id="form-username"
+                  placeholder="Andi"
+                  />
+                </div>
+                <div className="w-full">
+                <InputLabel
+                  label="Fullname"
+                  type="text"
+                  name="fullname"
+                  id="form-fullname"
+                  placeholder="Andi Susanto"
+                  />
+                </div>
+              </div>
+              <div className="px-6">
+                <TextAreaLabel
+                label="Alamat"
+                name="alamat"
+                id="form-alamat"
+                placeholder="Jalan mekarsari 5467"/>
+              </div>
+              <div className="flex flex-row gap-5 p-6">
+                <div className="w-full">
+                <InputLabel
+                  label="No. Handphone"
+                  type="text"
+                  name="nohandphone"
+                  id="form-no-handphone"
+                  placeholder="08677868954"
+                  />
+                </div>
+                <div className="w-full">
+                <InputLabel
+                  label="Jenis Kelamin"
+                  type="text"
+                  name="jeniskelamin"
+                  id="form-jenis-kelamin"
+                  placeholder="Laki-Laki"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row gap-5 p-6">
+                <div className="w-full">
+                <InputLabel
+                  label="Jumlah"
+                  type="text"
+                  name="jumlahe"
+                  id="form-jumlah"
+                  placeholder="50.000.000"
+                  />
+                </div>
+                <div className="w-full">
+                <InputLabel
+                  label="Virtual Account"
+                  type="text"
+                  name="virtualaccount"
+                  id="form-virtual-account"
+                  placeholder="Mandiri"
+                  />
+                </div>
+              </div>
           </div>
         </div>
       </Layout>
@@ -41,4 +110,4 @@ function TransactionDetail() {
   );
 }
 
-export default TransactionDetail;
+export default CustomerEdit;
