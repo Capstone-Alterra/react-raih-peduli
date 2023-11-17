@@ -10,12 +10,7 @@ const InputLabel = React.forwardRef(({ className, type, id, label, name, ...prop
       <Label className="text-black  tracking-wider mb-3" htmlFor={id}>
         {label}
       </Label>
-      <Input
-        id={id}
-        type={type}
-        ref={ref}
-        {...props}
-      />
+      <Input id={id} type={type} ref={ref} {...props} />
     </div>
   );
 });

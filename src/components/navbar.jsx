@@ -5,9 +5,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import dropdown from '@/assets/logos/DropDown.png';
-import hamburgerIcon from '@/assets/logos/hamburger.svg';
+} from "@/components/ui/dropdown-menu";
+import dropdown from "@/assets/logos/DropDown.png";
+import hamburgerIcon from "@/assets/logos/hamburger.svg";
 
 function Navbar({ toggleSidebar }) {
   return (
