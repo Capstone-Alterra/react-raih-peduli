@@ -1,12 +1,11 @@
 import { ButtonClick } from "@/components/button";
-import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToken } from "@/utils/context/token";
 import { loginSchema, userLogin } from "@/utils/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputLabel } from "@/components/input";
+import { InputLabel } from "@/components/input-with-label";
 
 function Login() {
 
@@ -61,19 +60,18 @@ function Login() {
           {/* form input */}
           <form aria-label="form-input" onSubmit={handleSubmit(handleLogin)}>
             {/* input username */}
-            <label className="font-bold" htmlFor="username">
-              Username
-            </label>
             <InputLabel
               id="username"
               aria-label="username"
               type="text"
-              className="mb-[25px]"
+              isLogin={true}
+              label="Username"
               placeholder="Masukkan username anda"
               name="username"
               register={register}
               error={errors.username?.message}
             />
+            
             {/* input password */}
             <div className="flex justify-between items-center font-bold">
               <label htmlFor="password">Password</label>
@@ -87,13 +85,13 @@ function Login() {
                 id="password"
                 aria-label="password"
                 type={showPassword ? "text" : "password"}
-                className="mb-[25px] pr-[30px]"
+                className="mb-[10px]"
                 placeholder="Masukkan password anda"
               />
               <img
                 src="/icon-eye-vector.svg"
                 alt=""
-                className="absolute right-[10px] top-[30%] tranlsate-y-[100%] cursor-pointer"
+                className="absolute right-[10px] top-[20%] tranlsate-y-[100%] cursor-pointer"
                 onClick={toggleShowPassword}
               />
             </div>
