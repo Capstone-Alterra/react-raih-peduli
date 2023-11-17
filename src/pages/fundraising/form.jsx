@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
 import InputFile from "@/components/input-file";
 import { InputLabel } from "@/components/input-with-label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextAreaLabel } from "@/components/textarea-with-label";
 
 function FundraisingForm() {
   const navigate = useNavigate();
@@ -37,8 +37,7 @@ function FundraisingForm() {
             <InputLabel label="Judul Penggalangan Dana" type="text" id="judul-fundraising" placeholder="Bantu Anak-Anak Sekolah: Mewujudkan Masa Depan Cerah" />
           </div>
           <div className="px-6">
-            <Label htmlFor="deskripsi-fundraising">Isi Deskripsi</Label>
-            <Textarea id="deskripsi-fundraising" className="mt-2" placeholder="Membantu anak-anak kurang mampu mendapatkan pendidikan dan perawatan yang mereka butuhkan." />
+          <TextAreaLabel label="Isi Deskripsi" name="alamat" id="deskripsi-fundraising" placeholder="Membantu anak-anak kurang mampu mendapatkan pendidikan dan perawatan yang mereka butuhkan."/>
           </div>
           <div className="px-6 pt-[18px]">
             <InputLabel label="Target" type="number" id="target-fundraising" placeholder="Rp. 50.000.000" />
