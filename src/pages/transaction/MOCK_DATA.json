@@ -1,0 +1,142 @@
+[
+  {
+    "no": 1,
+    "title": "Laceration of musc/fasc/tend long hd bicep, right arm, init",
+    "description": "Laceration of muscle, fascia and tendon of long head of biceps, right arm, initial encounter",
+    "target": 284843022,
+    "status": "Female"
+  },
+  {
+    "no": 2,
+    "title": "Inj left innominate or subclavian artery, init encntr",
+    "description": "Other specified injury of left innominate or subclavian artery, initial encounter",
+    "target": 785674410,
+    "status": "Female"
+  },
+  {
+    "no": 3,
+    "title": "Unspecified lagophthalmos left upper eyelid",
+    "description": "Unspecified lagophthalmos left upper eyelid",
+    "target": 848879377,
+    "status": "Female"
+  },
+  {
+    "no": 4,
+    "title": "Food in larynx causing other injury, subsequent encounter",
+    "description": "Food in larynx causing other injury, subsequent encounter",
+    "target": 209502136,
+    "status": "Female"
+  },
+  {
+    "no": 5,
+    "title": "Stress fracture, left shoulder, subs for fx w delay heal",
+    "description": "Stress fracture, left shoulder, subsequent encounter for fracture with delayed healing",
+    "target": 701703837,
+    "status": "Male"
+  },
+  {
+    "no": 6,
+    "title": "Partial traum amp of left hip and thigh, level unsp, init",
+    "description": "Partial traumatic amputation of left hip and thigh, level unspecified, initial encounter",
+    "target": 174646387,
+    "status": "Male"
+  },
+  {
+    "no": 7,
+    "title": "Driver of pk-up/van injured in clsn w oth mv nontraf, init",
+    "description": "Driver of pick-up truck or van injured in collision with other motor vehicles in nontraffic accident, initial encounter",
+    "target": 284027926,
+    "status": "Male"
+  },
+  {
+    "no": 8,
+    "title": "Obstructive and reflux uropathy",
+    "description": "Obstructive and reflux uropathy",
+    "target": 622440398,
+    "status": "Male"
+  },
+  {
+    "no": 9,
+    "title": "Bitten by raccoon, sequela",
+    "description": "Bitten by raccoon, sequela",
+    "target": 411171407,
+    "status": "Male"
+  },
+  {
+    "no": 10,
+    "title": "Passenger in 3-whl mv injured in collision w oth mv nontraf",
+    "description": "Passenger in three-wheeled motor vehicle injured in collision with other motor vehicles in nontraffic accident",
+    "target": 775471086,
+    "status": "Male"
+  },
+  {
+    "no": 11,
+    "title": "Sltr-haris Type II physl fx low end unsp femr, 7thP",
+    "description": "Salter-Harris Type II physeal fracture of lower end of unspecified femur, subsequent encounter for fracture with malunion",
+    "target": 605014613,
+    "status": "Female"
+  },
+  {
+    "no": 12,
+    "title": "Disorder of thyroid, unspecified",
+    "description": "Disorder of thyroid, unspecified",
+    "target": 727888625,
+    "status": "Female"
+  },
+  {
+    "no": 13,
+    "title": "Nondisp bimalleol fx l low leg, init for opn fx type 3A/B/C",
+    "description": "Nondisplaced bimalleolar fracture of left lower leg, initial encounter for open fracture type IIIA, IIIB, or IIIC",
+    "target": 587656325,
+    "status": "Male"
+  },
+  {
+    "no": 14,
+    "title": "Mech compl of intraocular lens, subsequent encounter",
+    "description": "Other mechanical complication of intraocular lens, subsequent encounter",
+    "target": 608681417,
+    "status": "Female"
+  },
+  {
+    "no": 15,
+    "title": "Poisoning by intravenous anesthetics, undetermined, sequela",
+    "description": "Poisoning by intravenous anesthetics, undetermined, sequela",
+    "target": 198342539,
+    "status": "Genderqueer"
+  },
+  {
+    "no": 16,
+    "title": "Toxic effect of venom of oth North and South American snake",
+    "description": "Toxic effect of venom of other North and South American snake",
+    "target": 541200774,
+    "status": "Non-binary"
+  },
+  {
+    "no": 17,
+    "title": "Pathological fracture in other disease, left hand",
+    "description": "Pathological fracture in other disease, left hand",
+    "target": 99737926,
+    "status": "Male"
+  },
+  {
+    "no": 18,
+    "title": "Oth fx shaft of r ulna, 7thF",
+    "description": "Other fracture of shaft of right ulna, subsequent encounter for open fracture type IIIA, IIIB, or IIIC with routine healing",
+    "target": 562927049,
+    "status": "Non-binary"
+  },
+  {
+    "no": 19,
+    "title": "Contus/lac/hem crblm w LOC of 30 minutes or less, subs",
+    "description": "Contusion, laceration, and hemorrhage of cerebellum with loss of consciousness of 30 minutes or less, subsequent encounter",
+    "target": 346870298,
+    "status": "Male"
+  },
+  {
+    "no": 20,
+    "title": "Intentional self-harm by explosive material",
+    "description": "Intentional self-harm by explosive material",
+    "target": 979142415,
+    "status": "Male"
+  }
+]
