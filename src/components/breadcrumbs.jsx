@@ -6,13 +6,13 @@ function Breadcrumbs() {
   const pathnames = location.pathname.split('/').filter((path) => path !== '');
 
   return (
-    <div>
+    <div className="flex">
       {pathnames.map((path, index) => {
         const route = `/${pathnames.slice(0, index + 1).join('/')}`;
         const isLast = index === pathnames.length - 1;
 
         return (
-          <span key={index}>
+          <div key={index}>
             {isLast ? (
               <p className="text-md text-gray-500 capitalize">{path}</p>
             ) : (
@@ -23,7 +23,7 @@ function Breadcrumbs() {
                 <span className="mx-1">/</span>
               </>
             )}
-          </span>
+          </div>
         );
       })}
     </div>
