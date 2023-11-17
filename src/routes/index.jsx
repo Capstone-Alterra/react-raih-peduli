@@ -27,7 +27,7 @@ export default function Router() {
       element: <Transaction />,
     },
     {
-      path: "/transaction/1",
+      path: "/transaction/:id",
       element: <TransactionDetail />,
     },
     {

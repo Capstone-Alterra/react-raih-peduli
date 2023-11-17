@@ -1,5 +1,4 @@
-import icon from "@/assets/logos/home.svg";
-import { Badge } from "@/components/ui/badge";
+import eye from "@/assets/icons/eye.svg";
 import { Button } from "@/components/ui/button";
 import convertToRupiah from "@/utils/formatter/convertToRupiah";
 
@@ -10,32 +9,32 @@ export const columns = [
   },
   {
     header: "Username",
-    accessorKey: "title",
+    accessorKey: "username",
   },
   {
     header: "Fullname",
-    accessorKey: "description",
+    accessorKey: "fullname",
   },
   {
     header: "Alamat",
-    accessorKey: "description",
+    accessorKey: "alamat",
   },
   {
     header: "No.Handphone",
-    accessorKey: "description",
+    accessorKey: "nohandphone",
   },
   {
     header: "jumlah",
-    accessorKey: "target",
+    accessorKey: "jumlahtransaksi",
     cell: ({ row }) => {
-      const target = row.original.target;
+      const jumlahtransaksi = row.original.jumlahtransaksi;
 
-      return <div className="whitespace-nowrap">{convertToRupiah(target)}</div>;
+      return <div className="whitespace-nowrap">{convertToRupiah(jumlahtransaksi)}</div>;
     },
   },
   {
-    header: "No.Handphone",
-    accessorKey: "description",
+    header: "Virtual account",
+    accessorKey: "virtualaccount",
   },
   {
     header: "Aksi",
@@ -43,11 +42,11 @@ export const columns = [
       <div className="flex gap-2">
         <Button
           size="icon"
-          className="bg-yellow-500 hover:bg-yellow-400"
+          className="bg-black hover:bg-yellow-400"
           style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           onClick={() => console.log(row.original.no)}
         >
-          <img src={icon} className="w-4 h-4" />
+          <img src={eye} className="w-4 h-4" id="eye" />
         </Button>
       </div>
     ),
