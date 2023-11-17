@@ -2,8 +2,6 @@ import { useState } from "react";
 import { format } from "date-fns";
 import Layout from "@/components/layout";
 import Header from "@/components/header";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/utils";
@@ -17,6 +15,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
 import InputFile from "@/components/input-file";
+import { InputLabel } from "@/components/input-with-label";
+import { TextAreaLabel } from "@/components/textarea-with-label";
 
 function FundraisingForm() {
   const navigate = useNavigate();
@@ -45,30 +45,30 @@ function FundraisingForm() {
           </p>
         </div>
         <div>
-          <div className="px-6 py-3">
-            <Label htmlFor="judul-fundraising">Judul Penggalangan Dana</Label>
-            <Input
+          <div className="px-6 pt-[18px]">
+            <InputLabel
+              label="Judul Penggalangan Dana"
               type="text"
               id="judul-fundraising"
               placeholder="Bantu Anak-Anak Sekolah: Mewujudkan Masa Depan Cerah"
             />
           </div>
-          <div className="px-6 py-3">
-            <Label htmlFor="deskripsi-fundraising">Isi Deskripsi</Label>
-            <Textarea
+          <div className="px-6">
+            <TextAreaLabel
+              label="Isi Deskripsi"
               id="deskripsi-fundraising"
               placeholder="Membantu anak-anak kurang mampu mendapatkan pendidikan dan perawatan yang mereka butuhkan."
             />
           </div>
-          <div className="px-6 py-3">
-            <Label htmlFor="target-fundraising">Target</Label>
-            <Input
+          <div className="px-6">
+            <InputLabel
+              label="Target"
               type="number"
               id="target-fundraising"
               placeholder="Rp. 50.000.000"
             />
           </div>
-          <div className="flex flex-row gap-5 p-6">
+          <div className="flex flex-row gap-5 px-6">
             <div className="w-full">
               <Label htmlFor="calendar1">Tanggal Mulai Penggalangan Dana</Label>
               <Popover>
@@ -125,7 +125,7 @@ function FundraisingForm() {
               </Popover>
             </div>
           </div>
-          <div className="px-6 py-3">
+          <div className="px-6 pt-[18px]">
             <Label htmlFor="form-image">Gambar Penggalangan Dana</Label>
             <InputFile
               word="Tambahkan Foto Penggalangan dana di sini"
@@ -134,10 +134,16 @@ function FundraisingForm() {
             />
           </div>
           <div className="flex flex-row gap-5 justify-end px-6 py-3">
-            <Button className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white" id="btn-cancel">
+            <Button
+              className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+              id="btn-cancel"
+            >
               Batal
             </Button>
-            <Button className="bg-[#293066] text-white hover:bg-[#293066]" id="btn-simpan">
+            <Button
+              className="bg-[#293066] text-white hover:bg-[#293066]"
+              id="btn-simpan"
+            >
               Simpan
             </Button>
           </div>

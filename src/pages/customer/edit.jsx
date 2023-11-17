@@ -1,13 +1,13 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
 import Swal from "sweetalert2";
 import { Label } from "@/components/ui/label";
 import InputFile from "@/components/input-file";
+import { InputLabel } from "@/components/input-with-label";
+import { TextAreaLabel } from "@/components/textarea-with-label";
 
 function CustomerEdit() {
   const navigate = useNavigate();
@@ -60,34 +60,44 @@ function CustomerEdit() {
             <form onSubmit={handleSubmit}>
               <div className="flex flex-row gap-5 p-6">
                 <div className="w-full">
-                  <Label htmlFor="form-username">Username</Label>
-                  <Input type="text" name="username" id="form-username" />
+                  <InputLabel
+                  label="Username"
+                  type="text"
+                  name="username"
+                  id="form-username"
+                  />
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="form-fullname">Fullname</Label>
-                  <Input type="text" name="fullname" id="form-fullname" />
+                <InputLabel
+                  label="Fullname"
+                  type="text"
+                  name="fullname"
+                  id="form-fullname"
+                  />
                 </div>
               </div>
               <div className="px-6">
-                <Label htmlFor="form-alamat">Alamat</Label>
-                <Textarea name="alamat" id="form-alamat" />
+                <TextAreaLabel
+                label="Alamat"
+                name="alamat"
+                id="form-alamat"/>
               </div>
               <div className="flex flex-row gap-5 p-6">
                 <div className="w-full">
-                <Label htmlFor="form-no-handphone">No. Handphone</Label>
-                <Input
+                <InputLabel
+                  label="No. Handphone"
                   type="text"
-                  name="no. handphone"
+                  name="nohandphone"
                   id="form-no-handphone"
-                />
+                  />
                 </div>
                 <div className="w-full">
-                <Label htmlFor="form-jenis-kelamin">Jenis Kelamin</Label>
-                <Input
+                <InputLabel
+                  label="Jenis Kelamin"
                   type="text"
-                  name="jenis kelamin"
+                  name="jeniskelamin"
                   id="form-jenis-kelamin"
-                />
+                  />
                 </div>
               </div>
               <div className="px-6 py-3">
