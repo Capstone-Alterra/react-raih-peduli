@@ -1,15 +1,11 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import backIcon from "@/assets/icons/back-icon.svg";
-import Swal from "sweetalert2";
-import { Label } from "@/components/ui/label";
-import InputFile from "@/components/input-file";
 import { InputLabel } from "@/components/input-with-label";
 import { TextAreaLabel } from "@/components/textarea-with-label";
 
-function CustomerEdit() {
+function TransactionDetail() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
@@ -110,4 +106,4 @@ function CustomerEdit() {
   );
 }
 
-export default CustomerEdit;
+export default TransactionDetail;
