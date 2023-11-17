@@ -2,6 +2,8 @@ import Dashboard from "@/pages/dashboard";
 import FundraisingForm from "@/pages/fundraising/form";
 import Fundraising from "@/pages/fundraising/index";
 import EditUser from "@/pages/customer/edit.jsx";
+import Transaction from "@/pages/transaction";
+import TransactionDetail from "@/pages/transaction/transaction-detail";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import User from "@/pages/customer/index";
 
