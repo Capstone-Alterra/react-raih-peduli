@@ -1,27 +1,22 @@
 import React from "react";
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 
 export default function Cards({ image, title, customerCount }) {
   return (
     <>
-      <Card className="w-70 h-70 p-6 bg-white shadow-md rounded-lg flex flex-col justify-center items-center gap-10">
+      <Card className="w-70 h-70 p-6 bg-white shadow-md rounded-lg flex flex-col justify-center items-center gap-10 mt-6">
         <div className="w-64 flex justify-start items-center gap-4">
-          <div className="h-28 w-28 bg-black rounded-8 flex justify-center items-center gap-4 rounded-lg">
+          <div className="h-28 w-28 bg-[#293066] rounded-8 flex justify-center items-center gap-4 rounded-lg">
             <img className="w-15 h-15" src={image} alt="" />
           </div>
           <div className="w-32 flex flex-col justify-center items-start gap-2">
             <div className="text-gray-500 text-xl font-bold break-words">
               {title}
             </div>
-            <div className="text-black text-2xl font-bold break-words">
+            <div className="text-black text-2xl font-bold break-words ">
               {customerCount}
             </div>
           </div>
