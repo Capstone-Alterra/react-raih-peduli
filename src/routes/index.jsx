@@ -83,6 +83,10 @@ export default function Router() {
       element: <VolunterForm />,
     },
     {
+      path: "/detail-lowongan-relawan",
+      element: <DetailVolunter />,
+    },
+    {
       path: "*",
       element: <div>404 page found</div>,
     },
