@@ -6,6 +6,8 @@ import Transaction from '@/pages/transaction';
 import TransactionDetail from '@/pages/transaction/transaction-detail';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import User from '@/pages/customer/index';
+import News from '@/pages/news/index'
+import NewsDetail from '@/pages/news/form'
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -36,6 +38,14 @@ export default function Router() {
     {
       path: '/penggalangan-dana/:id',
       element: <FundraisingForm />,
+    },
+    {
+      path: '/berita',
+      element: <News />,
+    },
+    {
+      path: '/berita/:id',
+      element: <NewsDetail />,
     },
     {
       path: '*',
