@@ -1,4 +1,3 @@
-
 import Login from "@/pages/login";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
