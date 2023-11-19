@@ -14,6 +14,7 @@ import News from "@/pages/news/index";
 import NewsDetail from "@/pages/news/form";
 import Volunter from "@/pages/volunter";
 import VolunterForm from "@/pages/volunter/form";
+import DetailVolunter from "@/pages/volunter/detail";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -72,6 +73,10 @@ export default function Router() {
     {
       path: "/lowongan-relawan",
       element: <Volunter />,
+    },
+    {
+      path: "/lowongan-relawan/:id",
+      element: <VolunterForm />,
     },
     {
       path: "/tambah-lowongan-relawan",
