@@ -6,13 +6,15 @@ import { useToken } from "@/utils/context/token";
 import { loginSchema, userLogin } from "@/utils/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputLabel } from "@/components/input-with-label";
-
+import iconEyeClose from "@/assets/logos/icon-eye-close.svg";
+import iconEyeOpen from "@/assets/logos/icon-eye-open.svg";
+import { LayoutLogin } from "@/components/card-login";
 function Login() {
-
-  const {changeToken} = useToken();
+  const { changeToken } = useToken();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [changeIcon, setChangeIcon] = useState(false);
   const {
     handleSubmit,
     formState: { errors },
@@ -31,81 +33,71 @@ function Login() {
       setErrorMessage(error.message);
     }
   }
-  
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+    setChangeIcon(!changeIcon);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-[20px] bg-[#F4F6F9] h-screen">
-      <div className="flex flex-col items-center justify-center">
-        <img src="/logo-new.svg" alt="logo" className="w-[118px] h-[115px] " />
-        <p className="font-normal mb-[30px] text-[28px] text-[#293066]">
-          <span className="font-bold">RAIH</span> PEDULI
-        </p>
-      </div>
-      <div className="flex flex-col w-[531px] bg-white">
-        <hr className="border-2 border-[#293066] w-full" />
+    <LayoutLogin
+    label="Raih Peduli - Login"
+    id="raih-peduli-tittle"
+    route="/">
+      <form aria-label="form-input" onSubmit={handleSubmit(handleLogin)}>
 
-        {/* content login */}
-        <div className="ml-[40px] mr-[34px] my-[35px]">
-          <Link
-            id="btn-back"
-            to="/"
-            className="flex items-center gap-[10px] mb-[50px] text-[#293066]"
-          >
-            <img src="/left-arrow.svg" alt="btn-back" className="h-[26px] w-[26px] mt-[2px]"/>
-            <p className="text-2xl font-bold">Raih Peduli - Login</p>
+        {/* input username */}
+        <InputLabel
+          id="username"
+          aria-label="username"
+          label="Username"
+          type="text"
+          isLogin={true}
+          placeholder="Masukkan username anda"
+          name="username"
+          register={register}
+          error={errors.username?.message}
+        />
+
+        {/* input password */}
+        <div className="flex justify-between items-center font-bold text-[14px]">
+          <label htmlFor="password">Password</label>
+          <Link to="/lupa-password" id="forgot-password">
+            Lupa Password ?
           </Link>
-          {/* form input */}
-          <form aria-label="form-input" onSubmit={handleSubmit(handleLogin)}>
-            {/* input username */}
-            <InputLabel
-              id="username"
-              aria-label="username"
-              type="text"
-              isLogin={true}
-              label="Username"
-              placeholder="Masukkan username anda"
-              name="username"
-              register={register}
-              error={errors.username?.message}
-            />
-            
-            {/* input password */}
-            <div className="flex justify-between items-center font-bold">
-              <label htmlFor="password">Password</label>
-              <Link to="/" id="forgot-password">Lupa Password ?</Link>
-            </div>
-            <div className="relative mb-[50px]">
-              <InputLabel
-                register={register}
-                name="password"
-                error={errors.password?.message}
-                id="password"
-                aria-label="password"
-                type={showPassword ? "text" : "password"}
-                className="mb-[10px]"
-                placeholder="Masukkan password anda"
-              />
-              <img
-                src="/icon-eye-vector.svg"
-                alt=""
-                className="absolute right-[10px] top-[20%] tranlsate-y-[100%] cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            </div>
-            <ButtonClick
-              id="btn-submit"
-              aria-label="btn-submit-form"
-              label="Login"
-              className="w-[457px] h-[56px] bg-[#293066] hover:bg-[#293066] text-white mb-[50px]"
-            />
-          </form>
-          {errorMessage && <p className="text-[#FC544B] text-center mt-[-25px] font-semibold text-base">{errorMessage}</p>}
         </div>
-      </div>
-    </div>
+        <div className="relative mb-[75px]">
+          <InputLabel
+            id="password"
+            isLogin={true}
+            aria-label="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Masukkan password anda"
+            name="password"
+            register={register}
+            error={errors.password?.message}
+          />
+          <img
+            src={changeIcon ? iconEyeOpen : iconEyeClose}
+            alt="iconeye"
+            className="absolute right-[3%] top-[-6%] translate-y-[100%] cursor-pointer"
+            onClick={toggleShowPassword}
+          />
+        </div>
+
+        <ButtonClick
+          id="btn-submit"
+          aria-label="btn-submit-form"
+          label="Login"
+          className="w-[457px] h-[56px] bg-[#293066] hover:bg-[#293066] text-white"
+        />
+      </form>
+      {errorMessage && (
+        <p className="text-[#FC544B] text-center mt-[-25px] font-semibold text-base">
+          {errorMessage}
+        </p>
+      )}
+    </LayoutLogin>
   );
 }
 
