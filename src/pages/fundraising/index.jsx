@@ -1,17 +1,33 @@
-import { columns } from './columns';
-import data from './MOCK_DATA.json';
-import { Link } from 'react-router-dom';
-import CsvIcon from '@/assets/icons/csv';
-import Header from '@/components/header';
-import Layout from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import TableData from '@/components/table/table-data';
-import TableHeader from '@/components/table/table-header';
-import TableLayout from '@/components/table/table-layout';
+import { columns } from "./fundraise-columns";
+import { Link } from "react-router-dom";
+import CsvIcon from "@/assets/icons/csv";
+import Header from "@/components/header";
+import Layout from "@/components/layout";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import TableData from "@/components/table/table-data";
+import TableHeader from "@/components/table/table-header";
+import TableLayout from "@/components/table/table-layout";
+import axiosWithConfig from "@/utils/api/axiosWithConfig";
 
-function Fundraising() {
+function Fundraise() {
+  const [fundraises, setFundraises] = useState([]);
+
+  const getFundraises = async () => {
+    try {
+      const response = await axiosWithConfig.get("/fundraises");
+      setFundraises(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getFundraises();
+  }, []);
+
   return (
-    <Layout currentPage="fundraising">
+    <Layout>
       <Header titleHeader="Penggalangan Dana" />
       <TableLayout>
         <TableHeader heading="List Penggalangan Dana" hasAction={true}>
@@ -23,10 +39,10 @@ function Fundraising() {
             Export CSV
           </Button>
         </TableHeader>
-        <TableData columns={columns} data={data} />
+        <TableData columns={columns} data={fundraises} />
       </TableLayout>
     </Layout>
   );
 }
 
-export default Fundraising;
+export default Fundraise;
