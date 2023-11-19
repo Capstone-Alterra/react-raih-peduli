@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 function InputFile(props) {
   const { word, id, name } = props;
   return (
-    <div classname="mb-[18px]">
+    <div className="mb-[18px]">
       <Label/>
       <div className="relative h-20 rounded-lg border border-input flex justify-center items-center">
         <div className="absolute">
