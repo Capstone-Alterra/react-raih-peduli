@@ -3,8 +3,6 @@ import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
 import Dashboard from "@/pages/dashboard";
-import FundraisingForm from "@/pages/fundraising/form";
-import Fundraising from "@/pages/fundraising/index";
 import EditUser from "@/pages/customer/edit.jsx";
 import Transaction from "@/pages/transaction";
 import TransactionDetail from "@/pages/transaction/transaction-detail";
@@ -18,6 +16,9 @@ import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-volunter";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
+import DetailFundraise from "@/pages/fundraising/detail-fundraise";
+import Fundraise from "@/pages/fundraising/index";
+import AddFundraise from "@/pages/fundraising/add-fundraise";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -63,11 +64,11 @@ export default function Router() {
     },
     {
       path: "/penggalangan-dana",
-      element: <Fundraising />,
+      element: <Fundraise />,
     },
     {
       path: "/penggalangan-dana/:id",
-      element: <FundraisingForm />,
+      element: <DetailFundraise />,
     },
     {
       path: "/berita",
@@ -100,6 +101,10 @@ export default function Router() {
     {
       path: "/respon-pendaftar-lowongan-relawan/:id",
       element: <ResponseForm />,
+    },
+    {
+      path: "/tambah-penggalangan-dana",
+      element: <AddFundraise />,
     },
     {
       path: "*",
