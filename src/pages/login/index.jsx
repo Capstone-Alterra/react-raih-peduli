@@ -93,7 +93,7 @@ function Login() {
         />
       </form>
       {errorMessage && (
-        <p className="text-[#FC544B] text-center mt-[-25px] font-semibold text-base">
+        <p className="text-[#FC544B] text-center mt-[15px] font-semibold text-base">
           {errorMessage}
         </p>
       )}
