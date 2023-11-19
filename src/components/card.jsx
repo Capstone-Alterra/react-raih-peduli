@@ -7,7 +7,7 @@ import {
 export default function Cards({ image, title, customerCount }) {
   return (
     <>
-      <Card className="w-70 h-70 p-6 bg-white shadow-md rounded-lg flex flex-col justify-center items-center gap-10 mt-6">
+      <Card className="  p-5 bg-white shadow-md rounded-lg flex flex-col justify-center items-center gap-10 mt-6">
         <div className="w-64 flex justify-start items-center gap-4">
           <div className="h-28 w-28 bg-[#293066] rounded-8 flex justify-center items-center gap-4 rounded-lg">
             <img className="w-15 h-15" src={image} alt="" />

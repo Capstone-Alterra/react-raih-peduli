@@ -16,17 +16,17 @@ function Dashboard() {
     <>
       <Layout>
       <Header titleHeader="Dashboard"/>
-        <div className="pl-10 ml-10 flex gap-36 pb-9">
+        <div className=" flex gap-16 pb-11">
           <Cards image={User} title="Pelanggan" customerCount={1} />
           <Cards image={Dollar} title="Penggalangan Dana" customerCount={1}/>
           <Cards image={Volunteer} title="Lowongan Sukarelawan" customerCount={1}/>
           <Cards image={News} title="Berita" customerCount={1}/>
         </div>
-        <div className="flex gap-10 ml-10 ">
+        <div className="flex gap-10  ">
           <TableHeader/>
           <TableHeader/>
         </div>
-        <div className="flex gap-10 ml-10 pb-10">
+        <div className="flex gap-10 pb-10">
         <Table columns={columns} data={data} />
         <Table columns={columns} data={data}/>
         </div>
