@@ -8,8 +8,8 @@ import TableLayout from "@/components/table/table-layout";
 
 function Index() {
   return (
-    <Layout currentPage="fundraising">
-      <Header titleHeader="Penggalangan Dana" />
+    <Layout currentPage="pelanggan">
+      <Header titleHeader="Pelanggan" />
       <TableLayout>
         <TableData columns={columns} data={data} />
       </TableLayout>
