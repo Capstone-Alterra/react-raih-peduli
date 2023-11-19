@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,16 +6,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import dropdown from "@/assets/logos/DropDown.png";
+import hamburgerIcon from "@/assets/logos/hamburger.svg";
 
-function Navbar() {
+function Navbar({ toggleSidebar }) {
   return (
-    <div className="w-full h-20 flex flex-row justify-end items-center p-7 bg-[#1E1E1E]">
+    <div className="sticky top-0 z-10 h-16 bg-[#293066] flex items-center justify-between shadow-md px-8">
+      <img className="w-7 h-7 cursor-pointer" src={hamburgerIcon} onClick={toggleSidebar} />
       <DropdownMenu>
-        <DropdownMenuTrigger className="text-white flex gap-x-2 mr-10">
+        <DropdownMenuTrigger className="text-white flex items-center gap-x-2 mr-10">
           Hi, Admin!
-          <img src={dropdown} className="mt-3" />
+          <img src={dropdown} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
