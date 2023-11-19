@@ -1,7 +1,6 @@
 import { columns } from './columns';
 import data from './MOCK_DATA.json';
 import { Link } from 'react-router-dom';
-import CsvIcon from '@/assets/icons/csv';
 import Header from '@/components/header';
 import Layout from '@/components/layout';
 import { Button } from '@/components/ui/button';
@@ -9,18 +8,14 @@ import TableData from '@/components/table/table-data';
 import TableHeader from '@/components/table/table-header';
 import TableLayout from '@/components/table/table-layout';
 
-function Fundraising() {
+function Index() {
   return (
-    <Layout currentPage="fundraising">
-      <Header titleHeader="Penggalangan Dana" />
+    <Layout currentPage="berita">
+      <Header titleHeader="Berita" />
       <TableLayout>
-        <TableHeader heading="List Penggalangan Dana" hasAction={true}>
+        <TableHeader heading="Daftar Berita" hasAction={true}>
           <Button size="sm" className="rounded-full bg-[#293066] hover:bg-[#293066]/80" asChild>
-            <Link to="/tambah-penggalangan-dana">Tambah Penggalangan Dana</Link>
-          </Button>
-          <Button size="sm" className="rounded-full bg-[#14513B] hover:bg-[#14513B]/80 flex gap-1">
-            <CsvIcon className="w-5 h-5" />
-            Export CSV
+            <Link to="/berita/:id">Tambah Berita</Link>
           </Button>
         </TableHeader>
         <TableData columns={columns} data={data} />
@@ -29,4 +24,4 @@ function Fundraising() {
   );
 }
 
-export default Fundraising;
+export default Index;

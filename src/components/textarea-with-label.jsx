@@ -1,25 +1,21 @@
-import * as React from "react";
-import { cn } from "@/utils";
-import { Label } from "@radix-ui/react-label";
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+ 
+import { cn } from "@/utils"
 
-const Textarea = React.forwardRef(({ className, id, label, name, type, ...props }, ref) => {
+export function TextAreaLabel({register, error, label, id, placeholder, name, type}) {
   return (
-    <div className="flex flex-col mb-4">
-      <Label className="text-black  tracking-wider mb-3" htmlFor={id}>
-        {label}
-      </Label>
-      <textarea
-        type={type}
-        className={cn(
-          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
+    <div className="mb-[18px]">
+      <Label htmlFor={id} className='font-base'>{label}</Label>
+      <Textarea type={type} id={id} name={name} placeholder={placeholder} {...(register ? register(name) : {})} 
+      className={cn("mt-2",`${error && 'border-red-500 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0'}`)} />
+        {error && (
+            <label>
+            <span className="break-words text-sm font-light text-red-500">
+                {error}
+            </span>
+            </label>
         )}
-        ref={ref}
-        {...props}
-      />
     </div>
-  );
-});
-Textarea.displayName = "Textarea";
-
-export { Textarea };
+  )
+}

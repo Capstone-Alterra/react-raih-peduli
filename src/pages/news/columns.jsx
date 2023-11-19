@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import InfoIcon from '@/assets/icons/info';
 import TrashIcon from '@/assets/icons/trash';
-import { Badge } from '@/components/ui/badge';
 import PencilIcon from '@/assets/icons/pencil';
 import { Button } from '@/components/ui/button';
-import convertToRupiah from '@/utils/formatter/convertToRupiah';
 
 export const columns = [
   {
@@ -12,43 +10,18 @@ export const columns = [
     accessorKey: 'no',
   },
   {
-    header: 'Judul Penggalangan Dana',
+    header: 'Judul',
     accessorKey: 'title',
+  },
+  {
+    header: 'Gambar',
+    accessorKey: 'image',
   },
   {
     header: 'Deskripsi',
     accessorKey: 'description',
   },
-  {
-    header: 'Target',
-    accessorKey: 'target',
-    cell: ({ row }) => {
-      const target = row.original.target;
-
-      return <div className="whitespace-nowrap">{convertToRupiah(target)}</div>;
-    },
-  },
-  {
-    header: 'Status',
-    accessorKey: 'status',
-    cell: ({ row }) => {
-      const label = row.original.status;
-
-      if (label === 'Menunggu') {
-        return (
-          <Badge className="font-bold flex w-24 py-2 justify-center border border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white">
-            {label}
-          </Badge>
-        );
-      } else {
-        return (
-          <Badge className="font-bold flex w-24 py-2 justify-center border border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white">
-            {label}
-          </Badge>
-        );
-      }
-    },
-  },
+  
   {
     header: 'Aksi',
     cell: ({ row }) => {
