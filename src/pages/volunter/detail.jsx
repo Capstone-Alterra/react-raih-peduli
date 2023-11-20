@@ -10,14 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import Select from "react-select";
 import React, { useState } from "react";
+import Select from "react-select";
+import { cn } from "@/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/utils";
 
 function DetailVolunter() {
   const navigate = useNavigate();
@@ -189,9 +189,9 @@ function DetailVolunter() {
             </div>
           </div>
           <div className="px-6 pt-[18px]">
-            <Label htmlFor="form-image">Gambar Penggalangan Dana</Label>
+            <Label htmlFor="form-image">Gambar Lowongan Relawan</Label>
             <InputFile
-              word="Tambahkan Foto Penggalangan dana di sini"
+              word="Tambahkan Foto Lowongan Relawan di sini"
               name="image"
               id="form-image"
             />

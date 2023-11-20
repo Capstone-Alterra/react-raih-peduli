@@ -185,9 +185,9 @@ function VolunterForm() {
             </div>
           </div>
           <div className="px-6 pt-[18px]">
-            <Label htmlFor="form-image">Gambar Volunter Vacancies</Label>
+            <Label htmlFor="form-image">Gambar Lowongan Relawan</Label>
             <InputFile
-              word="Tambahkan Foto Penggalangan dana di sini"
+              word="Tambahkan Foto Lowongan Relawan di sini"
               name="image"
               id="form-image"
             />
