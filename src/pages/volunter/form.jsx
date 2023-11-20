@@ -6,8 +6,6 @@ import { Calendar } from "@/components/ui/calendar";
 import InputFile from "@/components/input-file";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
@@ -18,25 +16,53 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Select from "react-select";
 
 function VolunterForm() {
   const navigate = useNavigate();
-  const [tags, setTags] = useState(["Pendidikan", "Komunikasi", "Teknologi"]);
   const [date, setDate] = useState(undefined);
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  const handleRemoveTag = (indexToRemove) => {
-    setTags(tags.filter((_, index) => index !== indexToRemove));
-  };
+  const options = [
+    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
+    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
+    { value: "tekonologi", label: "Teknologi", color: "#293066" },
+  ];
 
-  const addTags = (e) => {
-    if (e.key === "Enter" && e.target.value !== "") {
-      setTags([...tags, e.target.value]);
-      e.target.value = "";
-    }
+  const customStyles = {
+    multiValue: (styles, { data }) => {
+      return {
+        ...styles,
+        backgroundColor: data.color,
+        color: "#fff",
+        padding: "3px",
+        borderRadius: "30px",
+      };
+    },
+    multiValueLabel: (styles) => {
+      return {
+        ...styles,
+        color: "#fff",
+      };
+    },
+    multiValueRemove: (styles) => {
+      return {
+        ...styles,
+        color: "#fff",
+        cursor: "pointer",
+        ":hover": {
+          color: "#fff",
+        },
+      };
+    },
+    control: (styles) => ({
+      ...styles,
+      padding: "1px",
+      borderColor: "#E4E6FC",
+    }),
   };
 
   return (
@@ -75,27 +101,13 @@ function VolunterForm() {
           </div>
           <div className="px-6 ">
             <p className="font-semibold mb-2">Keahlian</p>
-            <div className="w-full h-wrap border p-3 rounded-md">
-              <ul className="flex flex-row justify-center items-center">
-                {tags.map((tag, index) => (
-                  <li key={index} className="mr-2">
-                    <Badge className="bg-[#293066] hover:bg-[#293066]/80">
-                      {tag}
-                      <a
-                        onClick={() => handleRemoveTag(index)}
-                        className="ml-2 cursor-pointer text-base">
-                        x
-                      </a>
-                    </Badge>
-                  </li>
-                ))}
-                <Input
-                  className="border-none"
-                  placeholder="Ketik dan Enter untuk menambah"
-                  onKeyUp={(e) => (e.key === "Enter" ? addTags(e) : null)}
-                />
-              </ul>
-            </div>
+            <Select
+              className="mt-2"
+              placeholder="Tambah Keahlian"
+              options={options}
+              isMulti
+              styles={customStyles}
+            />
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
@@ -117,7 +129,9 @@ function VolunterForm() {
           </div>
           <div className="flex flex-row gap-5 px-6">
             <div className="w-full">
-              <Label htmlFor="calendar1">Tanggal Mulai Penggalangan Dana</Label>
+              <Label htmlFor="calendar1">
+                Tanggal Mulai Volunter Vacancies
+              </Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -144,7 +158,7 @@ function VolunterForm() {
 
             <div className="w-full">
               <Label htmlFor="calendar2">
-                Tanggal Selesai Penggalangan Dana
+                Tanggal Selesai Volunter Vacancies
               </Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -171,7 +185,7 @@ function VolunterForm() {
             </div>
           </div>
           <div className="px-6 pt-[18px]">
-            <Label htmlFor="form-image">Gambar Penggalangan Dana</Label>
+            <Label htmlFor="form-image">Gambar Volunter Vacancies</Label>
             <InputFile
               word="Tambahkan Foto Penggalangan dana di sini"
               name="image"

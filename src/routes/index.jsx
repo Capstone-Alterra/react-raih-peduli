@@ -15,6 +15,8 @@ import NewsDetail from "@/pages/news/form";
 import Volunter from "@/pages/volunter";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
+import ListVolunter from "@/pages/volunter/list-volunter";
+import ResponseForm from "@/pages/volunter/response-form";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -85,6 +87,14 @@ export default function Router() {
     {
       path: "/detail-lowongan-relawan",
       element: <DetailVolunter />,
+    },
+    {
+      path: "/list-pendaftar-lowongan-relawan",
+      element: <ListVolunter />,
+    },
+    {
+      path: "/respon-pendaftar-lowongan-relawan/:id",
+      element: <ResponseForm />,
     },
     {
       path: "*",

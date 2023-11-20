@@ -7,11 +7,10 @@ import ProfileIcon from "@/assets/icons/profile";
 import { Button } from "@/components/ui/button";
 import InputFile from "@/components/input-file";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
+import Select from "react-select";
 import React, { useState } from "react";
 import {
   Popover,
@@ -29,16 +28,49 @@ function DetailVolunter() {
     navigate(-1);
   };
 
-  const handleRemoveTag = (indexToRemove) => {
-    setTags(tags.filter((_, index) => index !== indexToRemove));
+  const handleGoListRegister = () => {
+    navigate("/list-pendaftar-lowongan-relawan");
   };
 
-  const addTags = (e) => {
-    if (e.key === "Enter" && e.target.value !== "") {
-      setTags([...tags, e.target.value]);
-      e.target.value = "";
-    }
+  const options = [
+    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
+    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
+    { value: "tekonologi", label: "Teknologi", color: "#293066" },
+  ];
+
+  const customStyles = {
+    multiValue: (styles, { data }) => {
+      return {
+        ...styles,
+        backgroundColor: data.color,
+        color: "#fff",
+        padding: "3px",
+        borderRadius: "30px",
+      };
+    },
+    multiValueLabel: (styles) => {
+      return {
+        ...styles,
+        color: "#fff",
+      };
+    },
+    multiValueRemove: (styles) => {
+      return {
+        ...styles,
+        color: "#fff",
+        cursor: "pointer",
+        ":hover": {
+          color: "#fff",
+        },
+      };
+    },
+    control: (styles) => ({
+      ...styles,
+      padding: "1px",
+      borderColor: "#E4E6FC",
+    }),
   };
+
   return (
     <Layout>
       <Header titleHeader="Lowongan Relawan" />
@@ -75,27 +107,13 @@ function DetailVolunter() {
           </div>
           <div className="px-6 ">
             <p className="font-semibold mb-2">Keahlian</p>
-            <div className="w-full h-wrap border p-3 rounded-md">
-              <ul className="flex flex-row justify-center items-center">
-                {tags.map((tag, index) => (
-                  <li key={index} className="mr-2">
-                    <Badge className="bg-[#293066] hover:bg-[#293066]/80">
-                      {tag}
-                      <a
-                        onClick={() => handleRemoveTag(index)}
-                        className="ml-2 cursor-pointer text-base">
-                        x
-                      </a>
-                    </Badge>
-                  </li>
-                ))}
-                <Input
-                  className="border-none"
-                  placeholder="Ketik dan Enter untuk menambah"
-                  onKeyUp={(e) => (e.key === "Enter" ? addTags(e) : null)}
-                />
-              </ul>
-            </div>
+            <Select
+              className="mt-2"
+              placeholder="Tambah Keahlian"
+              options={options}
+              isMulti
+              styles={customStyles}
+            />
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
@@ -178,8 +196,10 @@ function DetailVolunter() {
               id="form-image"
             />
           </div>
-          <div className="px-6 pt-[18px] mb-3">
-            <div className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer">
+          <div className="px-6 pt-[18px] py-5">
+            <div
+              className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
+              onClick={handleGoListRegister}>
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />
               <p className="ml-2">50+</p>
