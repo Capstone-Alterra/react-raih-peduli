@@ -26,7 +26,7 @@ export default function LandingPage() {
   return (
     <div>
       {/* navbar */}
-      <nav className="w-full" style={{ width: "1532px", height: "70px" }}>
+      <nav className="w-full" style={{ height: "70px" }}>
         <div
           className="flex"
           style={{ margin: "20px 90px", width: "auto", height: "40px" }}
@@ -99,9 +99,8 @@ export default function LandingPage() {
         className="w-full flex justify-center items-center"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          width: "1532px",
           height: "736px",
-          opacity: "80%",
+          opacity: "70%",
         }}
       >
         <h1
@@ -116,29 +115,33 @@ export default function LandingPage() {
         </h1>
       </div>
 
-      <div className="w-[1532px] h-[3824px] justify-center items-center">
-        <div
-          className="w-full flex justify-center items-center"
-          style={{
-            padding: "50px",
-            borderRadius: "15px",
-            justifyContent: "center",
-          }}
-        >
-          <a className="pr-[100px]" href="">
-            <img src={relawan} />
-          </a>
-          <a className="pr-[100px]" href="">
-            <img src={mitra} />
-          </a>
-          <a href="">
-            <img src={kegiatan} />
-          </a>
-        </div>
+      <div className="w-full h-[3824px] justify-center items-center relative "> {/* Change to relative positioning */}
+  <div
+    className="w-[600px] flex absolute"
+    style={{
+      left: "50%", // Center horizontally
+      transform: "translateX(-50%)", // Center horizontally
+      padding: "50px",
+      borderRadius: "15px",
+      backgroundColor: "white",
+      marginTop:"-55px"
+    }}
+  >
+    <a className="pr-[100px]" href="">
+      <img src={relawan} />
+    </a>
+    <a className="pr-[100px]" href="">
+      <img src={mitra} />
+    </a>
+    <a href="">
+      <img src={kegiatan} />
+    </a>
+  </div>
+
+
         <div
           className="w-full flex bg-white justify-center items-center "
           style={{
-            width: "1532px",
             height: "645px",
             padding: "20px 0px 20px 0px",
           }}
@@ -186,7 +189,6 @@ export default function LandingPage() {
         <div
           className="w-full flex bg-white justify-center items-center"
           style={{
-            width: "1532px",
             height: "584px",
             padding: "20px 0px 20px 0px",
           }}
@@ -288,7 +290,6 @@ export default function LandingPage() {
         <div
           className="w-full flex bg-white justify-center items-center "
           style={{
-            width: "1532px",
             height: "610px",
             padding: "20px 0px 20px 0px",
           }}
@@ -332,7 +333,6 @@ export default function LandingPage() {
         <div
           className="w-full flex bg-white justify-center items-center"
           style={{
-            width: "1532px",
             height: "602px",
             padding: "20px 0px 20px 0px",
           }}
@@ -434,7 +434,6 @@ export default function LandingPage() {
         <div
           className="w-full flex bg-white justify-center items-center "
           style={{
-            width: "1532px",
             height: "640px",
             padding: "20px 0px 20px 0px",
           }}
@@ -478,9 +477,9 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="w-full" style={{ width: "1532px", height: "543px" }}>
+        <div className="w-full justify-center items-center" style={{height: "543px" }}>
           <h1
-            className="flex text-[#293066] justify-center items-center"
+            className="text-[#293066]"
             style={{
               fontSize: "54px",
               fontFamily: "Helvetica",
@@ -493,7 +492,7 @@ export default function LandingPage() {
             Mitra Kami
           </h1>
           <p
-            className="flex justify-center items-center"
+            className=""
             style={{
               fontSize: "24px",
               fontWeight: "400",
@@ -505,15 +504,14 @@ export default function LandingPage() {
             Kami bekerjasama dengan berbagai organisasi dan komunitas dalam
             mengelola Raih Peduli.
           </p>
-          <img className="pt-20" src={pict6} />
-          <img className="pt-20" src={pict7} />
+          <img className="w-full pt-20 justify-center items-center" src={pict6} />
+          <img className="w-full pt-20 justify-center items-center" src={pict7} />
         </div>
       </div>
 
       <footer
         className="w-full flex justify-between items-center"
         style={{
-          width: "1532px",
           height: "463px",
           backgroundColor: "#E5E9F4",
           padding: "20px 106px",
@@ -764,7 +762,6 @@ export default function LandingPage() {
       </footer>
       <div
         style={{
-          width: "1532px",
           height: "59px",
           backgroundColor: "#293066",
           padding: "21px 113px",
