@@ -1,17 +1,16 @@
-import * as z from "zod";
 import { cn } from "@/utils";
 import { useEffect } from "react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { id as Id } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
-import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axiosWithConfig from "@/utils/api/axiosWithConfig";
+import { useNavigate, useParams } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Form,
@@ -21,33 +20,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Kolom judul penggalangan dana harus diisi",
-  }),
-  description: z.string().min(2, {
-    message: "Kolom deskripsi penggalangan dana harus diisi",
-  }),
-  target: z.number().min(2, {
-    message: "Kolom target penggalangan dana harus diisi",
-  }),
-  start_date: z.date({
-    required_error: "Masukkan tanggal mulai penggalangan dana",
-  }),
-  end_date: z.date({
-    required_error: "Masukkan tanggal berakhir penggalangan dana",
-  }),
-});
-
-const accesToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDA0MDc5MzcsImlhdCI6MTcwMDQwNzMzNywicm9sZV9pZCI6IjEiLCJ1c2VyX2lkIjoiNiJ9.Tvy_K_4K7-qSGqPKzetxDcpkbuqwHrYH_g7WYXkFP28";
+import {
+  addFundraise,
+  editFundraise,
+  fundraiseSchema,
+  getDetailFundraise,
+  updateStatusFundraise,
+} from "@/utils/api/fundraise";
 
 const FundraiseForm = ({ action }) => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(fundraiseSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -58,11 +43,9 @@ const FundraiseForm = ({ action }) => {
   });
 
   useEffect(() => {
-    const getDetailFundraise = async () => {
-      try {
-        const response = await axiosWithConfig.get(`/fundraises/${id}`);
-        const { title, description, target, start_date, end_date } = response.data.data;
-
+    if (action === "detail") {
+      getDetailFundraise(id).then((data) => {
+        const { title, description, target, start_date, end_date } = data;
         const formattedStartDate = new Date(start_date);
         const formattedEndDate = new Date(end_date);
 
@@ -73,46 +56,42 @@ const FundraiseForm = ({ action }) => {
           start_date: formattedStartDate,
           end_date: formattedEndDate,
         });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (action === "detail") {
-      getDetailFundraise();
+      });
     }
   }, []);
 
   const onSubmit = (data) => {
     const { title, description, target, start_date, end_date } = data;
-
     const startISO = start_date.toISOString();
     const endISO = end_date.toISOString();
 
-    const addFundraise = async () => {
-      try {
-        const response = await axiosWithConfig.post(
-          "/fundraises",
-          {
-            title,
-            description,
-            target,
-            startISO,
-            endISO,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accesToken}`,
-            },
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    if (action === "add") {
+      addFundraise({ title, description, target, start_date: startISO, end_date: endISO })
+        .then((message) => alert(message))
+        .catch((message) => alert(message))
+        .finally(navigate("/penggalangan-dana"));
+    } else if (action === "edit") {
+      editFundraise(id, { title, description, target, start_date: startISO, end_date: endISO })
+        .then((message) => alert(message))
+        .catch((message) => alert(message))
+        .finally(navigate("/penggalangan-dana"));
+    } else if (action === "detail") {
+      updateStatusFundraise(id, "live")
+        .then((message) => alert(message))
+        .catch((message) => alert(message))
+        .finally(navigate("/penggalangan-dana"));
+    }
+  };
 
-    addFundraise();
+  const goBackHandler = () => {
+    if (action === "detail") {
+      updateStatusFundraise(id, "reject")
+        .then((message) => alert(message))
+        .catch((message) => alert(message))
+        .finally(navigate("/penggalangan-dana"));
+    } else {
+      navigate(-1);
+    }
   };
 
   return (
@@ -125,7 +104,12 @@ const FundraiseForm = ({ action }) => {
             <FormItem>
               <FormLabel>Judul Penggalangan Dana</FormLabel>
               <FormControl>
-                <Input placeholder="Masukkan judul penggalangan dana" {...field} />
+                <Input
+                  {...field}
+                  className="disabled:opacity-100"
+                  disabled={action === "detail"}
+                  placeholder="Masukkan judul penggalangan dana"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -138,7 +122,12 @@ const FundraiseForm = ({ action }) => {
             <FormItem>
               <FormLabel>Deskripsi Penggalangan Dana</FormLabel>
               <FormControl>
-                <Textarea placeholder="Masukkan deskripsi penggalangan dana" {...field} />
+                <Textarea
+                  {...field}
+                  className="min-h-[100px] disabled:opacity-100"
+                  disabled={action === "detail"}
+                  placeholder="Masukkan deskripsi penggalangan dana"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -151,11 +140,18 @@ const FundraiseForm = ({ action }) => {
             <FormItem>
               <FormLabel>Target Penggalangan Dana</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
+                <NumericFormat
+                  prefix="Rp. "
+                  thousandSeparator
+                  value={field.value}
+                  customInput={Input}
+                  allowNegative={false}
+                  disabled={action === "detail"}
+                  className="disabled:opacity-100"
                   placeholder="Masukkan target penggalangan dana"
-                  {...field}
-                  onChange={(event) => field.onChange(+event.target.value)}
+                  onValueChange={(v) => {
+                    field.onChange(Number(v.value));
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -174,8 +170,9 @@ const FundraiseForm = ({ action }) => {
                     <FormControl>
                       <Button
                         variant={"outline"}
+                        disabled={action === "detail"}
                         className={cn(
-                          "pl-3 text-left font-normal w-full",
+                          "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -191,9 +188,9 @@ const FundraiseForm = ({ action }) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      initialFocus
                       selected={field.value}
                       onSelect={field.onChange}
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>
@@ -212,8 +209,9 @@ const FundraiseForm = ({ action }) => {
                     <FormControl>
                       <Button
                         variant={"outline"}
+                        disabled={action === "detail"}
                         className={cn(
-                          "pl-3 text-left font-normal w-full",
+                          "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -229,9 +227,9 @@ const FundraiseForm = ({ action }) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      initialFocus
                       selected={field.value}
                       onSelect={field.onChange}
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>
@@ -244,15 +242,17 @@ const FundraiseForm = ({ action }) => {
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
-            className="bg-white w-20 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+            type="reset"
+            onClick={goBackHandler}
+            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
             id="btn-cancel"
           >
             {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "Batal"}
           </Button>
           <Button
-            disabled={action === "editing" && false}
             size="sm"
-            className="bg-[#293066] w-20 hover:bg-[#293066]/80"
+            type="submit"
+            className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-simpan"
           >
             {action === "edit"
