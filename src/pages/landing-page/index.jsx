@@ -21,28 +21,46 @@ import appstore from "@/assets/logos/appstore.svg";
 import relawan from "@/assets/pictures/relawan.svg";
 import mitra from "@/assets/pictures/mitra.svg";
 import kegiatan from "@/assets/pictures/kegiatan.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const handleToLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <div>
       {/* navbar */}
-      <nav className="w-full" style={{ height: "70px" }}>
+      <nav
+        className="w-full bg-white"
+        style={{
+          height: "80px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 1000,
+        }}
+      >
         <div
           className="flex"
           style={{ margin: "20px 90px", width: "auto", height: "40px" }}
         >
-          <div className="flex" style={{ alignItems: "center" }}>
-            <img src={LogoRaihPeduli} style={{ marginRight: "10px" }} />
-            <p
-              className="text-[#293066]"
-              style={{ fontFamily: "Helvetica", fontSize: "27px" }}
-            >
-              <span className="font-bold">RAIH</span> PEDULI
-            </p>
-          </div>
+          <a href="/">
+            <div className="flex" style={{ alignItems: "center" }}>
+              <img src={LogoRaihPeduli} style={{ marginRight: "10px" }} />
+              <p
+                className="text-[#293066]"
+                style={{ fontFamily: "Helvetica", fontSize: "27px" }}
+              >
+                <span className="font-bold">RAIH</span> PEDULI
+              </p>
+            </div>
+          </a>
 
           <div className="flex" style={{ flex: 1, justifyContent: "center" }}>
             <a
+              href="#tentang-kami"
               className="text-[#293066]"
               style={{
                 fontFamily: "Helvetica",
@@ -54,6 +72,7 @@ export default function LandingPage() {
               TENTANG KAMI
             </a>
             <a
+              href="#donasi"
               className="text-[#293066]"
               style={{
                 fontFamily: "Helvetica",
@@ -65,6 +84,7 @@ export default function LandingPage() {
               DONASI
             </a>
             <a
+              href="#relawan"
               className="text-[#293066]"
               style={{
                 fontFamily: "Helvetica",
@@ -76,6 +96,7 @@ export default function LandingPage() {
               RELAWAN
             </a>
             <a
+              href="#berita"
               className="text-[#293066]"
               style={{
                 fontFamily: "Helvetica",
@@ -89,7 +110,13 @@ export default function LandingPage() {
           </div>
 
           <div>
-            <Button className="bg-[#293066] text-white w-40">Masuk</Button>
+            <Button
+              id="toLogin"
+              className="bg-[#293066] text-white w-40"
+              onClick={handleToLogin}
+            >
+              Masuk
+            </Button>
           </div>
         </div>
       </nav>
@@ -99,8 +126,10 @@ export default function LandingPage() {
         className="w-full flex justify-center items-center"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          height: "736px",
-          opacity: "70%",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          height: "900px",
+          opacity: "90%",
         }}
       >
         <h1
@@ -108,39 +137,40 @@ export default function LandingPage() {
           style={{
             fontSize: "80px",
             textShadow:
-              " -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+              "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
           }}
         >
           Wujudkan Niat Baikmu
         </h1>
       </div>
 
-      <div className="w-full h-[3824px] justify-center items-center relative "> {/* Change to relative positioning */}
-  <div
-    className="w-[600px] flex absolute"
-    style={{
-      left: "50%", // Center horizontally
-      transform: "translateX(-50%)", // Center horizontally
-      padding: "50px",
-      borderRadius: "15px",
-      backgroundColor: "white",
-      marginTop:"-55px"
-    }}
-  >
-    <a className="pr-[100px]" href="">
-      <img src={relawan} />
-    </a>
-    <a className="pr-[100px]" href="">
-      <img src={mitra} />
-    </a>
-    <a href="">
-      <img src={kegiatan} />
-    </a>
-  </div>
-
-
+      <div className="w-full h-[3824px] justify-center items-center relative ">
+        {" "}
+        {/* Change to relative positioning */}
         <div
-          className="w-full flex bg-white justify-center items-center "
+          className="w-[600px] flex absolute"
+          style={{
+            left: "50%", // Center horizontally
+            transform: "translateX(-50%)", // Center horizontally
+            padding: "50px",
+            borderRadius: "15px",
+            backgroundColor: "white",
+            marginTop: "-55px",
+          }}
+        >
+          <a className="pr-[100px]" href="">
+            <img src={relawan} />
+          </a>
+          <a className="pr-[100px]" href="">
+            <img src={mitra} />
+          </a>
+          <a href="">
+            <img src={kegiatan} />
+          </a>
+        </div>
+        <div
+          id="tentang-kami"
+          className="w-full flex bg-slate-100 justify-center items-center "
           style={{
             height: "645px",
             padding: "20px 0px 20px 0px",
@@ -185,9 +215,8 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-
         <div
-          className="w-full flex bg-white justify-center items-center"
+          className="w-full flex bg-slate-100e justify-center items-center"
           style={{
             height: "584px",
             padding: "20px 0px 20px 0px",
@@ -286,9 +315,9 @@ export default function LandingPage() {
             }}
           />
         </div>
-
         <div
-          className="w-full flex bg-white justify-center items-center "
+          id="donasi"
+          className="w-full flex bg-slate-100 justify-center items-center "
           style={{
             height: "610px",
             padding: "20px 0px 20px 0px",
@@ -329,7 +358,6 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-
         <div
           className="w-full flex bg-white justify-center items-center"
           style={{
@@ -339,6 +367,7 @@ export default function LandingPage() {
         >
           <div style={{ width: "643px", height: "562px" }}>
             <h1
+              id="relawan"
               className="text-[#293066]"
               style={{
                 width: "643px",
@@ -430,9 +459,9 @@ export default function LandingPage() {
             }}
           />
         </div>
-
         <div
-          className="w-full flex bg-white justify-center items-center "
+          id="berita"
+          className="w-full flex bg-slate-100 justify-center items-center "
           style={{
             height: "640px",
             padding: "20px 0px 20px 0px",
@@ -476,8 +505,10 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-
-        <div className="w-full justify-center items-center" style={{height: "543px" }}>
+        <div
+          className="w-full justify-center items-center"
+          style={{ height: "543px" }}
+        >
           <h1
             className="text-[#293066]"
             style={{
@@ -504,8 +535,14 @@ export default function LandingPage() {
             Kami bekerjasama dengan berbagai organisasi dan komunitas dalam
             mengelola Raih Peduli.
           </p>
-          <img className="w-full pt-20 justify-center items-center" src={pict6} />
-          <img className="w-full pt-20 justify-center items-center" src={pict7} />
+          <img
+            className="w-full pt-20 justify-center items-center"
+            src={pict6}
+          />
+          <img
+            className="w-full pt-20 justify-center items-center"
+            src={pict7}
+          />
         </div>
       </div>
 
