@@ -9,7 +9,7 @@ function AddFundraise() {
     <Layout>
       <Header titleHeader="Penggalangan Dana" />
       <FormLayout>
-        <FormHeader title="Detail Penggalangan Dana" />
+        <FormHeader title="add" />
         <FundraiseForm action="add" />
       </FormLayout>
     </Layout>
