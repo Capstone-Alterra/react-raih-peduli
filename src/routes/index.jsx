@@ -1,24 +1,24 @@
 import Login from "@/pages/login";
-import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
-import OTPPage from "@/pages/login/forgot-password/OTPPage";
-import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
-import Dashboard from "@/pages/dashboard";
-import EditUser from "@/pages/customer/edit.jsx";
-import Transaction from "@/pages/transaction";
-import TransactionDetail from "@/pages/transaction/transaction-detail";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import User from "@/pages/customer/index";
 import News from "@/pages/news/index";
-import NewsDetail from "@/pages/news/form";
 import Volunter from "@/pages/volunter";
-import VolunterForm from "@/pages/volunter/form";
-import DetailVolunter from "@/pages/volunter/detail";
+import Dashboard from "@/pages/dashboard";
+import Transaction from "@/pages/transaction";
+import EditUser from "@/pages/customer/edit.jsx";
+import OTPPage from "@/pages/login/forgot-password/OTPPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import TransactionDetail from "@/pages/transaction/transaction-detail";
+import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
+import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
+import DetailFundraise from "@/pages/fundraising/detail-fundraise";
+import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ListVolunter from "@/pages/volunter/list-volunter";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
-import DetailFundraise from "@/pages/fundraising/detail-fundraise";
+import DetailVolunter from "@/pages/volunter/detail";
 import Fundraise from "@/pages/fundraising/index";
-import AddFundraise from "@/pages/fundraising/add-fundraise";
+import VolunterForm from "@/pages/volunter/form";
+import NewsDetail from "@/pages/news/form";
+import User from "@/pages/customer/index";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -67,6 +67,10 @@ export default function Router() {
       element: <Fundraise />,
     },
     {
+      path: "/penggalangan-dana/tambah-penggalangan-dana",
+      element: <AddFundraise />,
+    },
+    {
       path: "/penggalangan-dana/:id",
       element: <DetailFundraise />,
     },
@@ -101,10 +105,6 @@ export default function Router() {
     {
       path: "/respon-pendaftar-lowongan-relawan/:id",
       element: <ResponseForm />,
-    },
-    {
-      path: "/tambah-penggalangan-dana",
-      element: <AddFundraise />,
     },
     {
       path: "*",
