@@ -35,7 +35,7 @@ function ForgotPasswordPage() {
       id="raih-peduli-tittle"
       route="/login"
     >
-      <p className="opacity-70 mb-[1.25rem]">
+      <p className="opacity-70 mb-[2rem]">
         Kami akan mengirimkan OTP untuk mengatur ulang kata sandi anda
       </p>
       <form onSubmit={handleSubmit(handleOTP)}>
@@ -54,7 +54,7 @@ function ForgotPasswordPage() {
           id="btn-submit"
           aria-label="btn-submit-form"
           label="Lupa Password"
-          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white mt-[4rem]"
+          className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2.5rem]"
         />
       </form>
     </LayoutLogin>

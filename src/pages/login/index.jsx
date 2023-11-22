@@ -66,7 +66,7 @@ function Login() {
             Lupa Password ?
           </Link>
         </div>
-        <div className="relative mb-[4rem]">
+        <div className="relative mb-[2.5rem]">
           <InputLabel
             id="password"
             isLogin={true}
@@ -89,11 +89,11 @@ function Login() {
           id="btn-submit"
           aria-label="btn-submit-form"
           label="Login"
-          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white"
+          className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mb-3"
         />
       </form>
       {errorMessage && (
-        <p className="text-[#FC544B] text-center mt-[1rem] font-base text-base">
+        <p className="text-[#FC544B] text-center font-base text-base">
           {errorMessage}
         </p>
       )}

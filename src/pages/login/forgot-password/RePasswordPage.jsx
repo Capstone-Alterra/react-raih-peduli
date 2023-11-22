@@ -16,8 +16,8 @@ const schema = z.object({
 
 function RePasswordPage() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [changeIcon, setChangeIcon] = useState(false);
 
   const {
@@ -80,7 +80,6 @@ function RePasswordPage() {
             type={showPassword ? "text" : "password"}
             placeholder="Konfirmasi password anda"
             name="repassword"
-            className="mb-[25px]"
             register={register}
             error={errors.repassword?.message}
           />
@@ -96,7 +95,7 @@ function RePasswordPage() {
           id="btn-submit"
           aria-label="btn-submit-form"
           label="Kirim"
-          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white"
+          className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white"
         />
       </form>
       {errorMessage && (

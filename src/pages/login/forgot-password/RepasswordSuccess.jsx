@@ -18,7 +18,7 @@ function RepasswordSuccess() {
           id="btn-next-login"
           aria-label="btn-next-login"
           label="Masuk"
-          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white"
+          className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white"
         />
       </Link>
     </LayoutLogin>

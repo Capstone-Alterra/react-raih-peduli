@@ -26,7 +26,7 @@ function OTPPage() {
       route="/lupa-password"
       id="raih-peduli-tittle"
     >
-      <p className="opacity-70 my-[3.125rem]">
+      <p className="opacity-70 my-[2.5rem]">
         Kode Verifikasi OTP telah dikirim ke admin@gmail.com
       </p>
       <div className="row">
@@ -36,7 +36,7 @@ function OTPPage() {
               <input
                 id="otp-form"
                 aria-label="otp-form"
-                className="bg-[#E5E9F4] border-1 rounded-[0.5rem] w-[3.125rem] h-[3.125rem] text-center mx-[0.625rem] mb-5 font-bold text-xl"
+                className="bg-[#E5E9F4] border-1 rounded-lg w-[3rem] h-[3rem] text-center mx-[0.625rem] mb-5 font-bold text-xl"
                 type="text"
                 name="otp"
                 maxLength="1"
@@ -52,7 +52,7 @@ function OTPPage() {
             label="Selanjutnya"
             aria-label="btn-next-otp"
             id="btn-next-otp"
-            className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2.5rem]"
+            className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2rem]"
             onClick={handleNextClick}
           />
         </div>
