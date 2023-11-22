@@ -7,8 +7,6 @@ import checklist from "@/assets/pictures/checklist.svg";
 import pict3 from "@/assets/pictures/pict3.svg";
 import pict4 from "@/assets/pictures/pict4.svg";
 import pict5 from "@/assets/pictures/pict5.svg";
-import pict6 from "@/assets/pictures/pict6.svg";
-import pict7 from "@/assets/pictures/pict7.svg";
 import LogoRaihPeduli from "@/assets/logos/raihpeduli.svg";
 import { Button } from "@/components/ui/button";
 import fb from "@/assets/logos/fb.svg";
@@ -22,6 +20,13 @@ import relawan from "@/assets/pictures/relawan.svg";
 import mitra from "@/assets/pictures/mitra.svg";
 import kegiatan from "@/assets/pictures/kegiatan.svg";
 import { useNavigate } from "react-router-dom";
+import sedekah from "@/assets/pictures/sedekah.svg";
+import act from "@/assets/pictures/act.svg";
+import kitabisa from "@/assets/pictures/kitabisa.svg";
+import lindungi from "@/assets/pictures/lindungi.svg";
+import detik from "@/assets/pictures/detik.svg";
+import kompas from "@/assets/pictures/kompas.svg";
+import tempo from "@/assets/pictures/tempo.svg";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -535,14 +540,18 @@ export default function LandingPage() {
             Kami bekerjasama dengan berbagai organisasi dan komunitas dalam
             mengelola Raih Peduli.
           </p>
-          <img
-            className="w-full pt-20 justify-center items-center"
-            src={pict6}
-          />
-          <img
-            className="w-full pt-20 justify-center items-center"
-            src={pict7}
-          />
+          <div className="w-full gap-[40px] pt-20 pb-20 flex justify-center items-center">
+            <img src={sedekah} />
+            <img src={act} />
+            <img src={kitabisa} />
+            <img src={lindungi} />
+          </div>
+
+          <div className="w-full gap-[40px] flex justify-center items-center">
+            <img src={detik} />
+            <img src={kompas} />
+            <img src={tempo} />
+          </div>
         </div>
       </div>
 
