@@ -10,8 +10,8 @@ import iconEyeOpen from "@/assets/logos/icon-eye-open.svg";
 import { ButtonClick } from "@/components/button";
 
 const schema = z.object({
-  password: z.string().min(1, { message: "Password is required" }),
-  repassword: z.string().min(1, { message: "Repassword is required" }),
+  password: z.string().min(1, { message: "Password tidak boleh kosong" }),
+  repassword: z.string().min(1, { message: "Konfirmasi Password tidak boleh kosong" }),
 });
 
 function RePasswordPage() {
@@ -30,7 +30,7 @@ function RePasswordPage() {
 
   async function handleRepassword() {
     try {
-      navigate("/login");
+      navigate("/lupa-password-sukses");
       setErrorMessage(null);
     } catch (error) {
       setErrorMessage(error.message);
@@ -48,7 +48,7 @@ function RePasswordPage() {
       route="/otp-password"
       id="raih-peduli-tittle"
     >
-      <p className="opacity-70 my-[20px]">Silahkan buat Password Baru.</p>
+      <p className="opacity-70 my-[1.25rem]">Silahkan buat Password Baru.</p>
 
       <form aria-label="form-input" onSubmit={handleSubmit(handleRepassword)}>
         <div className="relative">
@@ -71,7 +71,7 @@ function RePasswordPage() {
           />
         </div>
 
-        <div className="relative mb-[40px]">
+        <div className="relative mb-[2.5rem]">
           <InputLabel
             id="confirm-password"
             label="Confirm Password"
@@ -96,7 +96,7 @@ function RePasswordPage() {
           id="btn-submit"
           aria-label="btn-submit-form"
           label="Kirim"
-          className="w-[457px] h-[56px] bg-[#293066] hover:bg-[#293066] text-white"
+          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white"
         />
       </form>
       {errorMessage && (

@@ -48,25 +48,25 @@ function Login() {
 
         {/* input username */}
         <InputLabel
-          id="username"
-          aria-label="username"
-          label="Username"
+          id="email"
+          aria-label="email"
+          label="Email"
           type="text"
           isLogin={true}
-          placeholder="Masukkan username anda"
-          name="username"
+          placeholder="Masukkan email anda"
+          name="email"
           register={register}
-          error={errors.username?.message}
+          error={errors.email?.message}
         />
 
         {/* input password */}
-        <div className="flex justify-between items-center font-bold text-[14px]">
+        <div className="flex justify-between items-center font-bold text-sm">
           <label htmlFor="password">Password</label>
           <Link to="/lupa-password" id="forgot-password">
             Lupa Password ?
           </Link>
         </div>
-        <div className="relative mb-[75px]">
+        <div className="relative mb-[4rem]">
           <InputLabel
             id="password"
             isLogin={true}
@@ -89,11 +89,11 @@ function Login() {
           id="btn-submit"
           aria-label="btn-submit-form"
           label="Login"
-          className="w-[457px] h-[56px] bg-[#293066] hover:bg-[#293066] text-white"
+          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white"
         />
       </form>
       {errorMessage && (
-        <p className="text-[#FC544B] text-center mt-[15px] font-semibold text-base">
+        <p className="text-[#FC544B] text-center mt-[1rem] font-base text-base">
           {errorMessage}
         </p>
       )}

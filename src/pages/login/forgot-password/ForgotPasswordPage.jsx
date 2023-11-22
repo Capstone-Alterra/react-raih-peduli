@@ -9,7 +9,7 @@ import { ButtonClick } from "@/components/button";
 
 const schema = z.object({
   email: z
-    .string().min(1, { message: "This field has to be filled." }).email({ message: "This is not a valid email." }),
+    .string().min(1, { message: "Email tidak boleh kosong" }).email({ message: "Penggunaan email tidak valid" }),
 });
 
 function ForgotPasswordPage() {
@@ -35,7 +35,7 @@ function ForgotPasswordPage() {
       id="raih-peduli-tittle"
       route="/login"
     >
-      <p className="opacity-70 mb-[20px]">
+      <p className="opacity-70 mb-[1.25rem]">
         Kami akan mengirimkan OTP untuk mengatur ulang kata sandi anda
       </p>
       <form onSubmit={handleSubmit(handleOTP)}>
@@ -54,7 +54,7 @@ function ForgotPasswordPage() {
           id="btn-submit"
           aria-label="btn-submit-form"
           label="Lupa Password"
-          className="w-[457px] h-[56px] bg-[#293066] hover:bg-[#293066] text-white mt-[75px]"
+          className="w-[28.565rem] h-[3.5rem] bg-[#293066] hover:bg-[#293066] text-white mt-[4rem]"
         />
       </form>
     </LayoutLogin>

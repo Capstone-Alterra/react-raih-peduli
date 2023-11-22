@@ -17,12 +17,17 @@ import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-volunter";
 import ResponseForm from "@/pages/volunter/response-form";
+import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
 
 export default function Router() {
   const router = createBrowserRouter([
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/lupa-password-sukses",
+      element: <RepasswordSuccess />,
     },
     {
       path: "/lupa-password",
