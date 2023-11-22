@@ -6,7 +6,7 @@ export const LayoutLogin = ({ children, label, id, route }) => {
   return (
     <div className="flex flex-col items-center justify-center bg-[#F4F6F9] h-screen">
       <div className="w-[30.5rem] bg-white">
-        <div className="flex flex-col items-center pt-2">
+        <div className="flex flex-col items-center pt-2 bg-[#F4F6F9]">
           <img
             src="/logo-new.svg"
             alt="logo"
