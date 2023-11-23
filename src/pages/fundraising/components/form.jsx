@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form";
 import { id as Id } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useParams } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Form,
@@ -28,8 +28,7 @@ import {
   updateStatusFundraise,
 } from "@/utils/api/fundraise";
 
-const FundraiseForm = ({ action }) => {
-  const { id } = useParams();
+const FundraiseForm = ({ action, id }) => {
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(fundraiseSchema),
@@ -43,7 +42,7 @@ const FundraiseForm = ({ action }) => {
   });
 
   useEffect(() => {
-    if (action === "detail") {
+    if (action === "detail" || action === "edit") {
       getDetailFundraise(id).then((data) => {
         const { title, description, target, start_date, end_date } = data;
         const formattedStartDate = new Date(start_date);

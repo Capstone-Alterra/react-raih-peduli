@@ -74,7 +74,7 @@ export const columns = [
             className="bg-[#E28100] hover:bg-[#E28100]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           >
-            <Link to={`/penggalangan-dana/${id}`}>
+            <Link to={`/penggalangan-dana/${id}?edit=true`}>
               <PencilIcon className="w-4 h-4" />
             </Link>
           </Button>

@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import PencilIcon from "@/assets/icons/pencil";
-import { Button } from "@/components/ui/button";
 import ArrowLeft from "@/assets/icons/arrow-left";
 
-const FormHeader = ({ title, handleEdit }) => {
+const FormHeader = ({ title }) => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
@@ -24,19 +22,6 @@ const FormHeader = ({ title, handleEdit }) => {
           ? "Tambah Penggalangan Dana"
           : ""}
       </h3>
-      {title !== "add" && (
-        <>
-          <div className="h-[2px] w-5 bg-[#293066] rounded"></div>
-          <Button
-            size="sm"
-            onClick={handleEdit}
-            className="rounded-full justify-items-end bg-[#293066] hover:bg-[#293066]/80 flex gap-1"
-          >
-            <PencilIcon className="w-5 h-5" />
-            Edit data
-          </Button>
-        </>
-      )}
     </div>
   );
 };
