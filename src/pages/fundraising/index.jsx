@@ -11,13 +11,24 @@ import TableHeader from "@/components/table/table-header";
 import TableLayout from "@/components/table/table-layout";
 
 function Fundraise() {
-  const [fundraises, setFundraises] = useState([]);
+  const [data, setData] = useState([]);
+  const [pageCount, setPageCount] = useState();
+  const [{ pageIndex, pageSize }, setPagination] = useState({
+    pageIndex: 1,
+    pageSize: 10,
+  });
+
+  const pagination = {
+    pageIndex,
+    pageSize,
+  };
 
   useEffect(() => {
-    getFundraises()
-      .then((data) => setFundraises(data))
-      .catch((message) => alert(message));
-  }, []);
+    getFundraises(pageIndex, pageSize).then((data) => {
+      setData(data.data);
+      setPageCount(data.pagination.total_page);
+    });
+  }, [pageIndex, pageSize]);
 
   return (
     <Layout>
@@ -32,7 +43,14 @@ function Fundraise() {
             Export CSV
           </Button>
         </TableHeader>
-        <TableData columns={columns} data={fundraises} />
+        <TableData
+          data={data}
+          columns={columns}
+          pageIndex={pageIndex}
+          pageCount={pageCount}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
       </TableLayout>
     </Layout>
   );

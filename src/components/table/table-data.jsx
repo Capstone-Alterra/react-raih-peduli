@@ -1,3 +1,7 @@
+// import { Input } from "../ui/input";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { flexRender, useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import {
   Select,
   SelectContent,
@@ -5,7 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -13,38 +17,34 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import {
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import { useState } from 'react';
-import { Input } from '../ui/input';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+} from "@/components/ui/table";
 
-function TableData({ columns, data }) {
-  const [filtering, setFiltering] = useState('');
-
+function TableData({
+  columns,
+  data,
+  pageCount,
+  pageIndex,
+  pagination,
+  setPagination,
+  // filtering,
+  // setFiltering,
+}) {
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
+    pageCount,
+    manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     state: {
-      globalFilter: filtering,
+      pagination,
     },
-    onGlobalFilterChange: setFiltering,
+    onPaginationChange: setPagination,
   });
 
   return (
     <>
-      <div className="px-8 flex items-center gap-2 py-6">
-        Cari :{' '}
+      {/* <div className="px-8 flex items-center gap-2 py-6">
+        Cari :{" "}
         <Input
           value={filtering}
           onChange={(e) => setFiltering(e.target.value)}
@@ -52,7 +52,7 @@ function TableData({ columns, data }) {
           type="text"
           placeholder="Masukkan kata pencarian"
         />
-      </div>
+      </div> */}
       <Table>
         <TableHeader className="bg-[#F5F5F5]">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -90,7 +90,7 @@ function TableData({ columns, data }) {
       <div className="flex justify-between items-center jus px-4 py-4 border-t-2">
         <div className="flex items-center gap-1 text-sm ">
           <div>Halaman ke</div>
-          {table.getState().pagination.pageIndex + 1} dari {table.getPageCount()}
+          {table.getState().pagination.pageIndex} dari {table.getPageCount()}
         </div>
         <div className="flex gap-3">
           <div className="flex items-center gap-2 text-sm">
@@ -98,7 +98,10 @@ function TableData({ columns, data }) {
             <Select
               value={table.getState().pagination.pageSize}
               onValueChange={(value) => {
-                table.setPageSize(Number(value));
+                setPagination((prevPagination) => ({
+                  ...prevPagination,
+                  pageSize: Number(value),
+                }));
               }}
             >
               <SelectTrigger className="w-16">
@@ -121,35 +124,46 @@ function TableData({ columns, data }) {
               className="w-9 h-9 p-0 bg-[#F4F6F9] hover:bg-[#293066]/20"
               variant="default"
               size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() =>
+                setPagination((prevState) => ({
+                  ...prevState,
+                  pageIndex: prevState.pageIndex - 1,
+                }))
+              }
+              disabled={pageIndex <= 1}
             >
               <ChevronLeft className="w-5 h-5 text-[#293066]" />
             </Button>
-            {table
-              .getPageOptions()
-              .slice(
-                table.getState().pagination.pageIndex,
-                table.getState().pagination.pageIndex + 3
-              )
+            {Array.from({ length: pageCount }, (_, index) => index + 1)
+              .slice(pageIndex - 1, pageIndex + 2)
               .map((page, index) => (
                 <Button
-                  className="w-9 h-9 disabled:bg-[#293066] disabled:opacity-100 disabled:text-[#E3EAEF]  bg-[#F4F6F9] text-[#293066] hover:bg-[#293066]/20"
+                  className="w-9 h-9 disabled:bg-[#293066] disabled:opacity-100 disabled:text-[#E3EAEF] bg-[#F4F6F9] text-[#293066] hover:bg-[#293066]/20"
                   key={index}
                   variant="default"
                   size="sm"
-                  onClick={() => table.setPageIndex(page)}
-                  disabled={table.getState().pagination.pageIndex === page}
+                  onClick={() =>
+                    setPagination((prevState) => ({
+                      ...prevState,
+                      pageIndex: page,
+                    }))
+                  }
+                  disabled={page === pageIndex}
                 >
-                  {page + 1}
+                  {page}
                 </Button>
               ))}
             <Button
               className="w-9 h-9 p-0 bg-[#F4F6F9] hover:bg-[#293066]/20"
               variant="default"
               size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={() =>
+                setPagination((prevState) => ({
+                  ...prevState,
+                  pageIndex: prevState.pageIndex + 1,
+                }))
+              }
+              disabled={pageIndex >= pageCount}
             >
               <ChevronRight className="w-5 h-5 text-[#293066]" />
             </Button>
