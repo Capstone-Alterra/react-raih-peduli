@@ -11,13 +11,13 @@ import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
 import React, { useState } from "react";
-import Select from "react-select";
 import { cn } from "@/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SelectLabel, MultipleSelect } from "@/components/multiple-select";
 
 function DetailVolunter() {
   const navigate = useNavigate();
@@ -106,13 +106,12 @@ function DetailVolunter() {
             />
           </div>
           <div className="px-6 ">
-            <p className="font-semibold mb-2">Keahlian</p>
-            <Select
-              className="mt-2"
-              placeholder="Tambah Keahlian"
-              options={options}
-              isMulti
-              styles={customStyles}
+            <MultipleSelect
+              label="Keahlian"
+              id="select-keahlian"
+              name="keahlian"
+              placeholder="Tambahkan Keahlian"
+              type="text"
             />
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
@@ -188,6 +187,46 @@ function DetailVolunter() {
               </Popover>
             </div>
           </div>
+          <div className="flex flex-row gap-5 px-6 mt-4">
+            <div className="w-full">
+              <SelectLabel
+                label="Provinsi"
+                type="text"
+                id="select-provinsi"
+                placeholder="Pilih Provinsi"
+                options={[{ value: "jawaBarat", label: "Jawa Barat" }]}
+              />
+            </div>
+            <div className="w-full">
+              <SelectLabel
+                label="Kabupaten"
+                type="text"
+                id="select-kabupaten"
+                placeholder="Pilih Kabupaten"
+                options={[{ value: "bogor", label: "Bogor" }]}
+              />
+            </div>
+          </div>
+          <div className="flex flex-row gap-5 px-6 mt-4">
+            <div className="w-full">
+              <SelectLabel
+                label="Kecamatan"
+                type="text"
+                id="select-kecamatan"
+                placeholder="Pilih Kecamatan"
+                options={[{ value: "caringin", label: "Caringin" }]}
+              />
+            </div>
+            <div className="w-full">
+              <SelectLabel
+                label="Kelurahan"
+                type="text"
+                id="select-kelurahan"
+                placeholder="Pilih Kelurahan"
+                options={[{ value: "tangkil", label: "Tangkil" }]}
+              />
+            </div>
+          </div>
           <div className="px-6 pt-[18px]">
             <Label htmlFor="form-image">Gambar Lowongan Relawan</Label>
             <InputFile
@@ -197,6 +236,7 @@ function DetailVolunter() {
             />
           </div>
           <div className="px-6 pt-[18px] py-5">
+            <Label>Pendaftar Lowongan</Label>
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
               onClick={handleGoListRegister}>

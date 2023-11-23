@@ -16,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Select from "react-select";
+import { MultipleSelect, SelectLabel } from "@/components/multiple-select";
 
 function VolunterForm() {
   const navigate = useNavigate();
@@ -24,45 +24,6 @@ function VolunterForm() {
 
   const handleBack = () => {
     navigate(-1);
-  };
-
-  const options = [
-    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
-    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
-    { value: "tekonologi", label: "Teknologi", color: "#293066" },
-  ];
-
-  const customStyles = {
-    multiValue: (styles, { data }) => {
-      return {
-        ...styles,
-        backgroundColor: data.color,
-        color: "#fff",
-        padding: "3px",
-        borderRadius: "30px",
-      };
-    },
-    multiValueLabel: (styles) => {
-      return {
-        ...styles,
-        color: "#fff",
-      };
-    },
-    multiValueRemove: (styles) => {
-      return {
-        ...styles,
-        color: "#fff",
-        cursor: "pointer",
-        ":hover": {
-          color: "#fff",
-        },
-      };
-    },
-    control: (styles) => ({
-      ...styles,
-      padding: "1px",
-      borderColor: "#E4E6FC",
-    }),
   };
 
   return (
@@ -100,21 +61,20 @@ function VolunterForm() {
             />
           </div>
           <div className="px-6 ">
-            <p className="font-semibold mb-2">Keahlian</p>
-            <Select
-              className="mt-2"
-              placeholder="Tambah Keahlian"
-              options={options}
-              isMulti
-              styles={customStyles}
+            <MultipleSelect
+              label="Keahlian"
+              id="select-keahlian"
+              name="keahlian"
+              placeholder="Tambahkan Keahlian"
+              type="text"
             />
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
               <InputLabel
-                label="Number of Vacancies"
+                label="Jumlah Lowongan"
                 type="number"
-                id="slot-volunter"
+                id="input-jumlah-lowongan"
                 placeholder="50"
               />
             </div>
@@ -122,7 +82,7 @@ function VolunterForm() {
               <InputLabel
                 label="Contact Email"
                 type="email"
-                id="contact-email-volunter"
+                id="kontak-email-volunter"
                 placeholder="jenny@gmail.com"
               />
             </div>
@@ -182,6 +142,46 @@ function VolunterForm() {
                   />
                 </PopoverContent>
               </Popover>
+            </div>
+          </div>
+          <div className="flex flex-row gap-5 px-6 mt-4">
+            <div className="w-full">
+              <SelectLabel
+                label="Provinsi"
+                type="text"
+                id="select-provinsi"
+                placeholder="Pilih Provinsi"
+                options={[{ value: "jawaBarat", label: "Jawa Barat" }]}
+              />
+            </div>
+            <div className="w-full">
+              <SelectLabel
+                label="Kabupaten"
+                type="text"
+                id="select-kabupaten"
+                placeholder="Pilih Kabupaten"
+                options={[{ value: "bogor", label: "Bogor" }]}
+              />
+            </div>
+          </div>
+          <div className="flex flex-row gap-5 px-6 mt-4">
+            <div className="w-full">
+              <SelectLabel
+                label="Kecamatan"
+                type="text"
+                id="select-kecamatan"
+                placeholder="Pilih Kecamatan"
+                options={[{ value: "caringin", label: "Caringin" }]}
+              />
+            </div>
+            <div className="w-full">
+              <SelectLabel
+                label="Kelurahan"
+                type="text"
+                id="select-kelurahan"
+                placeholder="Pilih Kelurahan"
+                options={[{ value: "tangkil", label: "Tangkil" }]}
+              />
             </div>
           </div>
           <div className="px-6 pt-[18px]">

@@ -15,7 +15,7 @@ import NewsDetail from "@/pages/news/form";
 import Volunter from "@/pages/volunter";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
-import ListVolunter from "@/pages/volunter/list-volunter";
+import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
 import ResponseForm from "@/pages/volunter/response-form";
 
 export default function Router() {
