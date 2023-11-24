@@ -2,19 +2,22 @@ import { ButtonClick } from "@/components/button";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useToken } from "@/utils/context/token";
-import { loginSchema, userLogin } from "@/utils/api/auth";
+import { loginSchema } from "@/utils/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputLabel } from "@/components/input-with-label";
 import iconEyeClose from "@/assets/logos/icon-eye-close.svg";
 import iconEyeOpen from "@/assets/logos/icon-eye-open.svg";
 import { LayoutLogin } from "@/components/card-login";
+import  useStore  from "@/utils/store/store";
+
 function Login() {
-  const { changeToken } = useToken();
+  const store = useStore();
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [changeIcon, setChangeIcon] = useState(false);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -24,11 +27,11 @@ function Login() {
   });
 
   async function handleLogin(data) {
+    const { email, password } = data;
     try {
-      const result = await userLogin(data);
-      changeToken(JSON.stringify(result));
+      await store.login(email, password);
+
       navigate("/dashboard");
-      setErrorMessage(null);
     } catch (error) {
       setErrorMessage(error.message);
     }

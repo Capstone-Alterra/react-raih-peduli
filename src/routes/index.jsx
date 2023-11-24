@@ -8,7 +8,6 @@ import Fundraising from "@/pages/fundraising/index";
 import EditUser from "@/pages/customer/edit.jsx";
 import Transaction from "@/pages/transaction";
 import TransactionDetail from "@/pages/transaction/transaction-detail";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import User from "@/pages/customer/index";
 import News from "@/pages/news/index";
 import NewsDetail from "@/pages/news/form";
@@ -18,8 +17,15 @@ import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-volunter";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useEffect } from "react";
+import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 
 export default function Router() {
+  useEffect(() => {
+    setAxiosConfig("", "http://34.128.91.0:8000");
+  });
+
   const router = createBrowserRouter([
     {
       path: "/login",
