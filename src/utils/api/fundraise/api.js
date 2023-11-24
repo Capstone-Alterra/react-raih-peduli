@@ -34,21 +34,34 @@ export const getDetailFundraise = async (id) => {
 
 export const addFundraise = async ({ ...data }) => {
   try {
-    const response = await axiosWithConfig.post("/fundraises", {
-      ...data,
-    });
+    const response = await axiosWithConfig.post(
+      "/fundraises",
+      { ...data },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data.message;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-
 export const editFundraise = async (id, { ...data }) => {
   try {
-    const response = await axiosWithConfig.put(`/fundraises/${id}`, {
-      ...data,
-    });
+    const response = await axiosWithConfig.put(
+      `/fundraises/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data.message;
   } catch (error) {
     console.error(error);
