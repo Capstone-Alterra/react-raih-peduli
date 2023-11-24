@@ -14,4 +14,8 @@ export const fundraiseSchema = z.object({
   end_date: z.date({
     required_error: "Masukkan tanggal berakhir penggalangan dana",
   }),
+  photo: z.any(),
+
+  // TODO: Create image validation
+  // NOTE: Wait confirmation from backend for validation schema
 });
