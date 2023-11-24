@@ -1,6 +1,6 @@
+// useStore.js
 import { create } from "zustand";
-import axiosWithConfig from "../setAxiosWithConfig";
-
+import { login, refreshJwt } from "../api/auth/index";
 
 const useStore = create((set) => ({
   isSidebarOpen: true,
@@ -12,8 +12,8 @@ const useStore = create((set) => ({
 
   login: async (email, password) => {
     try {
-      const response = await axiosWithConfig.post('/auth/login', { email, password });
-      set({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken });
+      const { accessToken, refreshToken } = await login(email, password);
+      set({ accessToken, refreshToken });
     } catch (error) {
       console.log(error);
     }
@@ -23,12 +23,13 @@ const useStore = create((set) => ({
 
   refreshToken: async () => {
     try {
-      const response = await axiosWithConfig.post('/auth/refresh-jwt', { refreshToken });
-      useStore.getState().setTokens(response.data.accessToken, useStore.getState().refreshToken);
+      const { accessToken } = await refreshJwt(useStore.getState().refreshToken);
+      useStore.getState().setTokens(accessToken, useStore.getState().refreshToken);
     } catch (error) {
       console.error("Token refresh failed:", error);
       useStore.getState().logout();
     }
-  }
+  },
 }));
+
 export default useStore;
