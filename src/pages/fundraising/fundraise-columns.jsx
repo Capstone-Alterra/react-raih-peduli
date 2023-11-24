@@ -40,8 +40,11 @@ export const columns = [
         case "pending":
           status = "Menunggu";
           break;
-        case "live":
-          status = "Live";
+        case "accepted":
+          status = "Diterima";
+          break;
+        case "rejected":
+          status = "Ditolak";
           break;
         default:
           status = originalStatus;
@@ -51,6 +54,8 @@ export const columns = [
       const badgeClass =
         status === "Menunggu"
           ? "border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white"
+          : status === "Ditolak"
+          ? "border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
           : "border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white";
 
       return (
