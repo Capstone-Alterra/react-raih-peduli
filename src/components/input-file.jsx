@@ -1,29 +1,30 @@
-import React from "react";
 import { Input } from "./ui/input";
-import fotoicon from "@/assets/icons/foto-icon.svg";
-import { Label } from "./ui/label";
+import placeholder from "@/assets/icons/foto-icon.svg";
 
-function InputFile(props) {
-  const { word, id, name } = props;
+function FileInput({ onChange, preview, image }) {
   return (
-    <div className="mb-[18px]">
-      <Label/>
-      <div className="relative h-20 rounded-lg border border-input flex justify-center items-center">
+    <div
+      className={`relative h-28 rounded-lg border border-input flex items-center ${
+        preview || image ? "justify-start" : "justify-center"
+      }`}
+    >
+      {preview || image ? (
+        <div className="absolute flex items-end gap-3">
+          <img src={preview || image} className="h-24 rounded-lg ms-2 border" />
+        </div>
+      ) : (
         <div className="absolute">
-          <div className="flex items-center">
-            <img src={fotoicon} className="mr-1"/>
-            <span className="block text-gray-400 font-normal">{word}</span>
+          <div className="flex gap-2 items-center">
+            <img src={placeholder} className="w-8 h-8" />
+            <span className="block text-gray-400 font-normal">
+              Tambahkan foto penggalangan dana disini
+            </span>
           </div>
         </div>
-        <Input
-          type="file"
-          className="h-full w-full opacity-0"
-          name={name}
-          id={id}
-        />
-      </div>
+      )}
+      <Input onChange={onChange} type="file" className="h-full w-full opacity-0" />
     </div>
   );
 }
 
-export default InputFile;
+export default FileInput;
