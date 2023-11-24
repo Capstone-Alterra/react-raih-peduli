@@ -1,12 +1,13 @@
 import { cn } from "@/utils";
-import { useEffect } from "react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { id as Id } from "date-fns/locale";
+import { useEffect, useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import FileInput from "@/components/input-file";
 import { Textarea } from "@/components/ui/textarea";
 import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
@@ -30,6 +31,8 @@ import {
 
 const FundraiseForm = ({ action, id }) => {
   const navigate = useNavigate();
+  const [status, setStatus] = useState("");
+  const [preview, setPreview] = useState("");
   const form = useForm({
     resolver: zodResolver(fundraiseSchema),
     defaultValues: {
@@ -38,16 +41,19 @@ const FundraiseForm = ({ action, id }) => {
       target: "",
       start_date: "",
       end_date: "",
+      photo: "",
     },
   });
 
   useEffect(() => {
-    if (action === "detail" || action === "edit") {
+    if (action !== "add") {
       getDetailFundraise(id).then((data) => {
-        const { title, description, target, start_date, end_date } = data;
+        const { title, description, target, status, start_date, end_date, photo } = data;
         const formattedStartDate = new Date(start_date);
         const formattedEndDate = new Date(end_date);
 
+        setStatus(status);
+        setPreview(photo);
         form.reset({
           title,
           description,
@@ -57,20 +63,27 @@ const FundraiseForm = ({ action, id }) => {
         });
       });
     }
-  }, []);
+  }, [action, form, id, status]);
 
   const onSubmit = (data) => {
-    const { title, description, target, start_date, end_date } = data;
+    const { title, description, target, start_date, end_date, photo } = data;
     const startISO = start_date.toISOString();
     const endISO = end_date.toISOString();
 
     if (action === "add") {
-      addFundraise({ title, description, target, start_date: startISO, end_date: endISO })
+      addFundraise({ title, description, photo, target, start_date: startISO, end_date: endISO })
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
     } else if (action === "edit") {
-      editFundraise(id, { title, description, target, start_date: startISO, end_date: endISO })
+      editFundraise(id, {
+        title,
+        description,
+        target,
+        start_date: startISO,
+        end_date: endISO,
+        photo,
+      })
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
@@ -84,7 +97,7 @@ const FundraiseForm = ({ action, id }) => {
 
   const goBackHandler = () => {
     if (action === "detail") {
-      updateStatusFundraise(id, "reject")
+      updateStatusFundraise(id, "rejected")
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
@@ -237,22 +250,46 @@ const FundraiseForm = ({ action, id }) => {
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="photo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Foto</FormLabel>
+              <FormControl>
+                <FileInput
+                  preview={preview}
+                  onChange={(e) => {
+                    field.onChange(e.target.files[0]);
+
+                    if (action !== "detail") {
+                      setPreview(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
             type="reset"
             onClick={goBackHandler}
+            disabled={action === "detail" && status !== "pending"}
             className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-            id="btn-cancel"
+            id="btn-action-negative"
           >
-            {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "Batal"}
+            {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
           </Button>
           <Button
             size="sm"
+            disabled={action === "detail" && status !== "pending"}
             type="submit"
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-            id="btn-simpan"
+            id="btn-action-positive"
           >
             {action === "edit"
               ? "Edit data"
