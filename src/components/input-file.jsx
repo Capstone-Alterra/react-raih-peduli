@@ -1,7 +1,7 @@
 import { Input } from "./ui/input";
 import placeholder from "@/assets/icons/foto-icon.svg";
 
-function FileInput({ onChange, preview, image }) {
+function FileInput({ onChange, preview, image, id }) {
   return (
     <div
       className={`relative h-28 rounded-lg border border-input flex items-center ${
@@ -22,7 +22,7 @@ function FileInput({ onChange, preview, image }) {
           </div>
         </div>
       )}
-      <Input onChange={onChange} type="file" className="h-full w-full opacity-0" />
+      <Input id={id} onChange={onChange} type="file" className="h-full w-full opacity-0" />
     </div>
   );
 }

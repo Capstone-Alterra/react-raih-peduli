@@ -114,10 +114,11 @@ const FundraiseForm = ({ action, id }) => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Judul Penggalangan Dana</FormLabel>
+              <FormLabel htmlFor="input-fundraise-title">Judul Penggalangan Dana</FormLabel>
               <FormControl>
                 <Input
                   {...field}
+                  id="input-fundraise-title"
                   className="disabled:opacity-100"
                   disabled={action === "detail"}
                   placeholder="Masukkan judul penggalangan dana"
@@ -132,10 +133,13 @@ const FundraiseForm = ({ action, id }) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Deskripsi Penggalangan Dana</FormLabel>
+              <FormLabel htmlFor="input-fundraise-description">
+                Deskripsi Penggalangan Dana
+              </FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
+                  id="input-fundraise-description"
                   className="min-h-[100px] disabled:opacity-100"
                   disabled={action === "detail"}
                   placeholder="Masukkan deskripsi penggalangan dana"
@@ -150,7 +154,7 @@ const FundraiseForm = ({ action, id }) => {
           name="target"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Target Penggalangan Dana</FormLabel>
+              <FormLabel htmlFor="input-fundraise-target">Target Penggalangan Dana</FormLabel>
               <FormControl>
                 <NumericFormat
                   prefix="Rp. "
@@ -158,6 +162,7 @@ const FundraiseForm = ({ action, id }) => {
                   value={field.value}
                   customInput={Input}
                   allowNegative={false}
+                  id="input-fundraise-target"
                   disabled={action === "detail"}
                   className="disabled:opacity-100"
                   placeholder="Masukkan target penggalangan dana"
@@ -176,13 +181,16 @@ const FundraiseForm = ({ action, id }) => {
             name="start_date"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Tanggal Mulai Penggalangan Dana</FormLabel>
+                <FormLabel htmlFor="input-fundraise-start-date">
+                  Tanggal Mulai Penggalangan Dana
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant={"outline"}
                         disabled={action === "detail"}
+                        id="input-fundraise-start-date"
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
@@ -199,8 +207,8 @@ const FundraiseForm = ({ action, id }) => {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      mode="single"
                       initialFocus
+                      mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
                     />
@@ -215,13 +223,16 @@ const FundraiseForm = ({ action, id }) => {
             name="end_date"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Tanggal Selesai Penggalangan Dana</FormLabel>
+                <FormLabel htmlFor="input-fundraise-end-date">
+                  Tanggal Selesai Penggalangan Dana
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant={"outline"}
                         disabled={action === "detail"}
+                        id="input-fundraise-end-date"
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
@@ -238,8 +249,8 @@ const FundraiseForm = ({ action, id }) => {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      mode="single"
                       initialFocus
+                      mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
                     />
@@ -255,9 +266,10 @@ const FundraiseForm = ({ action, id }) => {
           name="photo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Foto</FormLabel>
+              <FormLabel htmlFor="input-fundraise-image">Foto</FormLabel>
               <FormControl>
                 <FileInput
+                  id="input-fundraise-image"
                   preview={preview}
                   onChange={(e) => {
                     field.onChange(e.target.files[0]);
