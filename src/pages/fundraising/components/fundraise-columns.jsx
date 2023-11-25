@@ -76,6 +76,7 @@ export const columns = [
           <Button
             asChild
             size="icon"
+            id={`btn-edit-fundraise-${id}`}
             className="bg-[#E28100] hover:bg-[#E28100]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           >
@@ -86,6 +87,7 @@ export const columns = [
           <Button
             asChild
             size="icon"
+            id={`btn-detail-fundraise-${id}`}
             className="bg-[#166648] hover:bg-[#166648]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           >
@@ -95,6 +97,7 @@ export const columns = [
           </Button>
           <Button
             size="icon"
+            id={`btn-delete-fundraise-${id}`}
             className="bg-[#BF1616] hover:bg-[#BF1616]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
             onClick={() => {
