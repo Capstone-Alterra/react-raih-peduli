@@ -17,15 +17,18 @@ import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-volunter";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
+import { useToken } from "@/utils/context/token";
 
 export default function Router() {
   useEffect(() => {
     setAxiosConfig("", "http://34.128.91.0:8000");
   });
 
+  const { token }  = useToken();
+  
   const router = createBrowserRouter([
     {
       path: "/login",
@@ -49,7 +52,7 @@ export default function Router() {
     },
     {
       path: "/dashboard",
-      element: <Dashboard />,
+      element: token === "" ?  <Navigate to="/login"/> :  <Dashboard />,
     },
     {
       path: "/pelanggan",
