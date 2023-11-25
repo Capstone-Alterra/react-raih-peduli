@@ -2,21 +2,21 @@ import { ButtonClick } from "@/components/button";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { loginSchema } from "@/utils/api/auth";
+import { login, loginSchema } from "@/utils/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputLabel } from "@/components/input-with-label";
 import iconEyeClose from "@/assets/logos/icon-eye-close.svg";
 import iconEyeOpen from "@/assets/logos/icon-eye-open.svg";
 import { LayoutLogin } from "@/components/card-login";
-import  useStore  from "@/utils/store/store";
-
+import { useToken } from "@/utils/context/token";
 function Login() {
-  const store = useStore();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [changeIcon, setChangeIcon] = useState(false);
+
+  const { changeToken } = useToken();
 
   const {
     handleSubmit,
@@ -29,8 +29,8 @@ function Login() {
   async function handleLogin(data) {
     const { email, password } = data;
     try {
-      await store.login(email, password);
-
+      const res = await login(email, password);
+      changeToken(res.data.access_token);
       navigate("/dashboard");
     } catch (error) {
       setErrorMessage(error.message);
@@ -43,12 +43,8 @@ function Login() {
   };
 
   return (
-    <LayoutLogin
-    label="Raih Peduli - Login"
-    id="raih-peduli-tittle"
-    route="/">
+    <LayoutLogin label="Raih Peduli - Login" id="raih-peduli-tittle" route="/">
       <form aria-label="form-input" onSubmit={handleSubmit(handleLogin)}>
-
         {/* input username */}
         <InputLabel
           id="email"
