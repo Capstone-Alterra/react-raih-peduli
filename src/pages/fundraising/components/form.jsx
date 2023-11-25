@@ -54,6 +54,7 @@ const FundraiseForm = ({ action, id }) => {
 
         setStatus(status);
         setPreview(photo);
+
         form.reset({
           title,
           description,
@@ -63,7 +64,7 @@ const FundraiseForm = ({ action, id }) => {
         });
       });
     }
-  }, [action, form, id, status]);
+  }, []);
 
   const onSubmit = (data) => {
     const { title, description, target, start_date, end_date, photo } = data;
@@ -76,14 +77,16 @@ const FundraiseForm = ({ action, id }) => {
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
     } else if (action === "edit") {
-      editFundraise(id, {
+      const editedData = {
         title,
         description,
         target,
         start_date: startISO,
         end_date: endISO,
-        photo,
-      })
+        ...(photo instanceof File && { photo }),
+      };
+
+      editFundraise(id, editedData)
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
@@ -284,7 +287,6 @@ const FundraiseForm = ({ action, id }) => {
             </FormItem>
           )}
         />
-
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
