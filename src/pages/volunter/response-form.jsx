@@ -9,6 +9,8 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import Select from "react-select";
 import React from "react";
+import { MultipleSelect } from "@/components/multiple-select";
+import Swal from "sweetalert2";
 
 function ResponseForm() {
   const navigate = useNavigate();
@@ -17,43 +19,23 @@ function ResponseForm() {
     navigate(-1);
   };
 
-  const options = [
-    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
-    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
-    { value: "tekonologi", label: "Teknologi", color: "#293066" },
-  ];
-
-  const customStyles = {
-    multiValue: (styles, { data }) => {
-      return {
-        ...styles,
-        backgroundColor: data.color,
-        color: "#fff",
-        padding: "3px",
-        borderRadius: "30px",
-      };
-    },
-    multiValueLabel: (styles) => {
-      return {
-        ...styles,
-        color: "#fff",
-      };
-    },
-    multiValueRemove: (styles) => {
-      return {
-        ...styles,
-        color: "#fff",
-        cursor: "pointer",
-        ":hover": {
-          color: "#fff",
-        },
-      };
-    },
-    control: (styles) => ({
-      ...styles,
-      padding: "1px",
-      borderColor: "#E4E6FC",
-    }),
+  const handleIgnore = async () => {
+    const { value: text } = await Swal.fire({
+      input: "textarea",
+      inputLabel: "Alasan Di Tolak",
+      inputPlaceholder: "Tulis di sini",
+      inputAttributes: {
+        "aria-label": "Tulis di sini",
+      },
+      showCancelButton: true,
+      confirmButtonText: "Kirim",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#293066",
+      cancelButtonColor: "#293066",
+    });
+    if (text) {
+      Swal.fire(text);
+    }
   };
 
   return (
@@ -128,13 +110,11 @@ function ResponseForm() {
               />
             </div>
             <div className="w-full">
-              <p className="font-semibold mb-2">Keahlian</p>
-              <Select
-                className="mt-2"
-                placeholder="Tambah Keahlian"
-                options={options}
-                isMulti
-                styles={customStyles}
+              <MultipleSelect
+                label="Keahlian"
+                id="select-keahlian"
+                name="keahlian"
+                placeholder="Tambahkan Keahlian"
               />
             </div>
           </div>
@@ -155,9 +135,9 @@ function ResponseForm() {
             />
           </div>
           <div className="px-6 pt-[18px]">
-            <Label htmlFor="form-image">Foto Profile</Label>
+            <Label htmlFor="form-image">Pas Foto</Label>
             <InputFile
-              word="Tambahkan Foto Profile di sini"
+              word="Tambahkan Pas Foto disini"
               name="image"
               id="form-image"
             />
@@ -165,12 +145,14 @@ function ResponseForm() {
           <div className="flex flex-row gap-5 justify-end px-6 py-3">
             <Button
               className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-              id="btn-cancel">
+              id="btn-cancel"
+              onClick={handleIgnore}>
               Tolak
             </Button>
             <Button
               className="bg-[#293066] text-white hover:bg-[#293066]"
-              id="btn-simpan">
+              id="btn-simpan"
+              onClick={handleBack}>
               Terima
             </Button>
           </div>

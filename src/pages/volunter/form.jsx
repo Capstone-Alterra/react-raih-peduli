@@ -10,19 +10,40 @@ import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 import { cn } from "@/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MultipleSelect, SelectLabel } from "@/components/multiple-select";
+import { MultipleSelect, SelectForm } from "@/components/multiple-select";
 
 function VolunterForm() {
+  const [selected, setSelected] = useState("");
   const navigate = useNavigate();
   const [date, setDate] = useState(undefined);
 
   const handleBack = () => {
+    navigate(-1);
+  };
+
+  const handleSubmit = () => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Berhasil mengupdate Lowongan Relawan",
+    });
     navigate(-1);
   };
 
@@ -66,7 +87,6 @@ function VolunterForm() {
               id="select-keahlian"
               name="keahlian"
               placeholder="Tambahkan Keahlian"
-              type="text"
             />
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
@@ -80,7 +100,7 @@ function VolunterForm() {
             </div>
             <div className="w-full">
               <InputLabel
-                label="Contact Email"
+                label="Kontak Email"
                 type="email"
                 id="kontak-email-volunter"
                 placeholder="jenny@gmail.com"
@@ -146,16 +166,16 @@ function VolunterForm() {
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Provinsi"
                 type="text"
                 id="select-provinsi"
                 placeholder="Pilih Provinsi"
-                options={[{ value: "jawaBarat", label: "Jawa Barat" }]}
+                options={[{ value: "bogor", label: "Bogor" }]}
               />
             </div>
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Kabupaten"
                 type="text"
                 id="select-kabupaten"
@@ -166,21 +186,21 @@ function VolunterForm() {
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Kecamatan"
                 type="text"
                 id="select-kecamatan"
                 placeholder="Pilih Kecamatan"
-                options={[{ value: "caringin", label: "Caringin" }]}
+                options={[{ value: "bogor", label: "Bogor" }]}
               />
             </div>
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Kelurahan"
                 type="text"
                 id="select-kelurahan"
                 placeholder="Pilih Kelurahan"
-                options={[{ value: "tangkil", label: "Tangkil" }]}
+                options={[{ value: "bogor", label: "Bogor" }]}
               />
             </div>
           </div>
@@ -200,7 +220,8 @@ function VolunterForm() {
             </Button>
             <Button
               className="bg-[#293066] text-white hover:bg-[#293066]"
-              id="btn-simpan">
+              id="btn-simpan"
+              onClick={handleSubmit}>
               Simpan
             </Button>
           </div>

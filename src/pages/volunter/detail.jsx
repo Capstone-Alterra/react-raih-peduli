@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { SelectLabel, MultipleSelect } from "@/components/multiple-select";
+import { MultipleSelect, SelectForm } from "@/components/multiple-select";
 
 function DetailVolunter() {
   const navigate = useNavigate();
@@ -189,7 +189,7 @@ function DetailVolunter() {
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Provinsi"
                 type="text"
                 id="select-provinsi"
@@ -198,7 +198,7 @@ function DetailVolunter() {
               />
             </div>
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Kabupaten"
                 type="text"
                 id="select-kabupaten"
@@ -209,7 +209,7 @@ function DetailVolunter() {
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Kecamatan"
                 type="text"
                 id="select-kecamatan"
@@ -218,7 +218,7 @@ function DetailVolunter() {
               />
             </div>
             <div className="w-full">
-              <SelectLabel
+              <SelectForm
                 label="Kelurahan"
                 type="text"
                 id="select-kelurahan"

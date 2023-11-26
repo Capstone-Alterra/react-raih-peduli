@@ -1,6 +1,6 @@
 import React from "react";
-import { Label } from "./ui/label";
 import Select from "react-select";
+import { Label } from "./ui/label";
 
 function MultipleSelect({
   register,
@@ -78,22 +78,20 @@ function MultipleSelect({
   );
 }
 
-function SelectLabel({
-  register,
-  error,
+function SelectForm({
   label,
-  id,
   placeholder,
-  name,
-  type,
+  id,
+  error,
+  register,
   options = [],
+  name,
 }) {
   return (
     <div className="mb-[18px]">
       <Label htmlFor={id}>{label}</Label>
       <Select
         id={id}
-        type={type}
         name={name}
         className="mt-2"
         placeholder={placeholder}
@@ -112,4 +110,4 @@ function SelectLabel({
   );
 }
 
-export { MultipleSelect, SelectLabel };
+export { MultipleSelect, SelectForm };
