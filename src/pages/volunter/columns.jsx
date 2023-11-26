@@ -4,6 +4,28 @@ import TrashIcon from "@/assets/icons/trash";
 import { Badge } from "@/components/ui/badge";
 import PencilIcon from "@/assets/icons/pencil";
 import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
+
+const handleDelete = (id) => {
+  Swal.fire({
+    title: "Apakah Anda Yakin Menghapus Data Lowongan Relawan",
+    text: "Data yang dihapus tidak dapat dikembalikan!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#E31F1F",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ya, Hapus!",
+    cancelButtonText: "Batal",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        icon: "success",
+      });
+    }
+  });
+};
 
 export const columns = [
   {
@@ -77,7 +99,7 @@ export const columns = [
             size="icon"
             className="bg-[#BF1616] hover:bg-[#BF1616]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-            onClick={() => alert(`Hapus lowongan relawan dengan id: ${id}`)}>
+            onClick={(id) => handleDelete(id)}>
             <TrashIcon className="w-4 h-4" />
           </Button>
         </div>

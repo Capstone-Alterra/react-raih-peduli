@@ -10,11 +10,17 @@ import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 import { cn } from "@/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import Select from "react-select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { MultipleSelect, SelectForm } from "@/components/multiple-select";
 
 function VolunterForm() {
+  const [selected, setSelected] = useState("");
   const navigate = useNavigate();
   const [date, setDate] = useState(undefined);
 
@@ -22,43 +28,23 @@ function VolunterForm() {
     navigate(-1);
   };
 
-  const options = [
-    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
-    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
-    { value: "tekonologi", label: "Teknologi", color: "#293066" },
-  ];
-
-  const customStyles = {
-    multiValue: (styles, { data }) => {
-      return {
-        ...styles,
-        backgroundColor: data.color,
-        color: "#fff",
-        padding: "3px",
-        borderRadius: "30px",
-      };
-    },
-    multiValueLabel: (styles) => {
-      return {
-        ...styles,
-        color: "#fff",
-      };
-    },
-    multiValueRemove: (styles) => {
-      return {
-        ...styles,
-        color: "#fff",
-        cursor: "pointer",
-        ":hover": {
-          color: "#fff",
-        },
-      };
-    },
-    control: (styles) => ({
-      ...styles,
-      padding: "1px",
-      borderColor: "#E4E6FC",
-    }),
+  const handleSubmit = () => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Berhasil mengupdate Lowongan Relawan",
+    });
+    navigate(-1);
   };
 
   return (
@@ -92,29 +78,27 @@ function VolunterForm() {
             />
           </div>
           <div className="px-6 ">
-            <p className="font-semibold mb-2">Keahlian</p>
-            <Select
-              className="mt-2"
-              placeholder="Tambah Keahlian"
-              options={options}
-              isMulti
-              styles={customStyles}
+            <MultipleSelect
+              label="Keahlian"
+              id="select-keahlian"
+              name="keahlian"
+              placeholder="Tambahkan Keahlian"
             />
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
               <InputLabel
-                label="Number of Vacancies"
+                label="Jumlah Lowongan"
                 type="number"
-                id="slot-volunter"
+                id="input-jumlah-lowongan"
                 placeholder="50"
               />
             </div>
             <div className="w-full">
               <InputLabel
-                label="Contact Email"
+                label="Kontak Email"
                 type="email"
-                id="contact-email-volunter"
+                id="kontak-email-volunter"
                 placeholder="jenny@gmail.com"
               />
             </div>
@@ -174,6 +158,46 @@ function VolunterForm() {
               </Popover>
             </div>
           </div>
+          <div className="flex flex-row gap-5 px-6 mt-4">
+            <div className="w-full">
+              <SelectForm
+                label="Provinsi"
+                type="text"
+                id="select-provinsi"
+                placeholder="Pilih Provinsi"
+                options={[{ value: "bogor", label: "Bogor" }]}
+              />
+            </div>
+            <div className="w-full">
+              <SelectForm
+                label="Kabupaten"
+                type="text"
+                id="select-kabupaten"
+                placeholder="Pilih Kabupaten"
+                options={[{ value: "bogor", label: "Bogor" }]}
+              />
+            </div>
+          </div>
+          <div className="flex flex-row gap-5 px-6 mt-4">
+            <div className="w-full">
+              <SelectForm
+                label="Kecamatan"
+                type="text"
+                id="select-kecamatan"
+                placeholder="Pilih Kecamatan"
+                options={[{ value: "bogor", label: "Bogor" }]}
+              />
+            </div>
+            <div className="w-full">
+              <SelectForm
+                label="Kelurahan"
+                type="text"
+                id="select-kelurahan"
+                placeholder="Pilih Kelurahan"
+                options={[{ value: "bogor", label: "Bogor" }]}
+              />
+            </div>
+          </div>
           <div className="px-6 pt-[18px]">
             <Label htmlFor="form-image">Gambar Lowongan Relawan</Label>
             <InputFile
@@ -189,7 +213,11 @@ function VolunterForm() {
             >
               Batal
             </Button>
-            <Button className="bg-[#293066] text-white hover:bg-[#293066]" id="btn-simpan">
+            <Button
+              className="bg-[#293066] text-white hover:bg-[#293066]"
+              id="btn-simpan"
+              onClick={handleSubmit}>
+
               Simpan
             </Button>
           </div>
