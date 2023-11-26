@@ -31,6 +31,10 @@ function Fundraise() {
       .then((data) => {
         setData(data.data);
         setPageCount(data.pagination.total_page);
+        setPagination((prevState) => ({
+          ...prevState,
+          pageIndex: data.pagination.current_page,
+        }));
       })
       .catch(() => {
         setData([]);

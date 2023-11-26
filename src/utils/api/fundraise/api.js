@@ -2,10 +2,15 @@ import axiosWithConfig from "../axiosWithConfig";
 
 export const getFundraises = async (pageIndex, pageSize, title) => {
   try {
-    const response = await axiosWithConfig.get(
-      `/fundraises?page=${pageIndex}&page_size=${pageSize}&title=${title}`
-    );
-    return response.data;
+    if (title) {
+      const response = await axiosWithConfig.get(`/fundraises?&title=${title}`);
+      return response.data;
+    } else {
+      const response = await axiosWithConfig.get(
+        `/fundraises?page=${pageIndex}&page_size=${pageSize}&title=${title}`
+      );
+      return response.data;
+    }
   } catch (error) {
     console.error(error);
     throw error;
