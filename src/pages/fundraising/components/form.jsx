@@ -91,7 +91,7 @@ const FundraiseForm = ({ action, id }) => {
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
     } else if (action === "detail") {
-      updateStatusFundraise(id, "live")
+      updateStatusFundraise(id, "accepted")
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/penggalangan-dana"));
