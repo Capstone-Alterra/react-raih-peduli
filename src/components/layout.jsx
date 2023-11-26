@@ -1,14 +1,16 @@
-import "../styles/index.css";
-import Sidebar from "./sidebar";
 import Navbar from "./navbar";
+import Sidebar from "./sidebar";
+import useStore from "@/utils/store/store";
 
 function Layout({ children }) {
+  const { isSidebarOpen } = useStore();
+
   return (
-    <div className="flex w-full h-screen">
-      <Sidebar />
-      <div className="flex-1 w-full h-full">
+    <div className="flex w-screen max-h-screen">
+      <Sidebar isOpen={isSidebarOpen} />
+      <div className="w-full overflow-y-auto">
         <Navbar />
-        <div className="w-full grow">{children}</div>
+        <div className="px-8">{children}</div>
       </div>
     </div>
   );
