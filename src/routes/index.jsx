@@ -19,6 +19,7 @@ import Fundraise from "@/pages/fundraising/index";
 import VolunterForm from "@/pages/volunter/form";
 import NewsDetail from "@/pages/news/form";
 import User from "@/pages/customer/index";
+import LandingPage from "@/pages/landing-page";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -109,6 +110,10 @@ export default function Router() {
     {
       path: "*",
       element: <div>404 page found</div>,
+    },
+    {
+      path: "/",
+      element: <LandingPage/>,
     },
   ]);
 
