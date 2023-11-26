@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import backIcon from "@/assets/icons/back-icon.svg";
+import ArrowLeft from "@/assets/icons/arrow-left";
 import { Label } from "@/components/ui/label";
 import InputFile from "@/components/input-file";
 import { InputLabel } from "@/components/input-with-label";
@@ -17,7 +17,7 @@ function NewsForm(props) {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("data submit")
+    console.log("data submit");
   };
 
   const handleCancel = () => {
@@ -32,12 +32,7 @@ function NewsForm(props) {
             className="p-3 font-bold flex flex-row items-center cursor-pointer"
             onClick={handleGoBack}
           >
-            <img
-              src={backIcon}
-              className="mr-2"
-              alt="Back Icon"
-              id="btn-back"
-            />
+            <img src={ArrowLeft} className="w-4 h-4" alt="Back Icon" id="btn-back" />
             Tambah Berita
           </p>
         </div>
