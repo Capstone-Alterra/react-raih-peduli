@@ -1,7 +1,6 @@
 import axios from "axios";
 
-let accessToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoiMiIsInVzZXJfaWQiOiIxIiwiaWF0IjoxNTE2MjM5MDIyfQ.rdcs2MjPJKRFRLQvBIqttWf3KCBD5vkWe73_w3OJ5PM";
+let accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 
 const axiosWithConfig = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
