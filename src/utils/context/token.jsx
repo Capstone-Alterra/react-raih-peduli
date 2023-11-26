@@ -1,13 +1,7 @@
-import {
-  createContext,
-  useState,
-  useMemo,
-  useContext,
-  useCallback,
-} from "react";
-
+import { createContext, useState, useMemo, useContext, useCallback, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axiosWithConfig from "../setAxiosWithConfig";
+import { refreshJwt } from "../api/auth";
 
 const contextValue = {
   token: "",
@@ -17,51 +11,89 @@ const contextValue = {
 const TokenContext = createContext(contextValue);
 
 function TokenProvider({ children }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const [token, setToken] = useState(cookies.token);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "tokenExpiration"]);
 
-  axiosWithConfig.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error.response.status === 401) {
-        changeToken("");
+  const [token, setToken] = useState(cookies.accessToken || "");
+  const [tokenExpiration, setTokenExpiration] = useState(cookies.tokenExpiration || "");
+
+  const changeToken = useCallback(
+    async (newAccessToken, expiresIn) => {
+      if (newAccessToken) {
+        setToken(newAccessToken);
+        setTokenExpiration(expiresIn);
+
+        setCookie("accessToken", newAccessToken, { path: "/" });
+        setCookie("tokenExpiration", expiresIn, { path: "/" });
+      } else {
+        setToken("");
+        setTokenExpiration("");
+        removeCookie("accessToken", { path: "/" });
+        removeCookie("tokenExpiration", { path: "/" });
       }
-      return Promise.reject(error);
-    }
+    },
+    [setCookie, removeCookie]
   );
 
-  const changeToken = useCallback((token) => {
-    const newToken = token ?? "";
-    setToken(newToken);
-    if (token) {
-      setCookie("token", newToken, { path: "/" });
-    } else {
-      removeCookie("token", { path: "/" });
+  const refreshAndChangeToken = useCallback(async () => {
+    try {
+      const response = await refreshJwt(token);
+      const newAccessToken = response.data.access_token;
+      const expiresIn = response.data.expires_in;
+
+      changeToken(newAccessToken, expiresIn);
+      return newAccessToken;
+    } catch (error) {
+      console.error("Failed to refresh token:", error);
+      setToken("");
+      setTokenExpiration("");
+
+      removeCookie("accessToken", { path: "/" });
+      removeCookie("tokenExpiration", { path: "/" });
+      return null;
     }
-  });
+  }, [token, changeToken, removeCookie]);
+
+  useEffect(() => {
+    const expirationTime = tokenExpiration ? parseInt(tokenExpiration, 10) * 1000 : null;
+    const currentTime = new Date().getTime();
+
+    if (expirationTime && expirationTime - currentTime < 60 * 1000) {
+      refreshAndChangeToken();
+    }
+  }, [tokenExpiration, refreshAndChangeToken]);
 
   const tokenContextValue = useMemo(
     () => ({
       token,
       changeToken,
     }),
-    [token]
+    [token, changeToken]
   );
 
-  return (
-    <TokenContext.Provider value={tokenContextValue}>
-      {children}
-    </TokenContext.Provider>
+  axiosWithConfig.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      if (error.response?.status === 401) {
+        const newToken = await refreshAndChangeToken();
+        if (newToken) {
+          error.config.headers.Authorization = `Bearer ${newToken}`;
+          return axiosWithConfig.request(error.config);
+        }
+      }
+      return Promise.reject(error);
+    }
   );
+
+  return <TokenContext.Provider value={tokenContextValue}>{children}</TokenContext.Provider>;
 }
 
 function useToken() {
   const tokenContext = useContext(TokenContext);
 
   if (tokenContext === undefined) {
-    console.log("ERROR, useToken must be used within TokenContext");
+    console.error("ERROR, useToken must be used within TokenContext");
   }
 
   return tokenContext;
