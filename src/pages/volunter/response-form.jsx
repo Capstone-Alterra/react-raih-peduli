@@ -1,6 +1,6 @@
 import { TextAreaLabel } from "@/components/textarea-with-label";
 import { InputLabel } from "@/components/input-with-label";
-import backIcon from "@/assets/icons/back-icon.svg";
+import ArrowLeft from "@/assets/icons/arrow-left";
 import InputFile from "@/components/input-file";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -63,13 +63,9 @@ function ResponseForm() {
         <div className="rounded-t border-y-2">
           <p
             className="p-3 font-bold flex flex-row items-center cursor-pointer"
-            onClick={handleBack}>
-            <img
-              src={backIcon}
-              alt="Back Icon"
-              className="mr-2"
-              id="btn-back"
-            />
+            onClick={handleBack}
+          >
+            <img src={ArrowLeft} alt="Back Icon" className="w-4 h-4" id="btn-back" />
             Respon Pendaftar Lowongan Relawan
           </p>
         </div>
@@ -120,12 +116,7 @@ function ResponseForm() {
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
-              <InputLabel
-                label="NIK"
-                type="number"
-                id="nik"
-                placeholder="Masukkan NIK"
-              />
+              <InputLabel label="NIK" type="number" id="nik" placeholder="Masukkan NIK" />
             </div>
             <div className="w-full">
               <p className="font-semibold mb-2">Keahlian</p>
@@ -139,12 +130,7 @@ function ResponseForm() {
             </div>
           </div>
           <div className="px-6">
-            <TextAreaLabel
-              label="Resume"
-              name="resume"
-              id="resume"
-              placeholder="Masukkan resume"
-            />
+            <TextAreaLabel label="Resume" name="resume" id="resume" placeholder="Masukkan resume" />
           </div>
           <div className="px-6">
             <TextAreaLabel
@@ -156,21 +142,16 @@ function ResponseForm() {
           </div>
           <div className="px-6 pt-[18px]">
             <Label htmlFor="form-image">Foto Profile</Label>
-            <InputFile
-              word="Tambahkan Foto Profile di sini"
-              name="image"
-              id="form-image"
-            />
+            <InputFile word="Tambahkan Foto Profile di sini" name="image" id="form-image" />
           </div>
           <div className="flex flex-row gap-5 justify-end px-6 py-3">
             <Button
               className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-              id="btn-cancel">
+              id="btn-cancel"
+            >
               Tolak
             </Button>
-            <Button
-              className="bg-[#293066] text-white hover:bg-[#293066]"
-              id="btn-simpan">
+            <Button className="bg-[#293066] text-white hover:bg-[#293066]" id="btn-simpan">
               Terima
             </Button>
           </div>

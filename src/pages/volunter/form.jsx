@@ -1,7 +1,7 @@
 import { TextAreaLabel } from "@/components/textarea-with-label";
 import { InputLabel } from "@/components/input-with-label";
 import { Calendar as CalendarIcon } from "lucide-react";
-import backIcon from "@/assets/icons/back-icon.svg";
+import ArrowLeft from "@/assets/icons/arrow-left";
 import { Calendar } from "@/components/ui/calendar";
 import InputFile from "@/components/input-file";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,7 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import React, { useState } from "react";
 import { cn } from "@/utils";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Select from "react-select";
 
 function VolunterForm() {
@@ -72,13 +68,9 @@ function VolunterForm() {
         <div className="rounded-t border-y-2">
           <p
             className="p-3 font-bold flex flex-row items-center cursor-pointer"
-            onClick={handleBack}>
-            <img
-              src={backIcon}
-              alt="Back Icon"
-              className="mr-2"
-              id="btn-back"
-            />
+            onClick={handleBack}
+          >
+            <img src={ArrowLeft} alt="Back Icon" className="w-4 h-4" id="btn-back" />
             Tambah Lowongan Relawan
           </p>
         </div>
@@ -129,9 +121,7 @@ function VolunterForm() {
           </div>
           <div className="flex flex-row gap-5 px-6">
             <div className="w-full">
-              <Label htmlFor="calendar1">
-                Tanggal Mulai Volunter Vacancies
-              </Label>
+              <Label htmlFor="calendar1">Tanggal Mulai Volunter Vacancies</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -140,7 +130,8 @@ function VolunterForm() {
                     className={cn(
                       "w-full pl-3 text-left font-normal",
                       !date && "text-muted-foreground"
-                    )}>
+                    )}
+                  >
                     {date ? format(date, "PPP") : <span>Pilih tanggal</span>}
                     <CalendarIcon className="ml-auto h-4 w-4" />
                   </Button>
@@ -157,9 +148,7 @@ function VolunterForm() {
             </div>
 
             <div className="w-full">
-              <Label htmlFor="calendar2">
-                Tanggal Selesai Volunter Vacancies
-              </Label>
+              <Label htmlFor="calendar2">Tanggal Selesai Volunter Vacancies</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -168,7 +157,8 @@ function VolunterForm() {
                     className={cn(
                       "w-full pl-3 text-left font-normal",
                       !date && "text-muted-foreground"
-                    )}>
+                    )}
+                  >
                     {date ? format(date, "PPP") : <span>Pilih tanggal</span>}
                     <CalendarIcon className="ml-auto h-4 w-4" />
                   </Button>
@@ -195,12 +185,11 @@ function VolunterForm() {
           <div className="flex flex-row gap-5 justify-end px-6 py-3">
             <Button
               className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-              id="btn-cancel">
+              id="btn-cancel"
+            >
               Batal
             </Button>
-            <Button
-              className="bg-[#293066] text-white hover:bg-[#293066]"
-              id="btn-simpan">
+            <Button className="bg-[#293066] text-white hover:bg-[#293066]" id="btn-simpan">
               Simpan
             </Button>
           </div>
