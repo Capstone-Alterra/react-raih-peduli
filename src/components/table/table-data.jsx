@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -13,21 +13,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
   useReactTable,
-} from '@tanstack/react-table';
-import { useState } from 'react';
-import { Input } from '../ui/input';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+} from "@tanstack/react-table";
+import { useState } from "react";
+import { Input } from "../ui/input";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function TableData({ columns, data }) {
-  const [filtering, setFiltering] = useState('');
+  const [filtering, setFiltering] = useState("");
 
   const table = useReactTable({
     data,
@@ -44,7 +44,7 @@ function TableData({ columns, data }) {
   return (
     <>
       <div className="px-8 flex items-center gap-2 py-6">
-        Cari :{' '}
+        Cari :{" "}
         <Input
           value={filtering}
           onChange={(e) => setFiltering(e.target.value)}

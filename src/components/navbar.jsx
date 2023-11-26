@@ -8,13 +8,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import dropdown from "@/assets/logos/DropDown.png";
 import hamburgerIcon from "@/assets/logos/hamburger.svg";
+import useStore from "@/utils/store/store";
 
-function Navbar({ toggleSidebar }) {
+function Navbar() {
+  const { toggleSidebar } = useStore();
+
   return (
     <div className="sticky top-0 z-10 h-16 bg-[#293066] flex items-center justify-between shadow-md px-8">
-      <img className="w-7 h-7 cursor-pointer" src={hamburgerIcon} onClick={toggleSidebar} />
+      <img
+        id="toggling-sidebar"
+        className="w-7 h-7 cursor-pointer"
+        src={hamburgerIcon}
+        onClick={toggleSidebar}
+      />
       <DropdownMenu>
-        <DropdownMenuTrigger className="text-white flex items-center gap-x-2 mr-10">
+        <DropdownMenuTrigger
+          id="toggling-profile-dropdown"
+          className="text-white flex items-center gap-x-2 mr-10"
+        >
           Hi, Admin!
           <img src={dropdown} />
         </DropdownMenuTrigger>

@@ -1,6 +1,6 @@
 import { TextAreaLabel } from "@/components/textarea-with-label";
 import { InputLabel } from "@/components/input-with-label";
-import backIcon from "@/assets/icons/back-icon.svg";
+import ArrowLeft from "@/assets/icons/arrow-left";
 import InputFile from "@/components/input-file";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -45,13 +45,9 @@ function ResponseForm() {
         <div className="rounded-t border-y-2">
           <p
             className="p-3 font-bold flex flex-row items-center cursor-pointer"
-            onClick={handleBack}>
-            <img
-              src={backIcon}
-              alt="Back Icon"
-              className="mr-2"
-              id="btn-back"
-            />
+            onClick={handleBack}
+          >
+            <img src={ArrowLeft} alt="Back Icon" className="w-4 h-4" id="btn-back" />
             Respon Pendaftar Lowongan Relawan
           </p>
         </div>
@@ -102,12 +98,7 @@ function ResponseForm() {
           </div>
           <div className="flex flex-row gap-5 px-6 mt-4">
             <div className="w-full">
-              <InputLabel
-                label="NIK"
-                type="number"
-                id="nik"
-                placeholder="Masukkan NIK"
-              />
+              <InputLabel label="NIK" type="number" id="nik" placeholder="Masukkan NIK" />
             </div>
             <div className="w-full">
               <MultipleSelect
@@ -119,12 +110,7 @@ function ResponseForm() {
             </div>
           </div>
           <div className="px-6">
-            <TextAreaLabel
-              label="Resume"
-              name="resume"
-              id="resume"
-              placeholder="Masukkan resume"
-            />
+            <TextAreaLabel label="Resume" name="resume" id="resume" placeholder="Masukkan resume" />
           </div>
           <div className="px-6">
             <TextAreaLabel

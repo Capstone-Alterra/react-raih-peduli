@@ -1,28 +1,38 @@
 import Login from "@/pages/login";
-import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
-import OTPPage from "@/pages/login/forgot-password/OTPPage";
-import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
+import News from "@/pages/news/index";
+import Volunter from "@/pages/volunter";
 import Dashboard from "@/pages/dashboard";
-import FundraisingForm from "@/pages/fundraising/form";
-import Fundraising from "@/pages/fundraising/index";
-import EditUser from "@/pages/customer/edit.jsx";
 import Transaction from "@/pages/transaction";
-import TransactionDetail from "@/pages/transaction/transaction-detail";
+import EditUser from "@/pages/customer/edit.jsx";
+import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import User from "@/pages/customer/index";
 import News from "@/pages/news/index";
 import NewsDetail from "@/pages/news/form";
-import Volunter from "@/pages/volunter";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
+import TransactionDetail from "@/pages/transaction/transaction-detail";
+import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
+import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
+import DetailFundraise from "@/pages/fundraising/detail-fundraise";
+import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ResponseForm from "@/pages/volunter/response-form";
+import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
+import Fundraise from "@/pages/fundraising/index";
+import NewsDetail from "@/pages/news/form";
+import User from "@/pages/customer/index";
+import LandingPage from "@/pages/landing-page";
 
 export default function Router() {
   const router = createBrowserRouter([
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/lupa-password-sukses",
+      element: <RepasswordSuccess />,
     },
     {
       path: "/lupa-password",
@@ -58,11 +68,15 @@ export default function Router() {
     },
     {
       path: "/penggalangan-dana",
-      element: <Fundraising />,
+      element: <Fundraise />,
+    },
+    {
+      path: "/penggalangan-dana/tambah-penggalangan-dana",
+      element: <AddFundraise />,
     },
     {
       path: "/penggalangan-dana/:id",
-      element: <FundraisingForm />,
+      element: <DetailFundraise />,
     },
     {
       path: "/berita",
@@ -99,6 +113,10 @@ export default function Router() {
     {
       path: "*",
       element: <div>404 page found</div>,
+    },
+    {
+      path: "/",
+      element: <LandingPage/>,
     },
   ]);
 
