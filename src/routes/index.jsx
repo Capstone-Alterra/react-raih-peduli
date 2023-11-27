@@ -11,7 +11,6 @@ import NewsDetail from "@/pages/news/form";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
-import TransactionDetail from "@/pages/transaction/transaction-detail";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
 import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
 import DetailFundraise from "@/pages/fundraising/detail-fundraise";
@@ -25,10 +24,9 @@ import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
 import LandingPage from "@/pages/landing-page";
 
-
 export default function Router() {
   const { token } = useToken();
-
+  console.log("Initial Token:", token);
   useEffect(() => {
     setAxiosConfig(token, "http://34.128.91.0:8000");
   }, [token]);
@@ -79,17 +77,12 @@ export default function Router() {
       element: token === "" ? <Navigate to="/login" /> : <Fundraise />,
     },
     {
-      path: "/penggalangan-dana/:id",
-      element: token === "" ? <Navigate to="/login" /> : <FundraisingForm />,
-    },
-    {
       path: "/penggalangan-dana/tambah-penggalangan-dana",
-      element: token === "" ? <Navigate to="/login" /> :<AddFundraise />,
+      element: token === "" ? <Navigate to="/login" /> : <AddFundraise />,
     },
     {
       path: "/penggalangan-dana/:id",
-     element: token === "" ? <Navigate to="/login" /> :<DetailFundraise />,
-
+      element: token === "" ? <Navigate to="/login" /> : <DetailFundraise />,
     },
     {
       path: "/berita",

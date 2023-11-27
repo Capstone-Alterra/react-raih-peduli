@@ -1,11 +1,11 @@
-import { createContext, useState, useMemo, useContext, useCallback, useEffect } from "react";
+// token.jsx
+
+import { createContext, useState, useMemo, useContext, useCallback } from "react";
 import { useCookies } from "react-cookie";
 import axiosWithConfig from "../setAxiosWithConfig";
-import { refreshJwt } from "../api/auth";
 
 const contextValue = {
   token: "",
-  refreshToken: "",
   changeToken: () => {},
 };
 
@@ -36,29 +36,6 @@ function TokenProvider({ children }) {
     [setCookie, removeCookie]
   );
 
-  const refreshAndChangeToken = useCallback(async () => {
-    try {
-      const response = await refreshJwt(refreshToken);
-      const newAccessToken = response.data.access_token;
-      const newRefreshToken = response.data.refresh_token;
-
-      changeToken(newAccessToken, newRefreshToken);
-      return newAccessToken;
-    } catch (error) {
-      console.error("Failed to refresh token:", error);
-      setToken("");
-      setRefreshToken("");
-
-      removeCookie("accessToken", { path: "/" });
-      removeCookie("refreshToken", { path: "/" });
-      return null;
-    }
-  }, [refreshToken, changeToken, removeCookie]);
-
-  useEffect(() => {
-    refreshAndChangeToken();
-  }, [refreshAndChangeToken]);
-
   const tokenContextValue = useMemo(
     () => ({
       token,
@@ -77,10 +54,7 @@ function TokenProvider({ children }) {
       return response;
     },
     async (error) => {
-      if (error.response?.status === 401) {
-        await refreshAndChangeToken();
-      }
-      return Promise.reject(error);
+      if (error.response?.status === 401) return Promise.reject(error);
     }
   );
 
