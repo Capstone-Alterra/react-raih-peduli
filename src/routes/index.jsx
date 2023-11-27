@@ -7,7 +7,6 @@ import EditUser from "@/pages/customer/edit.jsx";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import User from "@/pages/customer/index";
-import News from "@/pages/news/index";
 import NewsDetail from "@/pages/news/form";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
@@ -20,8 +19,6 @@ import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
 import Fundraise from "@/pages/fundraising/index";
-import NewsDetail from "@/pages/news/form";
-import User from "@/pages/customer/index";
 import LandingPage from "@/pages/landing-page";
 
 export default function Router() {
@@ -116,7 +113,7 @@ export default function Router() {
     },
     {
       path: "/",
-      element: <LandingPage/>,
+      element: <LandingPage />,
     },
   ]);
 
