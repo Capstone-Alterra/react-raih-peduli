@@ -23,6 +23,7 @@ import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
 import LandingPage from "@/pages/landing-page";
+import AddNews from "@/pages/news/add-news"
 
 export default function Router() {
   const { token } = useToken();
@@ -86,6 +87,10 @@ export default function Router() {
     {
       path: "/berita",
       element: token === "" ? <Navigate to="/login" /> : <News />,
+    },
+    {
+      path: "/berita/tambah-berita",
+      element: <AddNews />,
     },
     {
       path: "/berita/:id",
