@@ -5,30 +5,32 @@ import { refreshJwt } from "../api/auth";
 
 const contextValue = {
   token: "",
+  refreshToken: "",
   changeToken: () => {},
 };
 
 const TokenContext = createContext(contextValue);
 
 function TokenProvider({ children }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "tokenExpiration"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "refreshToken"]);
 
   const [token, setToken] = useState(cookies.accessToken || "");
-  const [tokenExpiration, setTokenExpiration] = useState(cookies.tokenExpiration || "");
+  const [refreshToken, setRefreshToken] = useState(cookies.refreshToken || "");
 
   const changeToken = useCallback(
-    async (newAccessToken, expiresIn) => {
-      if (newAccessToken) {
+    (newAccessToken, newRefreshToken) => {
+      if (newAccessToken && newRefreshToken) {
         setToken(newAccessToken);
-        setTokenExpiration(expiresIn);
+        setRefreshToken(newRefreshToken);
 
         setCookie("accessToken", newAccessToken, { path: "/" });
-        setCookie("tokenExpiration", expiresIn, { path: "/" });
+        setCookie("refreshToken", newRefreshToken, { path: "/" });
       } else {
         setToken("");
-        setTokenExpiration("");
+        setRefreshToken("");
+
         removeCookie("accessToken", { path: "/" });
-        removeCookie("tokenExpiration", { path: "/" });
+        removeCookie("refreshToken", { path: "/" });
       }
     },
     [setCookie, removeCookie]
@@ -36,51 +38,47 @@ function TokenProvider({ children }) {
 
   const refreshAndChangeToken = useCallback(async () => {
     try {
-      const response = await refreshJwt(token);
+      const response = await refreshJwt(refreshToken);
       const newAccessToken = response.data.access_token;
-      const expiresIn = response.data.expires_in;
+      const newRefreshToken = response.data.refresh_token;
 
-      changeToken(newAccessToken, expiresIn);
+      changeToken(newAccessToken, newRefreshToken);
       return newAccessToken;
     } catch (error) {
       console.error("Failed to refresh token:", error);
       setToken("");
-      setTokenExpiration("");
+      setRefreshToken("");
 
       removeCookie("accessToken", { path: "/" });
-      removeCookie("tokenExpiration", { path: "/" });
+      removeCookie("refreshToken", { path: "/" });
       return null;
     }
-  }, [token, changeToken, removeCookie]);
+  }, [refreshToken, changeToken, removeCookie]);
 
   useEffect(() => {
-    const expirationTime = tokenExpiration ? parseInt(tokenExpiration, 10) * 1000 : null;
-    const currentTime = new Date().getTime();
-
-    if (expirationTime && expirationTime - currentTime < 60 * 1000) {
-      refreshAndChangeToken();
-    }
-  }, [tokenExpiration, refreshAndChangeToken]);
+    refreshAndChangeToken();
+  }, [refreshAndChangeToken]);
 
   const tokenContextValue = useMemo(
     () => ({
       token,
+      refreshToken,
       changeToken,
     }),
-    [token, changeToken]
+    [token, refreshToken, changeToken]
   );
 
   axiosWithConfig.interceptors.response.use(
     (response) => {
+      if (response.data && response.data.data) {
+        const { access_token, refresh_token } = response.data.data;
+        changeToken(access_token, refresh_token);
+      }
       return response;
     },
     async (error) => {
       if (error.response?.status === 401) {
-        const newToken = await refreshAndChangeToken();
-        if (newToken) {
-          error.config.headers.Authorization = `Bearer ${newToken}`;
-          return axiosWithConfig.request(error.config);
-        }
+        await refreshAndChangeToken();
       }
       return Promise.reject(error);
     }
