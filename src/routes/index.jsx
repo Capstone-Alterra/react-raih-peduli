@@ -16,15 +16,16 @@ import DetailFundraise from "@/pages/fundraising/detail-fundraise";
 import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
-import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
+import { setAxiosConfig } from "@/utils/api/axiosWithConfig";
 import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
 import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
 import AddNews from "@/pages/news/add-news";
-import Page404 from "@/pages/404/index"
+import Page404 from "@/pages/404/index";
+import ProtectedRoutes from "./protected-routes";
 
 export default function Router() {
   const { token } = useToken();
@@ -34,100 +35,105 @@ export default function Router() {
 
   const router = createBrowserRouter([
     {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "/lupa-password-sukses",
-      element: <RepasswordSuccess />,
-    },
-    {
-      path: "/lupa-password",
-      element: <ForgotPasswordPage />,
-    },
-    {
-      path: "/otp-password",
-      element: <OTPPage />,
-    },
-    {
-      path: "/repassword",
-      element: <RePasswordPage />,
-    },
-    {
-      path: "/dashboard",
-      element: token === "" ? <Navigate to="/login" /> : <Dashboard />,
-    },
-    {
-      path: "/pelanggan",
-      element: token === "" ? <Navigate to="/login" /> : <User />,
-    },
-    {
-      path: "/pelanggan/:id",
-      element: token === "" ? <Navigate to="/login" /> : <EditUser />,
-    },
-    {
-      path: "/transaksi",
-      element: token === "" ? <Navigate to="/login" /> : <Transaction />,
-    },
-    {
-      path: "/transaksi/:id",
-      element: token === "" ? <Navigate to="/login" /> : <DetailTransaction />,
-    },
-    {
-      path: "/penggalangan-dana",
-      element: token === "" ? <Navigate to="/login" /> : <Fundraise />,
-    },
-    {
-      path: "/penggalangan-dana/tambah-penggalangan-dana",
-      element: token === "" ? <Navigate to="/login" /> : <AddFundraise />,
-    },
-    {
-      path: "/penggalangan-dana/:id",
-      element: token === "" ? <Navigate to="/login" /> : <DetailFundraise />,
-    },
-    {
-      path: "/berita",
-      element: token === "" ? <Navigate to="/login" /> : <News />,
-    },
-    {
-      path: "/berita/tambah-berita",
-      element: token ==="" ? <Navigate to="/login"/> : <AddNews />,
-    },
-    {
-      path: "/berita/:id",
-      element: token === "" ? <Navigate to="/login" /> : <NewsDetail />,
-    },
-    {
-      path: "/lowongan-relawan",
-      element: token === "" ? <Navigate to="/login" /> : <Volunter />,
-    },
-    {
-      path: "/lowongan-relawan/:id",
-      element: token === "" ? <Navigate to="/login" /> : <VolunterForm />,
-    },
-    {
-      path: "/tambah-lowongan-relawan",
-      element: token === "" ? <Navigate to="/login" /> : <VolunterForm />,
-    },
-    {
-      path: "/detail-lowongan-relawan",
-      element: token === "" ? <Navigate to="/login" /> : <DetailVolunter />,
-    },
-    {
-      path: "/list-pendaftar-lowongan-relawan",
-      element: token === "" ? <Navigate to="/login" /> : <ListVolunter />,
-    },
-    {
-      path: "/respon-pendaftar-lowongan-relawan/:id",
-      element: token === "" ? <Navigate to="/login" /> : <ResponseForm />,
-    },
-    {
-      path: "*",
-      element: <Page404/>,
-    },
-    {
-      path: "/",
-      element: <LandingPage />,
+      element: <ProtectedRoutes />,
+      children: [
+        {
+          path: "/",
+          element: <LandingPage />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/lupa-password-sukses",
+          element: <RepasswordSuccess />,
+        },
+        {
+          path: "/lupa-password",
+          element: <ForgotPasswordPage />,
+        },
+        {
+          path: "/otp-password",
+          element: <OTPPage />,
+        },
+        {
+          path: "/repassword",
+          element: <RePasswordPage />,
+        },
+        {
+          path: "/dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "/pelanggan",
+          element: <User />,
+        },
+        {
+          path: "/pelanggan/:id",
+          element: <EditUser />,
+        },
+        {
+          path: "/transaksi",
+          element: <Transaction />,
+        },
+        {
+          path: "/transaksi/:id",
+          element: <DetailTransaction />,
+        },
+        {
+          path: "/penggalangan-dana",
+          element: <Fundraise />,
+        },
+        {
+          path: "/penggalangan-dana/tambah-penggalangan-dana",
+          element: <AddFundraise />,
+        },
+        {
+          path: "/penggalangan-dana/:id",
+          element: <DetailFundraise />,
+        },
+        {
+          path: "/berita",
+          element: <News />,
+        },
+        {
+          path: "/berita/tambah-berita",
+          element: <AddNews />,
+        },
+        {
+          path: "/berita/:id",
+          element: <NewsDetail />,
+        },
+        {
+          path: "/lowongan-relawan",
+          element: <Volunter />,
+        },
+        {
+          path: "/lowongan-relawan/:id",
+          element: <VolunterForm />,
+        },
+        {
+          path: "/tambah-lowongan-relawan",
+          element: <VolunterForm />,
+        },
+        {
+          path: "/detail-lowongan-relawan",
+          element: <DetailVolunter />,
+        },
+        {
+          path: "/list-pendaftar-lowongan-relawan",
+          element: <ListVolunter />,
+        },
+        {
+          path: "/respon-pendaftar-lowongan-relawan/:id",
+          element: <ResponseForm />,
+        },
+        {
+          path: "*",
+          element: <Page404 />,
+        },
+      ],
     },
   ]);
 
