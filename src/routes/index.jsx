@@ -1,26 +1,30 @@
 import Login from "@/pages/login";
-import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
-import OTPPage from "@/pages/login/forgot-password/OTPPage";
-import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
+import News from "@/pages/news/index";
+import Volunter from "@/pages/volunter";
 import Dashboard from "@/pages/dashboard";
-import FundraisingForm from "@/pages/fundraising/form";
-import Fundraising from "@/pages/fundraising/index";
-import EditUser from "@/pages/customer/edit.jsx";
 import Transaction from "@/pages/transaction";
 import TransactionDetail from "@/pages/transaction/transaction-detail";
+import EditUser from "@/pages/customer/edit.jsx";
+import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
-import News from "@/pages/news/index";
 import NewsDetail from "@/pages/news/form";
-import Volunter from "@/pages/volunter";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
-import ListVolunter from "@/pages/volunter/list-volunter";
+import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
+import TransactionDetail from "@/pages/transaction/transaction-detail";
+import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
+import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
+import DetailFundraise from "@/pages/fundraising/detail-fundraise";
+import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 import { useToken } from "@/utils/context/token";
+import Fundraise from "@/pages/fundraising/index";
+import LandingPage from "@/pages/landing-page";
+
 
 export default function Router() {
   const { token } = useToken();
@@ -72,11 +76,20 @@ export default function Router() {
     },
     {
       path: "/penggalangan-dana",
-      element: token === "" ? <Navigate to="/login" /> : <Fundraising />,
+      element: token === "" ? <Navigate to="/login" /> : <Fundraise />,
     },
     {
       path: "/penggalangan-dana/:id",
       element: token === "" ? <Navigate to="/login" /> : <FundraisingForm />,
+    },
+    {
+      path: "/penggalangan-dana/tambah-penggalangan-dana",
+      element: token === "" ? <Navigate to="/login" /> :<AddFundraise />,
+    },
+    {
+      path: "/penggalangan-dana/:id",
+     element: token === "" ? <Navigate to="/login" /> :<DetailFundraise />,
+
     },
     {
       path: "/berita",
@@ -113,6 +126,10 @@ export default function Router() {
     {
       path: "*",
       element: <div>404 page found</div>,
+    },
+    {
+      path: "/",
+      element: <LandingPage />,
     },
   ]);
 
