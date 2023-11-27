@@ -47,7 +47,7 @@ export const addNews = async ({ ...data }) => {
 export const editNews = async (id, { ...data }) => {
   try {
     const response = await axiosWithConfig.put(
-      `/News/${id}`,
+      `/news/${id}`,
       {
         ...data,
       },
