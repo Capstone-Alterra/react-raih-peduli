@@ -30,9 +30,9 @@ function Login() {
     const { email, password } = data;
     try {
       const res = await login(email, password);
-      console.log("Response:", res);
+      const refreshToken = res.data.refresh_token;
       const accessToken = res.data.access_token;
-      changeToken(accessToken);
+      changeToken(accessToken, refreshToken);
       navigate("/dashboard");
     } catch (error) {
       setErrorMessage(error.message);

@@ -24,7 +24,6 @@ import { useToken } from "@/utils/context/token";
 
 export default function Router() {
   const { token } = useToken();
-  console.log("Initial Token:", token);
 
   useEffect(() => {
     setAxiosConfig(token, "http://34.128.91.0:8000");
