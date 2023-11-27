@@ -1,11 +1,11 @@
-// token.jsx
-
-import { createContext, useState, useMemo, useContext, useCallback } from "react";
+import { createContext, useState, useMemo, useContext, useCallback, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axiosWithConfig from "../setAxiosWithConfig";
+import { refreshJwt } from "../api/auth";
 
 const contextValue = {
   token: "",
+  refreshToken: "",
   changeToken: () => {},
 };
 
@@ -44,6 +44,22 @@ function TokenProvider({ children }) {
     }),
     [token, refreshToken, changeToken]
   );
+
+  useEffect(() => {
+    const refreshInterval = setInterval(async () => {
+      try {
+        const response = await refreshJwt(refreshToken);
+        const newAccessToken = response.data.access_token;
+        const newRefreshToken = response.data.refresh_token;
+
+        changeToken(newAccessToken, newRefreshToken);
+      } catch (error) {
+        console.error("Failed to refresh token:", error);
+      }
+    }, 10 * 60 * 1000);
+
+    return () => clearInterval(refreshInterval);
+  }, [refreshToken, changeToken]);
 
   axiosWithConfig.interceptors.response.use(
     (response) => {
