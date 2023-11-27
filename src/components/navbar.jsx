@@ -12,7 +12,6 @@ function Navbar() {
 
   function handleLogout() {
     changeToken();
-    console.log("logout");
     navigate("/login");
   }
 
