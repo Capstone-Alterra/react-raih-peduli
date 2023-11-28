@@ -7,7 +7,6 @@ import TransactionDetail from "@/pages/transaction/transaction-detail";
 import EditUser from "@/pages/customer/edit.jsx";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
-import NewsDetail from "@/pages/news/form";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
@@ -22,8 +21,9 @@ import { useEffect } from "react";
 import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
+import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
-import AddNews from "@/pages/news/add-news"
+import AddNews from "@/pages/news/add-news";
 
 export default function Router() {
   const { token } = useToken();
