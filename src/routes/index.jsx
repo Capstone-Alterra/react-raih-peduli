@@ -7,7 +7,6 @@ import TransactionDetail from "@/pages/transaction/transaction-detail";
 import EditUser from "@/pages/customer/edit.jsx";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
-import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
@@ -24,6 +23,7 @@ import Fundraise from "@/pages/fundraising/index";
 import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
 import AddNews from "@/pages/news/add-news";
+import AddVolunterForm from "@/pages/volunter/add-form";
 
 export default function Router() {
   const { token } = useToken();
@@ -101,15 +101,11 @@ export default function Router() {
       element: token === "" ? <Navigate to="/login" /> : <Volunter />,
     },
     {
+      path: "/lowongan-relawan/tambah-lowongan-relawan",
+      element: token === "" ? <Navigate to="/login" /> : <AddVolunterForm />,
+    },
+    {
       path: "/lowongan-relawan/:id",
-      element: token === "" ? <Navigate to="/login" /> : <VolunterForm />,
-    },
-    {
-      path: "/tambah-lowongan-relawan",
-      element: token === "" ? <Navigate to="/login" /> : <VolunterForm />,
-    },
-    {
-      path: "/detail-lowongan-relawan",
       element: token === "" ? <Navigate to="/login" /> : <DetailVolunter />,
     },
     {
