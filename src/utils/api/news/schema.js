@@ -1,14 +1,23 @@
 import * as z from "zod";
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const newsSchema = z.object({
   title: z.string().min(2, {
     message: "Kolom judul berita harus diisi",
   }),
-  photo: z.any(),
+  photo: z
+  .any()
+  .refine((file) => !!file, {
+    message: "Kolom foto berita harus diisi",
+  })
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Ukuran Gambar Maksimal 5MB.`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Format gambar wajib JPG, JPEG, dan PNG"
+  ),
   description: z.string().min(2, {
     message: "Kolom deskripsi berita harus diisi",
   }),
 
-  // TODO: Create image validation
-  // NOTE: Wait confirmation from backend for validation schema
 });
