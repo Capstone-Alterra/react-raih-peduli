@@ -12,7 +12,7 @@ export const fundraiseSchema = z.object({
   }),
   start_date: z.date({
     required_error: "Masukkan tanggal mulai penggalangan dana",
-    invalid_type_error: "Masukkan tanggal berakhir penggalangan dana",
+    invalid_type_error: "Masukkan tanggal mulai penggalangan dana",
   }),
   end_date: z.date({
     required_error: "Masukkan tanggal berakhir penggalangan dana",
