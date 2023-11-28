@@ -14,12 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  addNews,
-  editNews,
-  newsSchema,
-  getDetailNews,
-} from "@/utils/api/news";
+import { addNews, editNews, newsSchema, getDetailNews } from "@/utils/api/news";
 
 const NewsForm = ({ action, id }) => {
   const navigate = useNavigate();
@@ -36,7 +31,7 @@ const NewsForm = ({ action, id }) => {
   useEffect(() => {
     if (action !== "add") {
       getDetailNews(id).then((data) => {
-        const { title, photo, description} = data;
+        const { title, photo, description } = data;
         setPreview(photo);
 
         form.reset({
@@ -65,16 +60,19 @@ const NewsForm = ({ action, id }) => {
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/berita"));
-    } 
+    }
   };
 
   const goBackHandler = () => {
-      navigate(-1);
+    navigate(-1);
   };
 
   return (
     <Form {...form}>
-      <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className="px-6 py-6 mb-6 flex flex-col gap-y-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="title"
@@ -122,9 +120,7 @@ const NewsForm = ({ action, id }) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-news-description">
-                Deskripsi
-              </FormLabel>
+              <FormLabel htmlFor="input-news-description">Deskripsi</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
@@ -138,28 +134,27 @@ const NewsForm = ({ action, id }) => {
             </FormItem>
           )}
         />
-        
-        <div className="flex justify-end gap-3 pt-5">
-          <Button
-            size="sm"
-            type="reset"
-            onClick={goBackHandler}
-            disabled={action === "detail" }
-            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-            id="btn-action-negative"
-          >
-            Batal
-          </Button>
-          <Button
-            size="sm"
-            disabled={action === "detail"}
-            type="submit"
-            className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-            id="btn-action-positive"
-          >
-            Simpan
-          </Button>
-        </div>
+        {action != "detail" && (
+          <div className="flex justify-end gap-3 pt-5">
+            <Button
+              size="sm"
+              type="reset"
+              onClick={goBackHandler}
+              className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+              id="btn-action-negative"
+            >
+              Batal
+            </Button>
+            <Button
+              size="sm"
+              type="submit"
+              className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+              id="btn-action-positive"
+            >
+              Simpan
+            </Button>
+          </div>
+        )}
       </form>
     </Form>
   );
