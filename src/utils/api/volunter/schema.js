@@ -18,8 +18,8 @@ export const volunterSchema = z.object({
   end_date: z.date({
     required_error: "Masukkan tanggal berakhir penggalangan dana",
   }),
-  province: z.string().min(2, { message: "Harus memilih provinsi" }),
-  city: z.string().min(2, { message: "Harus memilih kabupaten" }),
-  sub_district: z.string().min(2, { message: "Harus memilih kecamatan" }),
-  ward: z.string().min(2, { message: "Harus memilih kelurahan" }),
+  provinces: z.string().min(2, { message: "Harus memilih provinsi" }),
+  regencies: z.string().min(2, { message: "Harus memilih kabupaten" }),
+  districts: z.string().min(2, { message: "Harus memilih kecamatan" }),
+  villages: z.string().min(2, { message: "Harus memilih kelurahan" }),
 });

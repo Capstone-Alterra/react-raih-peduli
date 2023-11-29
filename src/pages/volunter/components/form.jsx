@@ -26,9 +26,19 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getDetailVolunter } from "@/utils/api/volunter/api";
+import axios from "axios";
+import { Label } from "@/components/ui/label";
+import ProfileIcon from "@/assets/icons/profile";
+import SingleSelect from "@/components/single-select";
+import { NumericFormat } from "react-number-format";
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
+  const [provincesData, setProvincesData] = useState([]);
+  const [regenciesData, setRegenciesData] = useState([]);
+  const [districtsData, setDistrictsData] = useState([]);
+  const [villagesData, setVillagesData] = useState([]);
+  const selectedProvinceId = provincesData.id;
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const form = useForm({
@@ -48,7 +58,14 @@ const VolunterForm = ({ action, id }) => {
     },
   });
 
+  const getProvinces = () => {
+    axios
+      .get("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
+      .then((response) => setProvincesData(response.data));
+  };
+
   useEffect(() => {
+    getProvinces();
     if (action !== "add") {
       getDetailVolunter(id).then((data) => {
         const {
@@ -85,6 +102,10 @@ const VolunterForm = ({ action, id }) => {
       });
     }
   }, []);
+
+  const handleGoListRegister = () => {
+    navigate("/list-pendaftar-lowongan-relawan");
+  };
 
   return (
     <Form {...form}>
@@ -155,17 +176,18 @@ const VolunterForm = ({ action, id }) => {
             control={form.control}
             name="number_of_vacancies"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem
+                style={{ width: action === "edit" ? "49%" : "100%" }}
+                className="w-full">
                 <FormLabel htmlFor="input-volunter-number">
                   Jumlah Lowongan
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
+                  <NumericFormat
                     value={field.value}
                     customInput={Input}
                     allowNegative={false}
-                    id="input-volunter-number"
+                    id="input-fundraise-number"
                     disabled={action === "detail"}
                     className="disabled:opacity-100"
                     placeholder="Masukkan Jumlah Lowongan"
@@ -179,11 +201,12 @@ const VolunterForm = ({ action, id }) => {
             )}
           />
           <FormField
-            className={action === "edit" || "editing" ? "hidden" : ""}
             control={form.control}
             name="contact_email"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem
+                style={{ display: action === "edit" ? "none" : "" }}
+                className="w-full">
                 <FormLabel htmlFor="input-volunter-email">
                   Kontak Email
                 </FormLabel>
@@ -291,15 +314,16 @@ const VolunterForm = ({ action, id }) => {
             name="province"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-province">
+                <FormLabel htmlFor="input-volunter-provinces">
                   Provinsi
                 </FormLabel>
                 <FormControl>
-                  <SelectForm
+                  <SingleSelect
                     {...field}
-                    id="input-volunter-province"
-                    placeholder="Pilih Provinsi"
-                    options={[{ value: "bogor", label: "Bogor" }]}
+                    id="input-volunter-provinces"
+                    disabled={action === "detail"}
+                    options={provincesData}
+                    placeholder="Provinsi"
                   />
                 </FormControl>
                 <FormMessage />
@@ -311,15 +335,16 @@ const VolunterForm = ({ action, id }) => {
             name="city"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-regency">
+                <FormLabel htmlFor="input-volunter-regencies">
                   Kabupaten
                 </FormLabel>
                 <FormControl>
-                  <SelectForm
+                  <SingleSelect
                     {...field}
-                    id="input-volunter-regency"
-                    placeholder="Pilih Kabupaten"
-                    options={[{ value: "bogor", label: "Bogor" }]}
+                    id="input-volunter-regencies"
+                    disabled={action === "detail"}
+                    options={regenciesData}
+                    placeholder="Kabupaten"
                   />
                 </FormControl>
                 <FormMessage />
@@ -333,15 +358,16 @@ const VolunterForm = ({ action, id }) => {
             name="sub_district"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-subdistrict">
+                <FormLabel htmlFor="input-volunter-districts">
                   Kecamatan
                 </FormLabel>
                 <FormControl>
-                  <SelectForm
+                  <SingleSelect
                     {...field}
-                    id="input-volunter-subdistrict"
-                    placeholder="Pilih Kecamatan"
-                    options={[{ value: "bogor", label: "Bogor" }]}
+                    id="input-volunter-districts"
+                    disabled={action === "detail"}
+                    options={districtsData}
+                    placeholder="Kecamatan"
                   />
                 </FormControl>
                 <FormMessage />
@@ -353,13 +379,16 @@ const VolunterForm = ({ action, id }) => {
             name="ward"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-ward">Kelurahan</FormLabel>
+                <FormLabel htmlFor="input-volunter-villages">
+                  Kelurahan
+                </FormLabel>
                 <FormControl>
-                  <SelectForm
+                  <SingleSelect
                     {...field}
-                    id="input-volunter-ward"
-                    placeholder="Pilih Kelurahan"
-                    options={[{ value: "bogor", label: "Bogor" }]}
+                    id="input-volunter-villages"
+                    disabled={action === "detail"}
+                    options={villagesData}
+                    placeholder="Kelurahan"
                   />
                 </FormControl>
                 <FormMessage />
@@ -390,6 +419,18 @@ const VolunterForm = ({ action, id }) => {
             </FormItem>
           )}
         />
+        <div
+          style={{ display: action !== "detail" ? "none" : "" }}
+          className=" pt-[18px] py-5">
+          <Label>Pendaftar Lowongan</Label>
+          <div
+            className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
+            onClick={handleGoListRegister}>
+            <ProfileIcon className="w-2 h-2" />
+            <ProfileIcon className="w-2 h-2 ml-3" />
+            <p className="ml-2">50+</p>
+          </div>
+        </div>
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
