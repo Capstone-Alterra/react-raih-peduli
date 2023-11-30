@@ -65,14 +65,14 @@ const Alert = ({ id }) => {
           <AlertDialogCancel
             onClick={() => setOpen(false)}
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-            className="w-24 font-semibold border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
+            className="w-[100px] font-semibold border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
           >
             Batal
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => deleteHandler(id, setOpen)}
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-            className="w-24 font-semibold border-[#E31F1F] bg-[#E31F1F] hover:bg-[#E31F1F]/80 text-white"
+            className="w-[100px] font-semibold border-[#E31F1F] bg-[#E31F1F] hover:bg-[#E31F1F]/80 text-white"
           >
             Ya, Hapus!
           </AlertDialogAction>
