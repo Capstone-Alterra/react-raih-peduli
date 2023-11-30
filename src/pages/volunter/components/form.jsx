@@ -25,12 +25,24 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getDetailVolunter } from "@/utils/api/volunter/api";
+import {
+  addVolunter,
+  editVolunter,
+  getDetailVolunter,
+  updateStatusVolunter,
+} from "@/utils/api/volunter/api";
 import axios from "axios";
 import { Label } from "@/components/ui/label";
 import ProfileIcon from "@/assets/icons/profile";
 import SingleSelect from "@/components/single-select";
 import { NumericFormat } from "react-number-format";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
@@ -38,9 +50,9 @@ const VolunterForm = ({ action, id }) => {
   const [regenciesData, setRegenciesData] = useState([]);
   const [districtsData, setDistrictsData] = useState([]);
   const [villagesData, setVillagesData] = useState([]);
-  const selectedProvinceId = provincesData.id;
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("");
   const form = useForm({
     resolver: zodResolver(volunterSchema),
     defaultValues: {
@@ -51,21 +63,90 @@ const VolunterForm = ({ action, id }) => {
       contact_email: "",
       start_date: "",
       end_date: "",
-      province: "",
+      provinces: "",
       city: "",
       sub_district: "",
-      ward: "",
+      villages: "",
     },
   });
 
+  const onSubmit = (data) => {
+    const {
+      title,
+      description,
+      skill_requred,
+      number_of_vacancies,
+      contact_email,
+      start_date,
+      end_date,
+      provinces,
+      city,
+      sub_disctrict,
+      villages,
+    } = data;
+    const startISO = start_date.toISOString();
+    const endISO = end_date.toISOString();
+
+    if (action === "add") {
+      addVolunter({
+        title,
+        description,
+        skill_requred,
+        number_of_vacancies,
+        contact_email,
+        start_date: startISO,
+        end_date: endISO,
+        provinces,
+        city,
+        sub_disctrict,
+        villages,
+      })
+        .then((message) => alert(message))
+        .catch((message) => alert(message))
+        .finally(navigate("/lowongan-relawan"));
+    } else if (action === "edit") {
+      const editedData = {
+        title,
+        description,
+        skill_requred,
+        number_of_vacancies,
+        contact_email,
+        start_date: startISO,
+        end_date: endISO,
+        province,
+        city,
+        sub_disctrict,
+        villages,
+      };
+
+      editVolunter(id, editedData)
+        .then((message) => alert(message))
+        .catch((message) => alert(message))
+        .finally(navigate("/lowongan-relawan"));
+    } else if (action === "detail") {
+      updateStatusVolunter(id, "accepted")
+        .then((message) => alert(message))
+        .cactch((message) => alert(message))
+        .finally(navigate("/lowongan-relawan"));
+    }
+  };
+
   const getProvinces = () => {
     axios
-      .get("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
-      .then((response) => setProvincesData(response.data));
+      .get(`https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
+      .then((response) => setProvincesData(response.data))
+      .catch((error) => console.log(error));
+  };
+
+  const getRegencies = () => {
+    axios
+      .get(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/11.json`)
+      .then((response) => setRegenciesData(response.data));
   };
 
   useEffect(() => {
     getProvinces();
+    getRegencies();
     if (action !== "add") {
       getDetailVolunter(id).then((data) => {
         const {
@@ -107,12 +188,16 @@ const VolunterForm = ({ action, id }) => {
     navigate("/list-pendaftar-lowongan-relawan");
   };
 
+  const handleSelect = (e) => {
+    setSelectedProvince(e.target.value);
+    console.log(selectedProvince);
+  };
+
   return (
     <Form {...form}>
       <form
         className="px-6 py-6 mb-6 flex flex-col gap-y-4"
-        // onSubmit={form.handleSubmit(onSubmit)}
-      >
+        onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="title"
@@ -311,21 +396,28 @@ const VolunterForm = ({ action, id }) => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="province"
+            name="provinces"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel htmlFor="input-volunter-provinces">
                   Provinsi
                 </FormLabel>
-                <FormControl>
-                  <SingleSelect
-                    {...field}
-                    id="input-volunter-provinces"
-                    disabled={action === "detail"}
-                    options={provincesData}
-                    placeholder="Provinsi"
-                  />
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange((e) => console.log(e.target))}
+                  value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {provincesData.map((province) => (
+                      <SelectItem key={province.id} value={province.id}>
+                        {province.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -335,13 +427,11 @@ const VolunterForm = ({ action, id }) => {
             name="city"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-regencies">
-                  Kabupaten
-                </FormLabel>
+                <FormLabel htmlFor="input-volunter-city">Kabupaten</FormLabel>
                 <FormControl>
                   <SingleSelect
                     {...field}
-                    id="input-volunter-regencies"
+                    id="input-volunter-city"
                     disabled={action === "detail"}
                     options={regenciesData}
                     placeholder="Kabupaten"
@@ -358,13 +448,13 @@ const VolunterForm = ({ action, id }) => {
             name="sub_district"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-districts">
+                <FormLabel htmlFor="input-volunter-sub-district">
                   Kecamatan
                 </FormLabel>
                 <FormControl>
                   <SingleSelect
                     {...field}
-                    id="input-volunter-districts"
+                    id="input-volunter-sub-district"
                     disabled={action === "detail"}
                     options={districtsData}
                     placeholder="Kecamatan"
@@ -376,7 +466,7 @@ const VolunterForm = ({ action, id }) => {
           />
           <FormField
             control={form.control}
-            name="ward"
+            name="villages"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel htmlFor="input-volunter-villages">
@@ -401,10 +491,11 @@ const VolunterForm = ({ action, id }) => {
           name="photo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-fundraise-image">Foto</FormLabel>
+              <FormLabel htmlFor="input-volunter-image">Foto</FormLabel>
               <FormControl>
                 <FileInput
-                  id="input-fundraise-image"
+                  id="input-volunter-image"
+                  placeholder="Tambahkan foto Lowongan Relawan di sini"
                   preview={preview}
                   onChange={(e) => {
                     field.onChange(e.target.files[0]);
