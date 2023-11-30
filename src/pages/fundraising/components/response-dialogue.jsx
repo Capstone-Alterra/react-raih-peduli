@@ -1,5 +1,7 @@
 import * as z from "zod";
+import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +28,7 @@ const responseFormSchema = z.object({
 });
 
 const ResponseDialogue = ({ open, onOpenChange, id }) => {
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(responseFormSchema),
     defaultValues: {
@@ -37,9 +40,21 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
     const { rejected_reason } = data;
 
     updateStatusFundraise(id, "rejected", rejected_reason)
-      .then((message) => alert(message))
-      .catch((message) => alert(message));
+      .then((message) => Toast.fire({ icon: "success", title: message }))
+      .catch((message) => Toast.fire({ icon: "error", title: message }))
+      .finally(navigate("/penggalangan-dana"));
   };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
