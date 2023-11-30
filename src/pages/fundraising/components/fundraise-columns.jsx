@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import InfoIcon from "@/assets/icons/info";
-import TrashIcon from "@/assets/icons/trash";
 import { Badge } from "@/components/ui/badge";
 import PencilIcon from "@/assets/icons/pencil";
 import { Button } from "@/components/ui/button";
-import { deleteFundraise } from "@/utils/api/fundraise";
+
 import convertToRupiah from "@/utils/formatter/convertToRupiah";
+import Alert from "./alert-dialog";
 
 export const columns = [
   {
@@ -95,23 +95,7 @@ export const columns = [
               <InfoIcon className="w-4 h-4" />
             </Link>
           </Button>
-          <Button
-            size="icon"
-            id={`btn-delete-fundraise-${id}`}
-            className="bg-[#BF1616] hover:bg-[#BF1616]/80"
-            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-            onClick={() => {
-              if (confirm("Hapus penggalangan dana?")) {
-                deleteFundraise(id)
-                  .then((message) => alert(message))
-                  .catch((message) => alert(message));
-              } else {
-                alert("Batal hapus penggalangan dana");
-              }
-            }}
-          >
-            <TrashIcon className="w-4 h-4" />
-          </Button>
+          <Alert id={id} />
         </div>
       );
     },
