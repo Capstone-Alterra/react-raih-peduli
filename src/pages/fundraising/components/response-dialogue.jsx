@@ -75,8 +75,8 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
               )}
             />
             <DialogFooter className="justify-end">
-              <DialogClose asChild>
-                <div className="flex gap-2">
+              <div className="flex gap-2">
+                <DialogClose asChild>
                   <Button
                     size="sm"
                     type="button"
@@ -85,16 +85,16 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
                   >
                     Batal
                   </Button>
-                  <Button
-                    type="submit"
-                    size="sm"
-                    id="btn-action-positive"
-                    className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-                  >
-                    Tolak
-                  </Button>
-                </div>
-              </DialogClose>
+                </DialogClose>
+                <Button
+                  type="submit"
+                  size="sm"
+                  id="btn-action-positive"
+                  className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+                >
+                  Tolak
+                </Button>
+              </div>
             </DialogFooter>
           </form>
         </Form>
