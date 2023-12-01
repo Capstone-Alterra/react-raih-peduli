@@ -7,7 +7,7 @@ export const getFundraises = async (pageIndex, pageSize, title) => {
       return response.data;
     } else {
       const response = await axiosWithConfig.get(
-        `/fundraises?page=${pageIndex}&page_size=${pageSize}&title=${title}`
+        `/fundraises?page=${pageIndex}&page_size=${pageSize}`
       );
       return response.data;
     }
@@ -29,7 +29,7 @@ export const getDetailFundraise = async (id) => {
 
 export const addFundraise = async ({ ...data }) => {
   try {
-    const response = await axiosWithConfig.post(
+    await axiosWithConfig.post(
       "/fundraises",
       { ...data },
       {
@@ -38,15 +38,16 @@ export const addFundraise = async ({ ...data }) => {
         },
       }
     );
-    return response.data.message;
+    return "Berhasil menambah penggalangan dana";
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
+
 export const editFundraise = async (id, { ...data }) => {
   try {
-    const response = await axiosWithConfig.put(
+    await axiosWithConfig.put(
       `/fundraises/${id}`,
       {
         ...data,
@@ -57,7 +58,7 @@ export const editFundraise = async (id, { ...data }) => {
         },
       }
     );
-    return response.data.message;
+    return "Berhasil mengedit penggalangan dana";
   } catch (error) {
     console.error(error);
     throw error;
@@ -66,20 +67,21 @@ export const editFundraise = async (id, { ...data }) => {
 
 export const deleteFundraise = async (id) => {
   try {
-    const response = await axiosWithConfig.delete(`/fundraises/${id}`);
-    return response.data.message;
+    await axiosWithConfig.delete(`/fundraises/${id}`);
+    return "Berhasil menghapus penggalangan dana";
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const updateStatusFundraise = async (id, status) => {
+export const updateStatusFundraise = async (id, status, reason) => {
   try {
-    const response = await axiosWithConfig.patch(`/fundraises/${id}`, {
+    await axiosWithConfig.patch(`/fundraises/${id}`, {
       status,
+      rejected_reason: reason,
     });
-    return response.data.message;
+    return "Berhasil mengupdate status penggalangan dana";
   } catch (error) {
     console.error(error);
     throw error;

@@ -1,4 +1,5 @@
 import { cn } from "@/utils";
+import Swal from "sweetalert2";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { id as Id } from "date-fns/locale";
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import FileInput from "@/components/input-file";
+import ResponseDialogue from "./response-dialogue";
 import { Textarea } from "@/components/ui/textarea";
 import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
@@ -15,26 +17,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Form,
-  FormControl,
-  FormField,
   FormItem,
+  FormField,
   FormLabel,
   FormMessage,
+  FormControl,
 } from "@/components/ui/form";
 import {
   addFundraise,
   editFundraise,
-  fundraiseSchema,
   getDetailFundraise,
+  addFundraiseSchema,
+  editFundraiseSchema,
   updateStatusFundraise,
 } from "@/utils/api/fundraise";
 
 const FundraiseForm = ({ action, id }) => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const form = useForm({
-    resolver: zodResolver(fundraiseSchema),
+    resolver: zodResolver(action === "edit" ? editFundraiseSchema : addFundraiseSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -73,8 +77,8 @@ const FundraiseForm = ({ action, id }) => {
 
     if (action === "add") {
       addFundraise({ title, description, photo, target, start_date: startISO, end_date: endISO })
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
+        .then((message) => Toast.fire({ icon: "success", title: message }))
+        .catch((message) => Toast.fire({ icon: "error", title: message }))
         .finally(navigate("/penggalangan-dana"));
     } else if (action === "edit") {
       const editedData = {
@@ -87,27 +91,39 @@ const FundraiseForm = ({ action, id }) => {
       };
 
       editFundraise(id, editedData)
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/penggalangan-dana"));
-    } else if (action === "detail") {
-      updateStatusFundraise(id, "accepted")
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
+        .then((message) => Toast.fire({ icon: "success", title: message }))
+        .catch((message) => Toast.fire({ icon: "error", title: message }))
         .finally(navigate("/penggalangan-dana"));
     }
   };
 
-  const goBackHandler = () => {
-    if (action === "detail") {
-      updateStatusFundraise(id, "rejected")
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/penggalangan-dana"));
-    } else {
-      navigate(-1);
-    }
+  const updateFundraise = (id, status) => {
+    updateStatusFundraise(id, status)
+      .then((message) => {
+        Toast.fire({ icon: "success", title: message });
+      })
+      .catch((message) => {
+        Toast.fire({ icon: "error", title: message });
+      })
+      .finally(navigate("/penggalangan-dana"));
   };
+
+  const isFutureDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   return (
     <Form {...form}>
@@ -214,6 +230,7 @@ const FundraiseForm = ({ action, id }) => {
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
+                      disabled={(date) => isFutureDate(date)}
                     />
                   </PopoverContent>
                 </Popover>
@@ -256,6 +273,7 @@ const FundraiseForm = ({ action, id }) => {
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
+                      disabled={(date) => isFutureDate(date)}
                     />
                   </PopoverContent>
                 </Popover>
@@ -290,31 +308,29 @@ const FundraiseForm = ({ action, id }) => {
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
-            type="reset"
-            onClick={goBackHandler}
-            disabled={action === "detail" && status !== "pending"}
-            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+            type="button"
             id="btn-action-negative"
+            disabled={action === "detail" && status !== "pending"}
+            onClick={() => {
+              action !== "detail" ? navigate(-1) : setOpen(true);
+            }}
+            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
           >
             {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
           </Button>
           <Button
             size="sm"
-            disabled={action === "detail" && status !== "pending"}
-            type="submit"
-            className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-action-positive"
+            type={action === "detail" ? "button" : "submit"}
+            disabled={action === "detail" && status !== "pending"}
+            className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+            onClick={action === "detail" ? () => updateFundraise(id, "accepted") : undefined}
           >
-            {action === "edit"
-              ? "Edit data"
-              : action === "detail"
-              ? "Terima"
-              : action === "add"
-              ? "Tambah"
-              : ""}
+            {action === "edit" ? "Edit data" : action === "detail" ? "Terima" : "Tambah"}
           </Button>
         </div>
       </form>
+      <ResponseDialogue open={open} onOpenChange={setOpen} status={status} id={id} />
     </Form>
   );
 };

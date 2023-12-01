@@ -7,7 +7,7 @@ import {
   updateStatusFundraise,
 } from "./api";
 
-import { fundraiseSchema } from "./schema";
+import { addFundraiseSchema, editFundraiseSchema } from "./schema";
 
 export {
   getFundraises,
@@ -16,5 +16,6 @@ export {
   editFundraise,
   deleteFundraise,
   updateStatusFundraise,
-  fundraiseSchema,
+  addFundraiseSchema,
+  editFundraiseSchema,
 };
