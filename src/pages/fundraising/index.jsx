@@ -13,28 +13,36 @@ import TableData from "@/pages/fundraising/components/fundraise-table";
 
 function Fundraise() {
   const [data, setData] = useState([]);
-  const [pageCount, setPageCount] = useState();
   const [filtering, setFiltering] = useState("");
   const debouncedSearchTerm = useDebounce(filtering, 500);
-  const [{ pageIndex, pageSize }, setPagination] = useState({
+  const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 10,
+    prevPage: 0,
+    currentPage: 0,
+    totalPage: 0,
   });
 
   const pagination = {
-    pageIndex,
     pageSize,
+    prevPage,
+    pageIndex,
+    totalPage,
+    currentPage,
   };
 
   useEffect(() => {
     getFundraises(pageIndex, pageSize, debouncedSearchTerm)
       .then((data) => {
         setData(data.data);
-        setPageCount(data.pagination.total_page);
-        setPagination((prevState) => ({
-          ...prevState,
+        setPagination({
+          nextPage: data.pagination.next_page,
+          pageSize: data.pagination.page_size,
+          totalPage: data.pagination.total_page,
+          prevPage: data.pagination.previous_page,
           pageIndex: data.pagination.current_page,
-        }));
+          currentPage: data.pagination.current_page,
+        });
       })
       .catch(() => {
         setData([]);
@@ -66,10 +74,8 @@ function Fundraise() {
         <TableData
           data={data}
           columns={columns}
-          pageIndex={pageIndex}
           filtering={filtering}
           setFiltering={setFiltering}
-          pageCount={pageCount}
           pagination={pagination}
           setPagination={setPagination}
         />

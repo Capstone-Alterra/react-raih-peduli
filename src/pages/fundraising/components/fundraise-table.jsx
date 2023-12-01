@@ -19,20 +19,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-function TableData({
-  columns,
-  data,
-  pageCount,
-  pageIndex,
-  pagination,
-  setPagination,
-  filtering,
-  setFiltering,
-}) {
+function TableData({ columns, data, pagination, setPagination, filtering, setFiltering }) {
+  const { totalPage, currentPage, pageIndex, pageSize, prevPage } = pagination;
   const table = useReactTable({
     data: data ?? [],
     columns,
-    pageCount,
     manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
     state: {
@@ -40,6 +31,20 @@ function TableData({
     },
     onPaginationChange: setPagination,
   });
+
+  let startPagination;
+
+  if (totalPage <= 3) {
+    startPagination = 0;
+  } else if (totalPage - currentPage < 2) {
+    startPagination = totalPage - 3;
+  } else if (totalPage - currentPage === 2) {
+    startPagination = currentPage - 2;
+  } else if (prevPage === 0) {
+    startPagination = currentPage - 1;
+  } else {
+    startPagination = currentPage - 2;
+  }
 
   return (
     <>
@@ -90,14 +95,14 @@ function TableData({
       </Table>
       <div className="flex justify-between items-center jus px-4 py-4 border-t-2">
         <div className="flex items-center gap-1 text-sm ">
-          <div>Halaman ke</div>
-          {table.getState().pagination.pageIndex} dari {table.getPageCount()}
+          <div>Menampilkan halaman ke</div>
+          {pageIndex} dari {totalPage}
         </div>
         <div className="flex gap-3">
           <div className="flex items-center gap-2 text-sm">
             Tampilkan
             <Select
-              value={table.getState().pagination.pageSize}
+              value={pageSize}
               onValueChange={(value) => {
                 setPagination((prevPagination) => ({
                   ...prevPagination,
@@ -132,12 +137,13 @@ function TableData({
                   pageIndex: prevState.pageIndex - 1,
                 }))
               }
-              disabled={pageIndex <= 1}
+              disabled={prevPage === 0}
             >
               <ChevronLeft className="w-5 h-5 text-[#293066]" />
             </Button>
-            {Array.from({ length: pageCount }, (_, index) => index + 1)
-              .slice(pageIndex - 1, pageIndex + 2)
+
+            {Array.from({ length: totalPage }, (_, index) => index + 1)
+              .slice(startPagination, startPagination + 3)
               .map((page, index) => (
                 <Button
                   size="sm"
@@ -156,6 +162,7 @@ function TableData({
                   {page}
                 </Button>
               ))}
+
             <Button
               id="btn-pagination-next"
               className="w-9 h-9 p-0 bg-[#F4F6F9] hover:bg-[#293066]/20"
@@ -164,10 +171,10 @@ function TableData({
               onClick={() =>
                 setPagination((prevState) => ({
                   ...prevState,
-                  pageIndex: prevState.pageIndex + 1,
+                  pageIndex: pageIndex + 1,
                 }))
               }
-              disabled={pageIndex >= pageCount}
+              disabled={pageIndex >= totalPage}
             >
               <ChevronRight className="w-5 h-5 text-[#293066]" />
             </Button>
