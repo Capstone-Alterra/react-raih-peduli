@@ -16,6 +16,7 @@ const handleDelete = (id) => {
     cancelButtonColor: "#d33",
     confirmButtonText: "Ya, Hapus!",
     cancelButtonText: "Batal",
+    reverseButtons: true,
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({

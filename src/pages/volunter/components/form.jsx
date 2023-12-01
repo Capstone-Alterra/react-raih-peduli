@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { volunterSchema } from "@/utils/api/volunter/schema";
-import { MultipleSelect, SelectForm } from "@/components/multiple-select";
+import { MultipleSelect } from "@/components/multiple-select";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import FileInput from "@/components/input-file";
@@ -50,9 +50,12 @@ const VolunterForm = ({ action, id }) => {
   const [regenciesData, setRegenciesData] = useState([]);
   const [districtsData, setDistrictsData] = useState([]);
   const [villagesData, setVillagesData] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedRegencie, setSelectedRegencie] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedVillage, setSelectedVillage] = useState("");
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
-  const [selectedProvince, setSelectedProvince] = useState("");
   const form = useForm({
     resolver: zodResolver(volunterSchema),
     defaultValues: {
@@ -138,15 +141,34 @@ const VolunterForm = ({ action, id }) => {
       .catch((error) => console.log(error));
   };
 
-  const getRegencies = () => {
+  const getRegencies = (id) => {
     axios
-      .get(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/11.json`)
-      .then((response) => setRegenciesData(response.data));
+      .get(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${id}.json`
+      )
+      .then((response) => setRegenciesData(response.data))
+      .catch((error) => console.log(error));
+  };
+
+  const getDistricts = (id) => {
+    axios
+      .get(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${id}.json`
+      )
+      .then((response) => setDistrictsData(response.data))
+      .catch((error) => console.log(error));
+  };
+
+  const getVillages = (id) => {
+    axios
+      .get(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${id}.json`
+      )
+      .then((response) => setVillagesData(response.data));
   };
 
   useEffect(() => {
     getProvinces();
-    getRegencies();
     if (action !== "add") {
       getDetailVolunter(id).then((data) => {
         const {
@@ -184,13 +206,20 @@ const VolunterForm = ({ action, id }) => {
     }
   }, []);
 
+  useEffect(() => {
+    getRegencies(selectedProvince);
+  }, [selectedProvince]);
+
+  useEffect(() => {
+    getDistricts(selectedRegencie);
+  }, [selectedRegencie]);
+
+  useEffect(() => {
+    getVillages(selectedDistrict);
+  }, [selectedDistrict]);
+
   const handleGoListRegister = () => {
     navigate("/list-pendaftar-lowongan-relawan");
-  };
-
-  const handleSelect = (e) => {
-    setSelectedProvince(e.target.value);
-    console.log(selectedProvince);
   };
 
   return (
@@ -285,29 +314,29 @@ const VolunterForm = ({ action, id }) => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="contact_email"
-            render={({ field }) => (
-              <FormItem
-                style={{ display: action === "edit" ? "none" : "" }}
-                className="w-full">
-                <FormLabel htmlFor="input-volunter-email">
-                  Kontak Email
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id="input-volunter-email"
-                    className="disabled:opacity-100"
-                    disabled={action === "detail"}
-                    placeholder="Masukkan kontak email"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {action !== "edit" && (
+            <FormField
+              control={form.control}
+              name="contact_email"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel htmlFor="input-volunter-email">
+                    Kontak Email
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      id="input-volunter-email"
+                      className="disabled:opacity-100"
+                      disabled={action === "detail"}
+                      placeholder="Masukkan kontak email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
         <div className="flex gap-4">
           <FormField
@@ -403,11 +432,11 @@ const VolunterForm = ({ action, id }) => {
                   Provinsi
                 </FormLabel>
                 <Select
-                  onValueChange={field.onChange((e) => console.log(e.target))}
-                  value={field.value}>
+                  onValueChange={(e) => setSelectedProvince(e)}
+                  defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder="Provinsi" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -427,16 +456,23 @@ const VolunterForm = ({ action, id }) => {
             name="city"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-city">Kabupaten</FormLabel>
-                <FormControl>
-                  <SingleSelect
-                    {...field}
-                    id="input-volunter-city"
-                    disabled={action === "detail"}
-                    options={regenciesData}
-                    placeholder="Kabupaten"
-                  />
-                </FormControl>
+                <FormLabel>Kabupaten</FormLabel>
+                <Select
+                  onValueChange={(e) => setSelectedRegencie(e)}
+                  defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Kabupaten" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {regenciesData.map((regencie) => (
+                      <SelectItem key={regencie.id} value={regencie.id}>
+                        {regencie.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -445,21 +481,26 @@ const VolunterForm = ({ action, id }) => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="sub_district"
+            name="sub-district"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-sub-district">
-                  Kecamatan
-                </FormLabel>
-                <FormControl>
-                  <SingleSelect
-                    {...field}
-                    id="input-volunter-sub-district"
-                    disabled={action === "detail"}
-                    options={districtsData}
-                    placeholder="Kecamatan"
-                  />
-                </FormControl>
+                <FormLabel>Kecamatan</FormLabel>
+                <Select
+                  onValueChange={(e) => setSelectedDistrict(e)}
+                  defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Kecamatan" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {districtsData.map((district) => (
+                      <SelectItem key={district.id} value={district.id}>
+                        {district.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -469,18 +510,23 @@ const VolunterForm = ({ action, id }) => {
             name="villages"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-villages">
-                  Kelurahan
-                </FormLabel>
-                <FormControl>
-                  <SingleSelect
-                    {...field}
-                    id="input-volunter-villages"
-                    disabled={action === "detail"}
-                    options={villagesData}
-                    placeholder="Kelurahan"
-                  />
-                </FormControl>
+                <FormLabel>Kelurahan</FormLabel>
+                <Select
+                  onValueChange={(e) => setSelectedVillage(e)}
+                  defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Kelurahan" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {villagesData.map((village) => (
+                      <SelectItem key={village.id} value={village.id}>
+                        {village.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -510,18 +556,21 @@ const VolunterForm = ({ action, id }) => {
             </FormItem>
           )}
         />
-        <div
-          style={{ display: action !== "detail" ? "none" : "" }}
-          className=" pt-[18px] py-5">
-          <Label>Pendaftar Lowongan</Label>
+        {action === "detail" && (
           <div
-            className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-            onClick={handleGoListRegister}>
-            <ProfileIcon className="w-2 h-2" />
-            <ProfileIcon className="w-2 h-2 ml-3" />
-            <p className="ml-2">50+</p>
+            style={{ display: action !== "detail" ? "none" : "" }}
+            className=" pt-[18px] py-5">
+            <Label>Pendaftar Lowongan</Label>
+            <div
+              className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
+              onClick={handleGoListRegister}>
+              <ProfileIcon className="w-2 h-2" />
+              <ProfileIcon className="w-2 h-2 ml-3" />
+              <p className="ml-2">50+</p>
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
@@ -555,5 +604,4 @@ const VolunterForm = ({ action, id }) => {
     </Form>
   );
 };
-// Kurang button ternarynya
 export default VolunterForm;
