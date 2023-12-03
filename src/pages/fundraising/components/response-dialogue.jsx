@@ -1,5 +1,7 @@
 import * as z from "zod";
 import Swal from "sweetalert2";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -29,6 +31,7 @@ const responseFormSchema = z.object({
 
 const ResponseDialogue = ({ open, onOpenChange, id }) => {
   const navigate = useNavigate();
+  const [processing, setProcessing] = useState(false);
   const form = useForm({
     resolver: zodResolver(responseFormSchema),
     defaultValues: {
@@ -38,11 +41,18 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
 
   const onSubmit = (data) => {
     const { rejected_reason } = data;
-
+    setProcessing(true);
     updateStatusFundraise(id, "rejected", rejected_reason)
-      .then((message) => Toast.fire({ icon: "success", title: message }))
-      .catch((message) => Toast.fire({ icon: "error", title: message }))
-      .finally(navigate("/penggalangan-dana"));
+      .then((message) => {
+        Toast.fire({ icon: "success", title: message });
+      })
+      .catch((message) => {
+        Toast.fire({ icon: "error", title: message });
+      })
+      .finally(() => {
+        setProcessing(false);
+        navigate("/penggalangan-dana");
+      });
   };
 
   const Toast = Swal.mixin({
@@ -80,6 +90,7 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
                   <Button
                     size="sm"
                     type="button"
+                    disabled={processing}
                     id="btn-action-negative"
                     className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
                   >
@@ -87,12 +98,13 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
                   </Button>
                 </DialogClose>
                 <Button
-                  type="submit"
                   size="sm"
+                  type="submit"
+                  disabled={processing}
                   id="btn-action-positive"
                   className="bg-[#293066] w-24 hover:bg-[#293066]/80"
                 >
-                  Tolak
+                  {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Tolak"}
                 </Button>
               </div>
             </DialogFooter>

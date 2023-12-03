@@ -1,6 +1,7 @@
 import {
-  getFundraises,
-  getDetailFundraise,
+  getAllFundraises,
+  getFundraiseById,
+  getFundraiseByTitle,
   addFundraise,
   editFundraise,
   deleteFundraise,
@@ -10,8 +11,9 @@ import {
 import { addFundraiseSchema, editFundraiseSchema } from "./schema";
 
 export {
-  getFundraises,
-  getDetailFundraise,
+  getAllFundraises,
+  getFundraiseById,
+  getFundraiseByTitle,
   addFundraise,
   editFundraise,
   deleteFundraise,

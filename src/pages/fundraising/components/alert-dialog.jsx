@@ -1,7 +1,9 @@
 import Swal from "sweetalert2";
 import { useState } from "react";
 import TrashIcon from "@/assets/icons/trash";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { deleteFundraise } from "@/utils/api/fundraise";
 import {
   AlertDialog,
@@ -12,17 +14,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertCircle } from "lucide-react";
 
-const deleteHandler = (id, setOpen) => {
+const deleteHandler = (id, setOpen, navigate, setProcessing) => {
+  setProcessing(true);
   deleteFundraise(id)
     .then((message) => {
       Toast.fire({ icon: "success", title: message });
-      setOpen(false);
     })
     .catch((message) => {
       Toast.fire({ icon: "error", title: message });
+    })
+    .finally(() => {
+      navigate(0);
       setOpen(false);
+      setProcessing(false);
     });
 };
 
@@ -38,7 +43,9 @@ const Toast = Swal.mixin({
 });
 
 const Alert = ({ id }) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   return (
     <AlertDialog open={open}>
@@ -63,6 +70,7 @@ const Alert = ({ id }) => {
         </AlertDialogHeader>
         <div className="flex gap-3 justify-center">
           <AlertDialogCancel
+            disabled={processing}
             onClick={() => setOpen(false)}
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
             className="w-[100px] font-semibold border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
@@ -70,11 +78,12 @@ const Alert = ({ id }) => {
             Batal
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => deleteHandler(id, setOpen)}
+            disabled={processing}
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
+            onClick={() => deleteHandler(id, setOpen, navigate, setProcessing)}
             className="w-[100px] font-semibold border-[#E31F1F] bg-[#E31F1F] hover:bg-[#E31F1F]/80 text-white"
           >
-            Ya, Hapus!
+            {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Ya, Hapus!"}
           </AlertDialogAction>
         </div>
       </AlertDialogContent>
