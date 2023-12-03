@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import InfoIcon from '@/assets/icons/info';
-import TrashIcon from '@/assets/icons/trash';
 import PencilIcon from '@/assets/icons/pencil';
 import { Button } from '@/components/ui/button';
-import { deleteNews } from "@/utils/api/news";
+import ButtonDelete from '@/pages/news/components/alert-dialog'
 
 export const columns = [
   {
@@ -50,22 +49,7 @@ export const columns = [
               <InfoIcon className="w-4 h-4" />
             </Link>
           </Button>
-          <Button
-            size="icon"
-            className="bg-[#BF1616] hover:bg-[#BF1616]/80"
-            style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
-            onClick={() => {
-              if (confirm("Hapus Berita?")) {
-                deleteNews(id)
-                  .then((message) => alert(message))
-                  .catch((message) => alert(message));
-              } else {
-                alert("Batal hapus Berita");
-              }
-            }}
-          >
-            <TrashIcon className="w-4 h-4" />
-          </Button>
+          <ButtonDelete id={id} />
         </div>
       );
     },
