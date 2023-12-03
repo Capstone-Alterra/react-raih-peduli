@@ -3,8 +3,8 @@ const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const newsSchema = z.object({
-  title: z.string().min(2, {
-    message: "Kolom judul berita harus diisi",
+  title: z.string().min(20, {
+    message: "Kolom judul berita harus memiliki minimal 20 karakter",
   }),
   photo: z
   .any()
@@ -17,7 +17,7 @@ export const newsSchema = z.object({
     "Format gambar wajib JPG, JPEG, dan PNG"
   ),
   description: z.string().min(2, {
-    message: "Kolom deskripsi berita harus diisi",
+    message: "Kolom deskripsi berita harus memiliki minimal 50 karakter",
   }),
 
 });
