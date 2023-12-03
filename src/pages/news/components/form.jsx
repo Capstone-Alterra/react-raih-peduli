@@ -15,10 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { addNews, editNews, newsSchema, getDetailNews } from "@/utils/api/news";
+import Swal from "sweetalert2";
+import {Loader2 } from "lucide-react";
 
 const NewsForm = ({ action, id }) => {
   const navigate = useNavigate();
   const [preview, setPreview] = useState("");
+  const [processing, setProcessing] = useState(false);
   const form = useForm({
     resolver: zodResolver(newsSchema),
     defaultValues: {
@@ -46,22 +49,52 @@ const NewsForm = ({ action, id }) => {
     const { title, photo, description } = data;
 
     if (action === "add") {
+      setProcessing(true);
       addNews({ title, photo, description })
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/berita"));
+        .then((message) => {
+          navigate("/berita");
+          Toast.fire({ icon: "success", title: message });
+        })
+        .catch((message) => {
+          navigate("/berita");
+          Toast.fire({ icon: "error", title: message });
+        })
+        .finally(() => {
+          setProcessing(false);
+        });
     } else if (action === "edit") {
+      setProcessing(true);
       const editedData = {
         title,
+        photo,
         description,
         ...(photo instanceof File && { photo }),
       };
+
       editNews(id, editedData)
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/berita"));
+        .then((message) => {
+          navigate("/berita");
+          Toast.fire({ icon: "success", title: message });
+        })
+        .catch((message) => {
+          navigate("/berita");
+          Toast.fire({ icon: "error", title: message });
+        })
+        .finally(() => {
+          setProcessing(false);
+        });
     }
   };
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const goBackHandler = () => {
     navigate(-1);
@@ -151,7 +184,11 @@ const NewsForm = ({ action, id }) => {
               className="bg-[#293066] w-24 hover:bg-[#293066]/80"
               id="btn-action-positive"
             >
-              Simpan
+              {processing ? (
+                <Loader2 className="animate-spin w-7 h-7" />
+              ) : (
+                "Simpan"
+              )}
             </Button>
           </div>
         )}
