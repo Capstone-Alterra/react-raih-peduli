@@ -301,7 +301,7 @@ const FundraiseForm = ({ action, id }) => {
                             {field.value ? (
                               format(field.value, "PPP", { locale: Id })
                             ) : (
-                              <span>Pilih tanggal mulai penggalangan dana</span>
+                              <span>Pilih tanggal selesai penggalangan dana</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
