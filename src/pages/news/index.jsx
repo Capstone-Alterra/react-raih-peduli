@@ -14,6 +14,7 @@ function Index() {
   const [data, setData] = useState([]);
   const [pageCount, setPageCount] = useState();
   const [filtering, setFiltering] = useState("");
+  const [loading, setLoading] = useState(false);
   const debouncedSearchTerm = useDebounce(filtering, 500);
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 1,
@@ -26,6 +27,7 @@ function Index() {
   };
 
   useEffect(() => {
+    setLoading(true);
     getNews(pageIndex, pageSize, debouncedSearchTerm)
       .then((data) => {
         setData(data.data);
@@ -37,6 +39,9 @@ function Index() {
       })
       .catch(() => {
         setData([]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [pageIndex, pageSize, debouncedSearchTerm]);
 
@@ -63,6 +68,7 @@ function Index() {
           pageCount={pageCount}
           pagination={pagination}
           setPagination={setPagination}
+          loading={loading}
         />
       </TableLayout>
     </Layout>

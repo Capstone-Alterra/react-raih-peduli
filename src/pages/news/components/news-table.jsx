@@ -1,7 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { flexRender, useReactTable, getCoreRowModel } from "@tanstack/react-table";
+import {
+  flexRender,
+  useReactTable,
+  getCoreRowModel,
+} from "@tanstack/react-table";
 import {
   Select,
   SelectContent,
@@ -18,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import SkeletonTable from "./skeleton/skeleton-table";
 
 function TableData({
   columns,
@@ -28,6 +33,7 @@ function TableData({
   setPagination,
   filtering,
   setFiltering,
+  loading,
 }) {
   const table = useReactTable({
     data: data ?? [],
@@ -61,37 +67,57 @@ function TableData({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead className="whitespace-nowrap" key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                   </TableHead>
                 );
               })}
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+        {loading ? (
+          <>
+            <SkeletonTable />
+            <SkeletonTable />
+            <SkeletonTable />
+            <SkeletonTable />
+            <SkeletonTable />
+          </>
+        ) : (
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Data tidak tersedia.
+                </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                Data tidak tersedia.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
+            )}
+          </TableBody>
+        )}
       </Table>
       <div className="flex justify-between items-center jus px-4 py-4 border-t-2">
         <div className="flex items-center gap-1 text-sm ">
           <div>Menampilkan Halaman ke</div>
-          {table.getState().pagination.pageIndex} dari {table.getPageCount()} halaman 
+          {table.getState().pagination.pageIndex} dari {table.getPageCount()}{" "}
+          halaman
         </div>
         <div className="flex gap-3">
           <div className="flex items-center gap-2 text-sm">
