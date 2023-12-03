@@ -1,23 +1,28 @@
 import axiosWithConfig from "../axiosWithConfig";
 
-export const getFundraises = async (pageIndex, pageSize, title) => {
+export const getAllFundraises = async (pageIndex, pageSize) => {
   try {
-    if (title) {
-      const response = await axiosWithConfig.get(`/fundraises?&title=${title}`);
-      return response.data;
-    } else {
-      const response = await axiosWithConfig.get(
-        `/fundraises?page=${pageIndex}&page_size=${pageSize}`
-      );
-      return response.data;
-    }
+    const response = await axiosWithConfig.get(
+      `/fundraises?page=${pageIndex}&page_size=${pageSize}`
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const getDetailFundraise = async (id) => {
+export const getFundraiseByTitle = async (title) => {
+  try {
+    const response = await axiosWithConfig.get(`/fundraises?title=${title}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getFundraiseById = async (id) => {
   try {
     const response = await axiosWithConfig.get(`/fundraises/${id}`);
     return response.data.data;
