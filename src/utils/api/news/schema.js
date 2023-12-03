@@ -16,7 +16,7 @@ export const newsSchema = z.object({
     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
     "Format gambar wajib JPG, JPEG, dan PNG"
   ),
-  description: z.string().min(2, {
+  description: z.string().min(50, {
     message: "Kolom deskripsi berita harus memiliki minimal 50 karakter",
   }),
 
