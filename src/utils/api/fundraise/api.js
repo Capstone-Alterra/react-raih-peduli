@@ -85,3 +85,14 @@ export const updateStatusFundraise = async (id, status) => {
     throw error;
   }
 };
+
+export const getTotalDataFundraise = async () => {
+  try {
+    const response = await axiosWithConfig.get('/fundraises');
+    const { total_data } = response.data.pagination;
+    return total_data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return 0;
+  }
+};

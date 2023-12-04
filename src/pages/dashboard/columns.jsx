@@ -3,7 +3,7 @@ import convertToRupiah from "@/utils/formatter/convertToRupiah";
 export const columns = [
   {
     header: "No",
-    accessorKey: "no",
+    accessorFn: (originalRow, index) => index + 1,
   },
   {
     header: "Judul Penggalangan Dana",
