@@ -1,19 +1,19 @@
 import axios from "axios";
 
-let bearerToken = "";
-let baseUrl = "";
-const axiosWithConfig = axios.create();
+let accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 
-export const setAxiosConfig = (token, backendUrl) => {
-    baseUrl = backendUrl;
-    bearerToken = token;
+const axiosWithConfig = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+});
+
+export const setAxiosConfig = (token) => {
+  accessToken = token;
 };
 
-axiosWithConfig.interceptors.request.use((axiosConfig) => {
-    axiosConfig.baseURL = baseUrl;
-    axiosConfig.headers.Authorization = `Bearer ${bearerToken}`;
+axiosWithConfig.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${accessToken}`;
 
-    return axiosConfig;
+  return config;
 });
 
 export default axiosWithConfig;
