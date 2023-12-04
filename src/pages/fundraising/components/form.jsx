@@ -58,7 +58,7 @@ const FundraiseForm = ({ action, id }) => {
     try {
       const data = await getFundraiseById(id);
       const { title, description, target, status, start_date, end_date, photo } = data;
-      console.log(start_date);
+
       const formattedStartDate = new Date(start_date);
       const formattedEndDate = new Date(end_date);
 
