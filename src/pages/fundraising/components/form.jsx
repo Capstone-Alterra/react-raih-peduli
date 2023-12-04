@@ -15,6 +15,7 @@ import { Calendar } from "@/components/ui/calendar";
 import SkeletonForm from "./skeleton/skeleton-form";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toIsoDate from "@/utils/formatter/convertToIso";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Form,
@@ -57,6 +58,7 @@ const FundraiseForm = ({ action, id }) => {
     try {
       const data = await getFundraiseById(id);
       const { title, description, target, status, start_date, end_date, photo } = data;
+
       const formattedStartDate = new Date(start_date);
       const formattedEndDate = new Date(end_date);
 
@@ -85,12 +87,13 @@ const FundraiseForm = ({ action, id }) => {
 
   const onSubmit = (data) => {
     const { title, description, target, start_date, end_date, photo } = data;
-    const startISO = start_date.toISOString();
-    const endISO = end_date.toISOString();
+
+    const startDate = toIsoDate(start_date);
+    const endDate = toIsoDate(end_date);
 
     if (action === "add") {
       setProcessing(true);
-      addFundraise({ title, description, photo, target, start_date: startISO, end_date: endISO })
+      addFundraise({ title, description, photo, target, start_date: startDate, end_date: endDate })
         .then((message) => {
           navigate("/penggalangan-dana");
           Toast.fire({ icon: "success", title: message });
@@ -108,8 +111,8 @@ const FundraiseForm = ({ action, id }) => {
         title,
         description,
         target,
-        start_date: startISO,
-        end_date: endISO,
+        start_date: startDate,
+        end_date: endDate,
         ...(photo instanceof File && { photo }),
       };
 
@@ -336,7 +339,9 @@ const FundraiseForm = ({ action, id }) => {
                         field.onChange(e.target.files[0]);
 
                         if (action !== "detail") {
-                          setPreview(URL.createObjectURL(e.target.files[0]));
+                          setPreview(
+                            e.target.files[0] ? URL.createObjectURL(e.target.files[0]) : null
+                          );
                         }
                       }}
                     />
