@@ -3,7 +3,7 @@ import Select from "react-select";
 import { Label } from "./ui/label";
 
 function MultipleSelect({
-  register,
+  onChange,
   error,
   label,
   id,
@@ -65,7 +65,7 @@ function MultipleSelect({
         options={options}
         styles={customStyles}
         placeholder={placeholder}
-        {...(register ? register(name) : {})}
+        onChange={onChange}
       />
       {error && (
         <label>

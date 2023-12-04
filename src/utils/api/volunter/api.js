@@ -17,7 +17,7 @@ export const getVolunters = async (pageIndex, pageSize, title) => {
   }
 };
 
-export const getDetailVolunter = async (id) => {
+export const getVolunterById = async (id) => {
   try {
     const response = await axiosWithConfig.get(`/volunteer-vacancies/${id}`);
     return response.data.data;
@@ -49,7 +49,7 @@ export const editVolunter = async (id, { ...data }) => {
   try {
     const response = await axiosWithConfig.put(
       `/volunteer-vacancies/${id}`,
-      { ...data },
+      ...data,
       {
         headers: {
           "Content-Type": "multipart/form-data",

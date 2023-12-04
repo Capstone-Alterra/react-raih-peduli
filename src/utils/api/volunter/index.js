@@ -2,19 +2,28 @@ import {
   getVolunters,
   addVolunter,
   deleteVolunter,
-  getDetailVolunter,
+  getVolunterById,
   updateStatusVolunter,
   editVolunter,
+  getDistricts,
+  getProvinces,
+  getRegencies,
+  getVillages,
 } from "./api";
 
-import { volunterSchema } from "./schema";
+import { volunterSchema, editVolunterSchema } from "./schema";
 
 export {
   getVolunters,
   addVolunter,
   deleteVolunter,
-  getDetailVolunter,
+  getVolunterById,
   updateStatusVolunter,
   editVolunter,
+  getDistricts,
+  getProvinces,
+  getRegencies,
+  getVillages,
   volunterSchema,
+  editVolunterSchema,
 };

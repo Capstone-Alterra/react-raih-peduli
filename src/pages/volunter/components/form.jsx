@@ -13,9 +13,13 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { id as Id } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { volunterSchema } from "@/utils/api/volunter/schema";
+import {
+  editVolunterSchema,
+  volunterSchema,
+} from "@/utils/api/volunter/schema";
 import { MultipleSelect } from "@/components/multiple-select";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -28,13 +32,12 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   addVolunter,
   editVolunter,
-  getDetailVolunter,
+  getVolunterById,
   updateStatusVolunter,
 } from "@/utils/api/volunter/api";
 import axios from "axios";
 import { Label } from "@/components/ui/label";
 import ProfileIcon from "@/assets/icons/profile";
-import SingleSelect from "@/components/single-select";
 import { NumericFormat } from "react-number-format";
 import {
   Select,
@@ -43,9 +46,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Swal from "sweetalert2";
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const [provincesData, setProvincesData] = useState([]);
   const [regenciesData, setRegenciesData] = useState([]);
   const [districtsData, setDistrictsData] = useState([]);
@@ -57,7 +62,9 @@ const VolunterForm = ({ action, id }) => {
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const form = useForm({
-    resolver: zodResolver(volunterSchema),
+    resolver: zodResolver(
+      action === "edit" ? editVolunterSchema : volunterSchema
+    ),
     defaultValues: {
       title: "",
       description: "",
@@ -66,12 +73,66 @@ const VolunterForm = ({ action, id }) => {
       contact_email: "",
       start_date: "",
       end_date: "",
-      provinces: "",
-      city: "",
+      province: "",
+      regencie: "",
       sub_district: "",
-      villages: "",
+      village: "",
     },
   });
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
+  const getDetailVolunter = async (id) => {
+    try {
+      const data = await getVolunterById(id);
+      const {
+        title,
+        description,
+        skill_requred,
+        number_of_vacancies,
+        contact_email,
+        start_date,
+        end_date,
+        province,
+        regencie,
+        sub_disctrict,
+        village,
+        photo,
+      } = data;
+      const formattedStartDate = new Date(start_date);
+      const formattedEndDate = new Date(end_date);
+
+      setStatus(status);
+      setPreview(photo);
+
+      form.reset({
+        title,
+        description,
+        // skill_requred,
+        number_of_vacancies,
+        contact_email,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+        // province,
+        // regencie,
+        // sub_disctrict,
+        // village,
+        photo,
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 
   const onSubmit = (data) => {
     const {
@@ -82,10 +143,11 @@ const VolunterForm = ({ action, id }) => {
       contact_email,
       start_date,
       end_date,
-      provinces,
-      city,
+      province,
+      regencie,
       sub_disctrict,
-      villages,
+      village,
+      photo,
     } = data;
     const startISO = start_date.toISOString();
     const endISO = end_date.toISOString();
@@ -94,18 +156,19 @@ const VolunterForm = ({ action, id }) => {
       addVolunter({
         title,
         description,
-        skill_requred,
+        skill_requred: selectedSkills,
         number_of_vacancies,
         contact_email,
         start_date: startISO,
         end_date: endISO,
-        provinces,
-        city,
-        sub_disctrict,
-        villages,
+        province: selectedProvince,
+        regencie: selectedRegencie,
+        sub_disctrict: selectedDistrict,
+        village: selectedVillage,
+        photo,
       })
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
+        .then((message) => Toast.fire({ icon: "success", title: message }))
+        .catch((message) => Toast.fire({ icon: "error", title: message }))
         .finally(navigate("/lowongan-relawan"));
     } else if (action === "edit") {
       const editedData = {
@@ -113,25 +176,35 @@ const VolunterForm = ({ action, id }) => {
         description,
         skill_requred,
         number_of_vacancies,
-        contact_email,
         start_date: startISO,
         end_date: endISO,
-        province,
-        city,
-        sub_disctrict,
-        villages,
+        province: selectedProvince,
+        regencie: selectedRegencie,
+        sub_disctrict: selectedDistrict,
+        village: selectedVillage,
+        ...(photo instanceof File && { photo }),
       };
 
       editVolunter(id, editedData)
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/lowongan-relawan"));
-    } else if (action === "detail") {
-      updateStatusVolunter(id, "accepted")
-        .then((message) => alert(message))
-        .cactch((message) => alert(message))
+        .then((message) => Toast.fire({ icon: "success", title: message }))
+        .catch((message) => Toast.fire({ icon: "error", title: message }))
         .finally(navigate("/lowongan-relawan"));
     }
+  };
+
+  const updateVolunter = (id, status) => {
+    updateStatusVolunter(id, status)
+      .then((message) => {
+        Toast.fire({ icon: "success", title: message });
+      })
+      .catch((message) => Toast.fire({ icon: "error", title: message }))
+      .finally(navigate("lowongan-relawan"));
+  };
+
+  const isFutureDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
   };
 
   const getProvinces = () => {
@@ -170,39 +243,7 @@ const VolunterForm = ({ action, id }) => {
   useEffect(() => {
     getProvinces();
     if (action !== "add") {
-      getDetailVolunter(id).then((data) => {
-        const {
-          title,
-          description,
-          skills_requred,
-          number_of_vacancies,
-          contact_email,
-          start_date,
-          end_date,
-          province,
-          city,
-          sub_district,
-          ward,
-        } = data;
-        const formattedStartDate = new Date(start_date);
-        const formattedEndDate = new Date(end_date);
-
-        setStatus(status);
-
-        form.reset({
-          title,
-          description,
-          skills_requred,
-          number_of_vacancies,
-          contact_email,
-          start_date: formattedStartDate,
-          end_date: formattedEndDate,
-          province,
-          city,
-          sub_district,
-          ward,
-        });
-      });
+      getDetailVolunter(id);
     }
   }, []);
 
@@ -277,9 +318,14 @@ const VolunterForm = ({ action, id }) => {
               <FormLabel htmlFor="input-volunter-skill">Keahlian</FormLabel>
               <FormControl>
                 <MultipleSelect
+                  {...field}
                   id="input-volunter-skill"
                   name="skills_requred"
                   placeholder="Tambahkan Keahlian"
+                  onChange={(e) => {
+                    setSelectedSkills([...selectedSkills, e.value]);
+                    console.log("selected skills: ", selectedSkills);
+                  }}
                 />
               </FormControl>
             </FormItem>
@@ -301,7 +347,7 @@ const VolunterForm = ({ action, id }) => {
                     value={field.value}
                     customInput={Input}
                     allowNegative={false}
-                    id="input-fundraise-number"
+                    id="input-volunter-number"
                     disabled={action === "detail"}
                     className="disabled:opacity-100"
                     placeholder="Masukkan Jumlah Lowongan"
@@ -373,6 +419,7 @@ const VolunterForm = ({ action, id }) => {
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
+                      disabled={(date) => isFutureDate(date)}
                     />
                   </PopoverContent>
                 </Popover>
@@ -402,7 +449,7 @@ const VolunterForm = ({ action, id }) => {
                         {field.value ? (
                           format(field.value, "PPP", { locale: Id })
                         ) : (
-                          <span>Pilih tanggal selesai lowongan relawan</span>
+                          <span>Pilih tanggal mulai lowongan relawan</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -414,6 +461,7 @@ const VolunterForm = ({ action, id }) => {
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
+                      disabled={(date) => isFutureDate(date)}
                     />
                   </PopoverContent>
                 </Popover>
@@ -425,7 +473,7 @@ const VolunterForm = ({ action, id }) => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="provinces"
+            name="province"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel htmlFor="input-volunter-provinces">
@@ -433,6 +481,7 @@ const VolunterForm = ({ action, id }) => {
                 </FormLabel>
                 <Select
                   onValueChange={(e) => setSelectedProvince(e)}
+                  onChange={(e) => console.log(e)}
                   defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -453,7 +502,7 @@ const VolunterForm = ({ action, id }) => {
           />
           <FormField
             control={form.control}
-            name="city"
+            name="regencie"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Kabupaten</FormLabel>
@@ -481,7 +530,7 @@ const VolunterForm = ({ action, id }) => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="sub-district"
+            name="sub_district"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Kecamatan</FormLabel>
@@ -507,7 +556,7 @@ const VolunterForm = ({ action, id }) => {
           />
           <FormField
             control={form.control}
-            name="villages"
+            name="village"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Kelurahan</FormLabel>
@@ -588,9 +637,14 @@ const VolunterForm = ({ action, id }) => {
           <Button
             size="sm"
             disabled={action === "detail" && status !== "pending"}
-            type="submit"
+            type={action === "detail" ? "button" : "submit"}
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-            id="btn-action-positive">
+            id="btn-action-positive"
+            onClick={
+              action === "detail"
+                ? () => updateVolunter(id, "accepted")
+                : undefined
+            }>
             {action === "edit"
               ? "Edit data"
               : action === "detail"
