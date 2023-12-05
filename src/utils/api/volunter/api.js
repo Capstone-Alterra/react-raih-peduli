@@ -1,4 +1,4 @@
-import axiosWithConfig from "../axiosWithConfig";
+import axiosWithConfig, { externalAxiosWithConfig } from "../axiosWithConfig";
 
 export const getVolunters = async (pageIndex, pageSize, title) => {
   try {
@@ -47,15 +47,11 @@ export const addVolunter = async ({ ...data }) => {
 
 export const editVolunter = async (id, { ...data }) => {
   try {
-    const response = await axiosWithConfig.put(
-      `/volunteer-vacancies/${id}`,
-      ...data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axiosWithConfig.put(`/volunteer-vacancies/${id}`, ...data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data.message;
   } catch (error) {
     console.error(error);
@@ -79,6 +75,46 @@ export const updateStatusVolunter = async (id, status) => {
       status,
     });
     return response.data.message;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getProvinces = async () => {
+  try {
+    const response = await externalAxiosWithConfig.get("/provinces.json");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getRegencies = async (id) => {
+  try {
+    const response = await externalAxiosWithConfig.get(`/regencies/${id}.json`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getDistricts = async (id) => {
+  try {
+    const response = await externalAxiosWithConfig.get(`/districts/${id}.json`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getVillages = async (id) => {
+  try {
+    const response = await externalAxiosWithConfig.get(`/villages/${id}.json`);
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
