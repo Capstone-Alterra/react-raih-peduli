@@ -5,13 +5,9 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const volunterSchema = z
   .object({
-    title: z
-      .string()
-      .min(2, { message: "Kolom judul lowongan relawan harus di isi" }),
+    title: z.string().min(2, { message: "Kolom judul lowongan relawan harus di isi" }),
     description: z.string().min(2, { message: "Kolom deskripsi harus di isi" }),
-    skills_requred: z
-      .string()
-      .min(1, { message: "Harus memiliki keahlian salah satu bidang" }),
+    skills_requred: z.string().min(1, { message: "Harus memiliki keahlian salah satu bidang" }),
     number_of_vacancies: z
       .number({ invalid_type_error: "Kolom harus di isi" })
       .min(10, { message: "Jumlah lowongan relawan minimal 10 orang" }),
@@ -25,9 +21,9 @@ export const volunterSchema = z
       invalid_type_error: "Kolom harus di isi",
     }),
     province: z.string().min(1, { message: "Harus memilih provinsi" }),
-    regencie: z.string().min(1, { message: "Harus memilih kabupaten" }),
+    city: z.string().min(1, { message: "Harus memilih kabupaten" }),
     sub_district: z.string().min(1, { message: "Harus memilih kecamatan" }),
-    village: z.string().min(1, { message: "Harus memilih kelurahan" }),
+    detail_location: z.string().min(1, { message: "Harus memilih kelurahan" }),
     photo: z
       .any()
       .refine((file) => !!file, { message: "Kolom harus di isi" })
@@ -44,13 +40,9 @@ export const volunterSchema = z
   });
 
 export const editVolunterSchema = z.object({
-  title: z
-    .string()
-    .min(2, { message: "Kolom judul lowongan relawan harus di isi" }),
+  title: z.string().min(2, { message: "Kolom judul lowongan relawan harus di isi" }),
   description: z.string().min(2, { message: "Kolom deskripsi harus di isi" }),
-  skills_requred: z
-    .string()
-    .min(1, { message: "Harus memiliki keahlian salah satu bidang" }),
+  skills_requred: z.string().min(1, { message: "Harus memiliki keahlian salah satu bidang" }),
   number_of_vacancies: z
     .number({ invalid_type_error: "Kolom harus di isi" })
     .min(10, { message: "Jumlah lowongan relawan minimal 10 orang" }),
@@ -64,7 +56,7 @@ export const editVolunterSchema = z.object({
     invalid_type_error: "Kolom harus di isi",
   }),
   province: z.string().min(1, { message: "Harus memilih provinsi" }),
-  regencie: z.string().min(2, { message: "Harus memilih kabupaten" }),
+  city: z.string().min(2, { message: "Harus memilih kabupaten" }),
   sub_district: z.string().min(2, { message: "Harus memilih kecamatan" }),
-  village: z.string().min(2, { message: "Harus memilih kelurahan" }),
+  detail_location: z.string().min(2, { message: "Harus memilih kelurahan" }),
 });
