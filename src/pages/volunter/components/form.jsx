@@ -1,8 +1,23 @@
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { cn } from "@/utils";
+import Swal from "sweetalert2";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { id as Id } from "date-fns/locale";
+import { useEffect, useState } from "react";
+import { CalendarIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import FileInput from "@/components/input-file";
+import ProfileIcon from "@/assets/icons/profile";
+import { NumericFormat } from "react-number-format";
+import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MultipleSelect } from "@/components/multiple-select";
+import { editVolunterSchema, volunterSchema } from "@/utils/api/volunter/schema";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Form,
   FormControl,
@@ -11,34 +26,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { id as Id } from "date-fns/locale";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  editVolunterSchema,
-  volunterSchema,
-} from "@/utils/api/volunter/schema";
-import { MultipleSelect } from "@/components/multiple-select";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
-import FileInput from "@/components/input-file";
-import { cn } from "@/utils";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   addVolunter,
   editVolunter,
+  getDistricts,
+  getProvinces,
+  getRegencies,
+  getVillages,
   getVolunterById,
   updateStatusVolunter,
 } from "@/utils/api/volunter/api";
-import axios from "axios";
-import { Label } from "@/components/ui/label";
-import ProfileIcon from "@/assets/icons/profile";
-import { NumericFormat } from "react-number-format";
 import {
   Select,
   SelectContent,
@@ -46,25 +43,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Swal from "sweetalert2";
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [provincesData, setProvincesData] = useState([]);
-  const [regenciesData, setRegenciesData] = useState([]);
-  const [districtsData, setDistrictsData] = useState([]);
-  const [villagesData, setVillagesData] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedRegencie, setSelectedRegencie] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedVillage, setSelectedVillage] = useState("");
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [{ provinces, regencies, districts, villages }, setData] = useState({
+    provinces: [],
+    regencies: [],
+    districts: [],
+    villages: [],
+  });
+  const [{ province, regency, district }, setSelectedData] = useState({
+    province: { id: "", name: "" },
+    regency: { id: "", name: "" },
+    district: { id: "", name: "" },
+    village: { id: "", name: "" },
+  });
+
   const form = useForm({
-    resolver: zodResolver(
-      action === "edit" ? editVolunterSchema : volunterSchema
-    ),
+    resolver: zodResolver(action === "edit" ? editVolunterSchema : volunterSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -93,7 +92,6 @@ const VolunterForm = ({ action, id }) => {
 
   const getDetailVolunter = async (id) => {
     try {
-      const data = await getVolunterById(id);
       const {
         title,
         description,
@@ -107,7 +105,8 @@ const VolunterForm = ({ action, id }) => {
         sub_disctrict,
         village,
         photo,
-      } = data;
+      } = await getVolunterById(id);
+
       const formattedStartDate = new Date(start_date);
       const formattedEndDate = new Date(end_date);
 
@@ -117,15 +116,15 @@ const VolunterForm = ({ action, id }) => {
       form.reset({
         title,
         description,
-        // skill_requred,
+        skill_requred,
         number_of_vacancies,
         contact_email,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
-        // province,
-        // regencie,
-        // sub_disctrict,
-        // village,
+        province,
+        regencie,
+        sub_disctrict,
+        village,
         photo,
       });
     } catch (error) {
@@ -133,6 +132,12 @@ const VolunterForm = ({ action, id }) => {
       throw error;
     }
   };
+
+  useEffect(() => {
+    if (action !== "add") {
+      getDetailVolunter(id);
+    }
+  }, [action, id]);
 
   const onSubmit = (data) => {
     const {
@@ -144,9 +149,9 @@ const VolunterForm = ({ action, id }) => {
       start_date,
       end_date,
       province,
-      regencie,
-      sub_disctrict,
-      village,
+      city,
+      sub_district,
+      detail_location,
       photo,
     } = data;
     const startISO = start_date.toISOString();
@@ -161,10 +166,10 @@ const VolunterForm = ({ action, id }) => {
         contact_email,
         start_date: startISO,
         end_date: endISO,
-        province: selectedProvince,
-        regencie: selectedRegencie,
-        sub_disctrict: selectedDistrict,
-        village: selectedVillage,
+        province,
+        city,
+        sub_district,
+        detail_location,
         photo,
       })
         .then((message) => Toast.fire({ icon: "success", title: message }))
@@ -178,10 +183,10 @@ const VolunterForm = ({ action, id }) => {
         number_of_vacancies,
         start_date: startISO,
         end_date: endISO,
-        province: selectedProvince,
-        regencie: selectedRegencie,
-        sub_disctrict: selectedDistrict,
-        village: selectedVillage,
+        province,
+        city,
+        sub_district,
+        detail_location,
         ...(photo instanceof File && { photo }),
       };
 
@@ -207,75 +212,45 @@ const VolunterForm = ({ action, id }) => {
     return date < today;
   };
 
-  const getProvinces = () => {
-    axios
-      .get(`https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
-      .then((response) => setProvincesData(response.data))
-      .catch((error) => console.log(error));
-  };
-
-  const getRegencies = (id) => {
-    axios
-      .get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${id}.json`
-      )
-      .then((response) => setRegenciesData(response.data))
-      .catch((error) => console.log(error));
-  };
-
-  const getDistricts = (id) => {
-    axios
-      .get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${id}.json`
-      )
-      .then((response) => setDistrictsData(response.data))
-      .catch((error) => console.log(error));
-  };
-
-  const getVillages = (id) => {
-    axios
-      .get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${id}.json`
-      )
-      .then((response) => setVillagesData(response.data));
-  };
-
   useEffect(() => {
-    getProvinces();
-    if (action !== "add") {
-      getDetailVolunter(id);
-    }
-  }, []);
+    const fetchData = async () => {
+      try {
+        if (province.id === "") {
+          const provincesData = await getProvinces();
+          setData((prevState) => ({ ...prevState, provinces: provincesData }));
+        }
 
-  useEffect(() => {
-    getRegencies(selectedProvince);
-  }, [selectedProvince]);
+        if (province.id !== "" && regency.id === "") {
+          const regenciesData = await getRegencies(province.id);
+          setData((prevState) => ({ ...prevState, regencies: regenciesData }));
+        }
 
-  useEffect(() => {
-    getDistricts(selectedRegencie);
-  }, [selectedRegencie]);
+        if (regency.id !== "" && district.id === "") {
+          const districtsData = await getDistricts(regency.id);
+          setData((prevState) => ({ ...prevState, districts: districtsData }));
+        }
 
-  useEffect(() => {
-    getVillages(selectedDistrict);
-  }, [selectedDistrict]);
+        if (district.id !== "") {
+          const villagesData = await getVillages(district.id);
+          setData((prevState) => ({ ...prevState, villages: villagesData }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const handleGoListRegister = () => {
-    navigate("/list-pendaftar-lowongan-relawan");
-  };
+    fetchData();
+  }, [province.id, regency.id, district.id]);
 
   return (
     <Form {...form}>
-      <form
-        className="px-6 py-6 mb-6 flex flex-col gap-y-4"
-        onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-volunter-title">
-                Judul Lowongan Relawan
-              </FormLabel>
+              <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -294,9 +269,7 @@ const VolunterForm = ({ action, id }) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-volunter-description">
-                Isi Deskripsi
-              </FormLabel>
+              <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
@@ -318,13 +291,11 @@ const VolunterForm = ({ action, id }) => {
               <FormLabel htmlFor="input-volunter-skill">Keahlian</FormLabel>
               <FormControl>
                 <MultipleSelect
-                  {...field}
                   id="input-volunter-skill"
                   name="skills_requred"
                   placeholder="Tambahkan Keahlian"
                   onChange={(e) => {
                     setSelectedSkills([...selectedSkills, e.value]);
-                    console.log("selected skills: ", selectedSkills);
                   }}
                 />
               </FormControl>
@@ -336,12 +307,8 @@ const VolunterForm = ({ action, id }) => {
             control={form.control}
             name="number_of_vacancies"
             render={({ field }) => (
-              <FormItem
-                style={{ width: action === "edit" ? "49%" : "100%" }}
-                className="w-full">
-                <FormLabel htmlFor="input-volunter-number">
-                  Jumlah Lowongan
-                </FormLabel>
+              <FormItem style={{ width: action === "edit" ? "49%" : "100%" }} className="w-full">
+                <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
                 <FormControl>
                   <NumericFormat
                     value={field.value}
@@ -366,9 +333,7 @@ const VolunterForm = ({ action, id }) => {
               name="contact_email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel htmlFor="input-volunter-email">
-                    Kontak Email
-                  </FormLabel>
+                  <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -403,7 +368,8 @@ const VolunterForm = ({ action, id }) => {
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
-                        )}>
+                        )}
+                      >
                         {field.value ? (
                           format(field.value, "PPP", { locale: Id })
                         ) : (
@@ -445,7 +411,8 @@ const VolunterForm = ({ action, id }) => {
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
-                        )}>
+                        )}
+                      >
                         {field.value ? (
                           format(field.value, "PPP", { locale: Id })
                         ) : (
@@ -476,21 +443,27 @@ const VolunterForm = ({ action, id }) => {
             name="province"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-provinces">
-                  Provinsi
-                </FormLabel>
+                <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
                 <Select
-                  onValueChange={(e) => setSelectedProvince(e)}
-                  onChange={(e) => console.log(e)}
-                  defaultValue={field.value}>
+                  onValueChange={(e) => {
+                    const data = JSON.parse(e);
+
+                    field.onChange(data.name);
+                    setSelectedData((prevState) => ({
+                      ...prevState,
+                      province: { id: data.id, name: data.name },
+                    }));
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Provinsi" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {provincesData.map((province) => (
-                      <SelectItem key={province.id} value={province.id}>
+                    {provinces.map((province) => (
+                      <SelectItem key={province.id} value={JSON.stringify(province)}>
                         {province.name}
                       </SelectItem>
                     ))}
@@ -502,22 +475,31 @@ const VolunterForm = ({ action, id }) => {
           />
           <FormField
             control={form.control}
-            name="regencie"
+            name="city"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Kabupaten</FormLabel>
                 <Select
-                  onValueChange={(e) => setSelectedRegencie(e)}
-                  defaultValue={field.value}>
+                  onValueChange={(e) => {
+                    const data = JSON.parse(e);
+
+                    field.onChange(data.name);
+                    setSelectedData((prevState) => ({
+                      ...prevState,
+                      regency: { id: data.id, name: data.name },
+                    }));
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kabupaten" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {regenciesData.map((regencie) => (
-                      <SelectItem key={regencie.id} value={regencie.id}>
-                        {regencie.name}
+                    {regencies.map((regency) => (
+                      <SelectItem key={regency.id} value={JSON.stringify(regency)}>
+                        {regency.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -535,16 +517,25 @@ const VolunterForm = ({ action, id }) => {
               <FormItem className="w-full">
                 <FormLabel>Kecamatan</FormLabel>
                 <Select
-                  onValueChange={(e) => setSelectedDistrict(e)}
-                  defaultValue={field.value}>
+                  onValueChange={(e) => {
+                    const data = JSON.parse(e);
+
+                    field.onChange(data.name);
+                    setSelectedData((prevState) => ({
+                      ...prevState,
+                      district: { id: data.id, name: data.name },
+                    }));
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kecamatan" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {districtsData.map((district) => (
-                      <SelectItem key={district.id} value={district.id}>
+                    {districts.map((district) => (
+                      <SelectItem key={district.id} value={JSON.stringify(district)}>
                         {district.name}
                       </SelectItem>
                     ))}
@@ -556,21 +547,30 @@ const VolunterForm = ({ action, id }) => {
           />
           <FormField
             control={form.control}
-            name="village"
+            name="detail_location"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Kelurahan</FormLabel>
                 <Select
-                  onValueChange={(e) => setSelectedVillage(e)}
-                  defaultValue={field.value}>
+                  onValueChange={(e) => {
+                    const data = JSON.parse(e);
+
+                    field.onChange(data.name);
+                    (prevState) => ({
+                      ...prevState,
+                      village: { id: data.id, name: data.name },
+                    });
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kelurahan" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {villagesData.map((village) => (
-                      <SelectItem key={village.id} value={village.id}>
+                    {villages.map((village) => (
+                      <SelectItem key={village.id} value={JSON.stringify(village)}>
                         {village.name}
                       </SelectItem>
                     ))}
@@ -606,13 +606,12 @@ const VolunterForm = ({ action, id }) => {
           )}
         />
         {action === "detail" && (
-          <div
-            style={{ display: action !== "detail" ? "none" : "" }}
-            className=" pt-[18px] py-5">
+          <div style={{ display: action !== "detail" ? "none" : "" }} className=" pt-[18px] py-5">
             <Label>Pendaftar Lowongan</Label>
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-              onClick={handleGoListRegister}>
+              onClick={() => navigate("/list-pendaftar-lowongan-relawan")}
+            >
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />
               <p className="ml-2">50+</p>
@@ -627,12 +626,9 @@ const VolunterForm = ({ action, id }) => {
             // onClick={goBackHandler}
             disabled={action === "detail" && status !== "pending"}
             className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-            id="btn-action-negative">
-            {action === "editing"
-              ? "Batal"
-              : action === "detail"
-              ? "Tolak"
-              : "kembali"}
+            id="btn-action-negative"
+          >
+            {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
           </Button>
           <Button
             size="sm"
@@ -640,11 +636,8 @@ const VolunterForm = ({ action, id }) => {
             type={action === "detail" ? "button" : "submit"}
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-action-positive"
-            onClick={
-              action === "detail"
-                ? () => updateVolunter(id, "accepted")
-                : undefined
-            }>
+            onClick={action === "detail" ? () => updateVolunter(id, "accepted") : undefined}
+          >
             {action === "edit"
               ? "Edit data"
               : action === "detail"
