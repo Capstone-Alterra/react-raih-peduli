@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { addNews, editNews, newsSchema, getDetailNews } from "@/utils/api/news";
+import { addNews, editNews, addNewsSchema, editNewsSchema, getDetailNews } from "@/utils/api/news";
 import Swal from "sweetalert2";
 import { Loader2 } from "lucide-react";
 
@@ -25,7 +25,7 @@ const NewsForm = ({ action, id }) => {
   const [processing, setProcessing] = useState(false);
   const [loading, setLoading] = useState(false);
   const form = useForm({
-    resolver: zodResolver(newsSchema),
+    resolver: zodResolver(action === "edit" ? editNewsSchema : addNewsSchema),
     defaultValues: {
       title: "",
       photo: "",

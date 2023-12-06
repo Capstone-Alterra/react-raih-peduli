@@ -6,7 +6,7 @@ import {
     deleteNews,
   } from "./api";
   
-  import { newsSchema } from "./schema";
+  import { addNewsSchema, editNewsSchema } from "./schema";
   
   export {
     getNews,
@@ -14,5 +14,6 @@ import {
     addNews,
     editNews,
     deleteNews,
-    newsSchema,
+    addNewsSchema,
+    editNewsSchema,
   };
