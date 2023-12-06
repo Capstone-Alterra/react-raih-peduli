@@ -35,7 +35,7 @@ export const columns = [
   {
     header: "Aksi",
     cell: ({ row }) => {
-      const id = row.original.no;
+      const id = row.original.id;
       
       return (
       <div className="flex gap-2">
