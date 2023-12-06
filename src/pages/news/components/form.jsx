@@ -154,7 +154,9 @@ const NewsForm = ({ action, id }) => {
                         field.onChange(e.target.files[0]);
 
                         if (action !== "detail") {
-                          setPreview(URL.createObjectURL(e.target.files[0]));
+                          setPreview(
+                            e.target.files[0] ? URL.createObjectURL(e.target.files[0]) : null
+                          );
                         }
                       }}
                     />
