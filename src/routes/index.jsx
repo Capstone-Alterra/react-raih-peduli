@@ -4,7 +4,7 @@ import Volunter from "@/pages/volunter";
 import Dashboard from "@/pages/dashboard";
 import Transaction from "@/pages/transaction";
 import TransactionDetail from "@/pages/transaction/transaction-detail";
-import EditUser from "@/pages/customer/edit.jsx";
+import EditUser from "@/pages/customer/edit-customer";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
 import VolunterForm from "@/pages/volunter/form";
