@@ -1,26 +1,9 @@
-import { TextAreaLabel } from "@/components/textarea-with-label";
-import { InputLabel } from "@/components/input-with-label";
-import { Calendar as CalendarIcon } from "lucide-react";
-import ArrowLeft from "@/assets/icons/arrow-left";
-import { Calendar } from "@/components/ui/calendar";
-import ProfileIcon from "@/assets/icons/profile";
-import { Button } from "@/components/ui/button";
-import InputFile from "@/components/input-file";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import React, { useState } from "react";
-import { cn } from "@/utils";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { MultipleSelect, SelectForm } from "@/components/multiple-select";
-import FormLayout from "./components/form-layout";
-import FormHeader from "./components/form-header";
 import VolunterForm from "./components/form";
+import FormHeader from "./components/form-header";
+import FormLayout from "./components/form-layout";
+import { useParams, useSearchParams } from "react-router-dom";
 
 function DetailVolunter() {
   const { id } = useParams();
