@@ -6,9 +6,8 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import { Link } from "react-router-dom";
 import { columns } from "./components/volunter-columns";
-import React from "react";
 import { useEffect } from "react";
-import { getVolunters } from "@/utils/api/volunter/api";
+import { getVolunteerVacancies } from "@/utils/api/volunter/api";
 import { useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 
@@ -25,7 +24,7 @@ function Volunter() {
   const pagination = { pageIndex, pageSize };
 
   useEffect(() => {
-    getVolunters(pageIndex, pageSize, debounceSearchTerm)
+    getVolunteerVacancies(pageIndex, pageSize, debounceSearchTerm)
       .then((data) => {
         setData(data.data);
         setPageCount(data.pagination.total_page);
@@ -44,13 +43,8 @@ function Volunter() {
       <Header titleHeader="Lowongan Relawan" />
       <TableLayout>
         <TableHeader heading="List Lowongan Relawan" hasAction={true}>
-          <Button
-            size="sm"
-            className="rounded-full bg-[#293066] hover:bg-[#293066]/80"
-            asChild>
-            <Link to="/lowongan-relawan/tambah-lowongan-relawan">
-              Tambah Lowongan Relawan
-            </Link>
+          <Button size="sm" className="rounded-full bg-[#293066] hover:bg-[#293066]/80" asChild>
+            <Link to="/lowongan-relawan/tambah-lowongan-relawan">Tambah Lowongan Relawan</Link>
           </Button>
         </TableHeader>
         <TableData

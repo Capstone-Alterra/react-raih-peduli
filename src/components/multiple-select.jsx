@@ -1,19 +1,24 @@
+import { useState } from "react";
+import { useEffect } from "react";
 import Select from "react-select";
+import { getSkills } from "@/utils/api/volunter/api";
 
-function MultipleSelect({ onChange }) {
-  const options = [
-    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
-    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
-    { value: "tekonologi", label: "Teknologi", color: "#293066" },
-    { value: "kesehatan", label: "Kesehatan", color: "#293066" },
-    { value: "pengajar", label: "Pengajar", color: "#293066" },
-  ];
+function MultipleSelect({ onChange, isDisabled, value }) {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    getSkills()
+      .then((data) => {
+        setOptions(data);
+      })
+      .catch((message) => console.error(message));
+  }, []);
 
   const customStyles = {
-    multiValue: (styles, { data }) => {
+    multiValue: (styles) => {
       return {
         ...styles,
-        backgroundColor: data.color,
+        backgroundColor: "#293066",
         color: "#fff",
         padding: "3px",
         borderRadius: "30px",
@@ -47,8 +52,13 @@ function MultipleSelect({ onChange }) {
       isMulti
       options={options}
       onChange={onChange}
+      value={value}
       styles={customStyles}
+      isDisabled={isDisabled}
       placeholder="Tambah keahlian"
+      classNames={{
+        control: (state) => state.isDisabled && "!bg-white",
+      }}
     />
   );
 }

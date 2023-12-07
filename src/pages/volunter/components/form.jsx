@@ -28,14 +28,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  addVolunter,
-  editVolunter,
+  getVolunteerVacancyById,
+  addVolunteerVacancy,
+  editVolunteerVacancy,
+  updateStatusVolunteerVacancy,
   getDistricts,
   getProvinces,
   getRegencies,
   getVillages,
-  getVolunterById,
-  updateStatusVolunter,
 } from "@/utils/api/volunter/api";
 import {
   Select,
@@ -48,6 +48,7 @@ import {
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
+  const [skills, setSkills] = useState();
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const [{ provinces, regencies, districts, villages }, setData] = useState({
@@ -71,8 +72,7 @@ const VolunterForm = ({ action, id }) => {
       skills_required: [],
       number_of_vacancies: "",
       contact_email: "",
-      start_date: "",
-      end_date: "",
+      application_deadline: "",
       province: "",
       city: "",
       sub_district: "",
@@ -91,43 +91,47 @@ const VolunterForm = ({ action, id }) => {
     },
   });
 
-  const getDetailVolunter = async (id) => {
+  const getDetailVolunteerVacancy = async (id) => {
     try {
       const {
         title,
         description,
-        skills_required,
+        skills_requred,
         number_of_vacancies,
         contact_email,
-        start_date,
-        end_date,
+        application_deadline,
         province,
-        regencie,
+        city,
         sub_disctrict,
-        village,
+        detail_location,
+        status,
         photo,
-      } = await getVolunterById(id);
+      } = await getVolunteerVacancyById(id);
 
-      const formattedStartDate = new Date(start_date);
-      const formattedEndDate = new Date(end_date);
+      const formattedEndDate = new Date(application_deadline);
+      const formatedSkills = skills_requred.map((skill) => ({ value: skill, label: skill }));
+
+      // console.log(formatedSkills);
 
       setStatus(status);
       setPreview(photo);
+      setSkills(formatedSkills);
 
       form.reset({
         title,
         description,
-        skills_required,
+        skills_required: formatedSkills,
         number_of_vacancies,
         contact_email,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
+        application_deadline: formattedEndDate,
         province,
-        regencie,
+        city,
         sub_disctrict,
-        village,
+        detail_location,
         photo,
       });
+
+      // console.log(form.watch("skills_required"));
     } catch (error) {
       console.error(error);
       throw error;
@@ -136,7 +140,7 @@ const VolunterForm = ({ action, id }) => {
 
   useEffect(() => {
     if (action !== "add") {
-      getDetailVolunter(id);
+      getDetailVolunteerVacancy(id);
     }
   }, [action, id]);
 
@@ -147,8 +151,7 @@ const VolunterForm = ({ action, id }) => {
       skills_required,
       number_of_vacancies,
       contact_email,
-      start_date,
-      end_date,
+      application_deadline,
       province,
       city,
       sub_district,
@@ -156,18 +159,16 @@ const VolunterForm = ({ action, id }) => {
       photo,
     } = data;
 
-    const startDate = toIsoDate(start_date);
-    const endDate = toIsoDate(end_date);
+    const endDate = toIsoDate(application_deadline);
 
     if (action === "add") {
-      addVolunter({
+      addVolunteerVacancy({
         title,
         description,
         skills_required,
         number_of_vacancies,
         contact_email,
-        start_date: startDate,
-        end_date: endDate,
+        application_deadline: endDate,
         province,
         city,
         sub_district,
@@ -183,8 +184,7 @@ const VolunterForm = ({ action, id }) => {
         description,
         skills_required,
         number_of_vacancies,
-        start_date: startISO,
-        end_date: endISO,
+        application_deadline: endDate,
         province,
         city,
         sub_district,
@@ -192,7 +192,7 @@ const VolunterForm = ({ action, id }) => {
         ...(photo instanceof File && { photo }),
       };
 
-      editVolunter(id, editedData)
+      editVolunteerVacancy(id, editedData)
         .then((message) => Toast.fire({ icon: "success", title: message }))
         .catch((message) => Toast.fire({ icon: "error", title: message }))
         .finally(navigate("/lowongan-relawan"));
@@ -200,7 +200,7 @@ const VolunterForm = ({ action, id }) => {
   };
 
   const updateVolunter = (id, status) => {
-    updateStatusVolunter(id, status)
+    updateStatusVolunteerVacancy(id, status)
       .then((message) => {
         Toast.fire({ icon: "success", title: message });
       })
@@ -285,21 +285,6 @@ const VolunterForm = ({ action, id }) => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="skills_required"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Keahlian yang dibutuhkan</FormLabel>
-              <FormControl>
-                <MultipleSelect
-                  onChange={(options) => field.onChange(options.map((opt) => opt.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="flex gap-4">
           <FormField
             control={form.control}
@@ -350,53 +335,10 @@ const VolunterForm = ({ action, id }) => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="start_date"
+            name="application_deadline"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-start-date">
-                  Tanggal Mulai Lowongan Relawan
-                </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        disabled={action === "detail"}
-                        id="input-volunter-start-date"
-                        className={cn(
-                          "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: Id })
-                        ) : (
-                          <span>Pilih tanggal mulai lowongan relawan</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      initialFocus
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => isFutureDate(date)}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="end_date"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-end-date">
+                <FormLabel htmlFor="input-volunter-application-deadline">
                   Tanggal Selesai Lowongan Relawan
                 </FormLabel>
                 <Popover>
@@ -405,7 +347,7 @@ const VolunterForm = ({ action, id }) => {
                       <Button
                         variant={"outline"}
                         disabled={action === "detail"}
-                        id="input-volunter-end-date"
+                        id="input-volunter-application-deadline"
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
@@ -434,11 +376,31 @@ const VolunterForm = ({ action, id }) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="skills_required"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Keahlian yang dibutuhkan</FormLabel>
+                <FormControl>
+                  <MultipleSelect
+                    value={skills}
+                    action={action}
+                    isDisabled={action === "detail"}
+                    onChange={(options) => {
+                      field.onChange(options.map((opt) => opt.value));
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <div className="flex gap-4">
           <FormField
-            control={form.control}
             name="province"
+            control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
