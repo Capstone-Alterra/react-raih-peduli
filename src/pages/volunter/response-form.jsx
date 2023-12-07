@@ -9,7 +9,7 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import Select from "react-select";
 import React from "react";
-import { MultipleSelect } from "@/components/multiple-select";
+import MultipleSelect from "@/components/multiple-select";
 import Swal from "sweetalert2";
 
 function ResponseForm() {
@@ -122,23 +122,21 @@ function ResponseForm() {
           </div>
           <div className="px-6 pt-[18px]">
             <Label htmlFor="form-image">Pas Foto</Label>
-            <InputFile
-              word="Tambahkan Pas Foto disini"
-              name="image"
-              id="form-image"
-            />
+            <InputFile word="Tambahkan Pas Foto disini" name="image" id="form-image" />
           </div>
           <div className="flex flex-row gap-5 justify-end px-6 py-3">
             <Button
               className="bg-white-500 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
               id="btn-cancel"
-              onClick={handleIgnore}>
+              onClick={handleIgnore}
+            >
               Tolak
             </Button>
             <Button
               className="bg-[#293066] text-white hover:bg-[#293066]"
               id="btn-simpan"
-              onClick={handleBack}>
+              onClick={handleBack}
+            >
               Terima
             </Button>
           </div>
