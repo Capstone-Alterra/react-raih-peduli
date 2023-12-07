@@ -111,8 +111,6 @@ const VolunterForm = ({ action, id }) => {
       const formattedEndDate = new Date(application_deadline);
       const formatedSkills = skills_requred.map((skill) => ({ value: skill, label: skill }));
 
-      // console.log(formatedSkills);
-
       setStatus(status);
       setPreview(photo);
       setSkills(formatedSkills);
@@ -130,8 +128,6 @@ const VolunterForm = ({ action, id }) => {
         detail_location,
         photo,
       });
-
-      // console.log(form.watch("skills_required"));
     } catch (error) {
       console.error(error);
       throw error;
@@ -247,50 +243,31 @@ const VolunterForm = ({ action, id }) => {
   return (
     <Form {...form}>
       <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  id="input-volunter-title"
-                  className="disabled:opacity-100"
-                  disabled={action === "detail"}
-                  placeholder="Masukkan judul lowongan relawan"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  id="input-volunter-description"
-                  className="min-h-[100px] disabled:opacity-100"
-                  disabled={action === "detail"}
-                  placeholder="Masukkan deskripsi lowongan relawan"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="flex gap-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    id="input-volunter-title"
+                    className="disabled:opacity-100"
+                    disabled={action === "detail"}
+                    placeholder="Masukkan judul lowongan relawan"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="number_of_vacancies"
             render={({ field }) => (
-              <FormItem style={{ width: action === "edit" ? "49%" : "100%" }} className="w-full">
+              <FormItem className="w-full">
                 <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
                 <FormControl>
                   <NumericFormat
@@ -310,28 +287,46 @@ const VolunterForm = ({ action, id }) => {
               </FormItem>
             )}
           />
-          {action !== "edit" && (
-            <FormField
-              control={form.control}
-              name="contact_email"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      id="input-volunter-email"
-                      className="disabled:opacity-100"
-                      disabled={action === "detail"}
-                      placeholder="Masukkan kontak email"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
         </div>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  id="input-volunter-description"
+                  className="min-h-[100px] disabled:opacity-100"
+                  disabled={action === "detail"}
+                  placeholder="Masukkan deskripsi lowongan relawan"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="skills_required"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Keahlian yang dibutuhkan</FormLabel>
+              <FormControl>
+                <MultipleSelect
+                  value={skills}
+                  action={action}
+                  isDisabled={action === "detail"}
+                  onChange={(options) => {
+                    field.onChange(options.map((opt) => opt.value));
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex gap-4">
           <FormField
             control={form.control}
@@ -376,26 +371,27 @@ const VolunterForm = ({ action, id }) => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="skills_required"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Keahlian yang dibutuhkan</FormLabel>
-                <FormControl>
-                  <MultipleSelect
-                    value={skills}
-                    action={action}
-                    isDisabled={action === "detail"}
-                    onChange={(options) => {
-                      field.onChange(options.map((opt) => opt.value));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {action !== "edit" && (
+            <FormField
+              control={form.control}
+              name="contact_email"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      id="input-volunter-email"
+                      className="disabled:opacity-100"
+                      disabled={action === "detail"}
+                      placeholder="Masukkan kontak email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
         <div className="flex gap-4">
           <FormField
@@ -405,6 +401,8 @@ const VolunterForm = ({ action, id }) => {
               <FormItem className="w-full">
                 <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
                 <Select
+                  defaultValue={field.value}
+                  disabled={action === "detail"}
                   onValueChange={(e) => {
                     const data = JSON.parse(e);
 
@@ -414,7 +412,6 @@ const VolunterForm = ({ action, id }) => {
                       province: { id: data.id, name: data.name },
                     }));
                   }}
-                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -442,6 +439,8 @@ const VolunterForm = ({ action, id }) => {
               <FormItem className="w-full">
                 <FormLabel>Kabupaten</FormLabel>
                 <Select
+                  defaultValue={field.value}
+                  disabled={action === "detail"}
                   onValueChange={(e) => {
                     const data = JSON.parse(e);
 
@@ -451,7 +450,6 @@ const VolunterForm = ({ action, id }) => {
                       regency: { id: data.id, name: data.name },
                     }));
                   }}
-                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -481,6 +479,8 @@ const VolunterForm = ({ action, id }) => {
               <FormItem className="w-full">
                 <FormLabel>Kecamatan</FormLabel>
                 <Select
+                  defaultValue={field.value}
+                  disabled={action === "detail"}
                   onValueChange={(e) => {
                     const data = JSON.parse(e);
 
@@ -490,7 +490,6 @@ const VolunterForm = ({ action, id }) => {
                       district: { id: data.id, name: data.name },
                     }));
                   }}
-                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -516,6 +515,8 @@ const VolunterForm = ({ action, id }) => {
               <FormItem className="w-full">
                 <FormLabel>Kelurahan</FormLabel>
                 <Select
+                  defaultValue={field.value}
+                  disabled={action === "detail"}
                   onValueChange={(e) => {
                     const data = JSON.parse(e);
 
@@ -525,7 +526,6 @@ const VolunterForm = ({ action, id }) => {
                       village: { id: data.id, name: data.name },
                     });
                   }}
-                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -553,9 +553,9 @@ const VolunterForm = ({ action, id }) => {
               <FormLabel htmlFor="input-volunter-image">Foto</FormLabel>
               <FormControl>
                 <FileInput
+                  preview={preview}
                   id="input-volunter-image"
                   placeholder="Tambahkan foto Lowongan Relawan di sini"
-                  preview={preview}
                   onChange={(e) => {
                     field.onChange(e.target.files[0]);
 
