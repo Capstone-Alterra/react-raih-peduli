@@ -5,13 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { NumericFormat } from "react-number-format";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { getDetailTransaction } from "@/utils/api/transaction";
 
 const TransactionForm = ({ action, id }) => {
   const navigate = useNavigate();
-  const [status, setStatus] = useState("");
-  const [preview, setPreview] = useState("");
   const form = useForm({
     resolver: zodResolver(),
     defaultValues: {
@@ -20,16 +25,21 @@ const TransactionForm = ({ action, id }) => {
       address: "",
       phone_number: "",
       amount: "",
-      photo: "",
     },
   });
 
   useEffect(() => {
     if (action !== "add") {
       getDetailTransaction(id).then((data) => {
-        const { email, fullname, address, phone_number, amount, photo } = data;
-        setStatus(status);
-        setPreview(photo);
+        const { email, fullname, address, phone_number, amount } = data;
+        console.log(data);
+        form.reset({
+          email,
+          fullname,
+          address,
+          phone_number,
+          amount,
+        });
       });
     }
   }, []);
@@ -72,7 +82,6 @@ const TransactionForm = ({ action, id }) => {
                     id="input-transaction-email"
                     className="disabled:opacity-100"
                     disabled={action === "detail"}
-                    placeholder="andi@gmail.com"
                   />
                 </FormControl>
                 <FormMessage />
@@ -84,14 +93,13 @@ const TransactionForm = ({ action, id }) => {
             name="fullname"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="form-transaction-fullname">fullname</FormLabel>
+                <FormLabel htmlFor="form-transaction-fullname">Nama Lengkap</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     id="form-transaction-fullname"
                     className="disabled:opacity-100"
                     disabled={action === "detail"}
-                    placeholder="andi@gmail.com"
                   />
                 </FormControl>
                 <FormMessage />
@@ -104,7 +112,7 @@ const TransactionForm = ({ action, id }) => {
           name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="form-transaction-address">Address</FormLabel>
+              <FormLabel htmlFor="form-transaction-address">Alamat</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
@@ -124,7 +132,7 @@ const TransactionForm = ({ action, id }) => {
             name="phone_number"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="form-transaction-nohandphone">No.Handphone</FormLabel>
+                <FormLabel htmlFor="form-transaction-nohandphone">No. Handphone</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -164,7 +172,7 @@ const TransactionForm = ({ action, id }) => {
             name="amount"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="form-transaction-jumlah">Jumlah</FormLabel>
+                <FormLabel htmlFor="form-transaction-jumlah">Jumlah Transaksi</FormLabel>
                 <FormControl>
                   <NumericFormat
                     prefix="Rp. "
