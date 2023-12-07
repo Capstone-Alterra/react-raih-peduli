@@ -3,13 +3,13 @@ import News from "@/pages/news/index";
 import Volunter from "@/pages/volunter";
 import Dashboard from "@/pages/dashboard";
 import Transaction from "@/pages/transaction";
-import TransactionDetail from "@/pages/transaction/transaction-detail";
 import EditUser from "@/pages/customer/edit-customer";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
+import DetailTransaction from "@/pages/transaction/detail-transaction";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
 import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
 import DetailFundraise from "@/pages/fundraising/detail-fundraise";
@@ -70,7 +70,7 @@ export default function Router() {
     },
     {
       path: "/transaksi/:id",
-      element: token === "" ? <Navigate to="/login" /> : <TransactionDetail />,
+      element: token === "" ? <Navigate to="/login" /> : <DetailTransaction />,
     },
     {
       path: "/penggalangan-dana",

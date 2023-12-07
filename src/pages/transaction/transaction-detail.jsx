@@ -1,12 +1,14 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ArrowLeft from "@/assets/icons/arrow-left";
 import { InputLabel } from "@/components/input-with-label";
 import { TextAreaLabel } from "@/components/textarea-with-label";
 
 function TransactionDetail() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
   const handleGoBack = () => {
     navigate(-1);
@@ -18,10 +20,7 @@ function TransactionDetail() {
         <Header titleHeader="Transaksi" />
         <div className="rounded shadow my-5">
           <div className="rounded-t border-y-2">
-            <p
-              className="p-3 font-bold flex flex-row items-center cursor-pointer"
-              onClick={handleGoBack}
-            >
+            <p className="p-3 font-bold flex flex-row items-center cursor-pointer" onClick={handleGoBack}>
               <img src={ArrowLeft} className="w-4 h-4" alt="Back Icon" id="btn-back" />
               Detail Transaksi
             </p>
@@ -29,13 +28,7 @@ function TransactionDetail() {
           <div>
             <div className="flex flex-row gap-5 p-6">
               <div className="w-full">
-                <InputLabel
-                  label="Username"
-                  type="text"
-                  name="username"
-                  id="form-username"
-                  placeholder="Andi"
-                />
+                <InputLabel label="Username" type="text" name="username" id="form-username" placeholder="Andi" />
               </div>
               <div className="w-full">
                 <InputLabel
@@ -48,12 +41,7 @@ function TransactionDetail() {
               </div>
             </div>
             <div className="px-6">
-              <TextAreaLabel
-                label="Alamat"
-                name="alamat"
-                id="form-alamat"
-                placeholder="Jalan mekarsari 5467"
-              />
+              <TextAreaLabel label="Alamat" name="alamat" id="form-alamat" placeholder="Jalan mekarsari 5467" />
             </div>
             <div className="flex flex-row gap-5 p-6">
               <div className="w-full">
@@ -77,13 +65,7 @@ function TransactionDetail() {
             </div>
             <div className="flex flex-row gap-5 p-6">
               <div className="w-full">
-                <InputLabel
-                  label="Jumlah"
-                  type="text"
-                  name="jumlahe"
-                  id="form-jumlah"
-                  placeholder="50.000.000"
-                />
+                <InputLabel label="Jumlah" type="text" name="jumlahe" id="form-jumlah" placeholder="50.000.000" />
               </div>
               <div className="w-full">
                 <InputLabel

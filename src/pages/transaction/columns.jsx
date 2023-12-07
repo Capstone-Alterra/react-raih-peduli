@@ -1,15 +1,16 @@
 import InfoIcon from "@/assets/icons/info";
 import { Button } from "@/components/ui/button";
 import convertToRupiah from "@/utils/formatter/convertToRupiah";
+import { Link } from "react-router-dom";
 
 export const columns = [
   {
     header: "No",
-    accessorKey: "no",
+    accessorFn: (originalRow, index) => index + 1,
   },
   {
-    header: "Username",
-    accessorKey: "username",
+    header: "Email",
+    accessorKey: "email",
   },
   {
     header: "Fullname",
@@ -17,38 +18,45 @@ export const columns = [
   },
   {
     header: "Alamat",
-    accessorKey: "alamat",
+    accessorKey: "address",
   },
   {
     header: "No.Handphone",
-    accessorKey: "nohandphone",
+    accessorKey: "phone_number",
   },
   {
     header: "jumlah",
-    accessorKey: "jumlahtransaksi",
+    accessorKey: "amount",
     cell: ({ row }) => {
-      const jumlahtransaksi = row.original.jumlahtransaksi;
+      const amount = row.original.amount;
 
-      return <div className="whitespace-nowrap">{convertToRupiah(jumlahtransaksi)}</div>;
+      return <div className="whitespace-nowrap">{convertToRupiah(amount)}</div>;
     },
   },
   {
-    header: "Virtual account",
-    accessorKey: "virtualaccount",
+    header: "virtual account",
+    accessorKey: "payment_type",
   },
   {
     header: "Aksi",
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <Button
-          size="icon"
-          className="bg-[#166648] hover:bg-[#166648]/80"
-          style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-          onClick={() => console.log(row.original.no)}
-        >
-          <InfoIcon className="w-4 h-4" />
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const id = row.original.id;
+
+      return (
+        <div className="flex gap-2">
+          <Button
+            asChild
+            size="icon"
+            id={`btn-detail-transaksi-${id}`}
+            className="bg-[#166648] hover:bg-[#166648]/80"
+            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
+          >
+            <Link to={`/transaksi/${id}`}>
+              <InfoIcon className="w-4 h-4" />
+            </Link>
+          </Button>
+        </div>
+      );
+    },
   },
 ];
