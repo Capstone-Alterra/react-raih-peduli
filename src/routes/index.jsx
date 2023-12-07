@@ -8,14 +8,17 @@ import EditUser from "@/pages/customer/edit.jsx";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
 import DetailVolunter from "@/pages/volunter/detail";
-import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
 import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
 import DetailFundraise from "@/pages/fundraising/detail-fundraise";
 import AddFundraise from "@/pages/fundraising/add-fundraise";
-import ResponseForm from "@/pages/volunter/response-form";
+import ResponseForm from "@/pages/volunter/list-registered/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { useEffect } from "react";
 import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 import { useToken } from "@/utils/context/token";
@@ -24,6 +27,7 @@ import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
 import AddNews from "@/pages/news/add-news";
 import AddVolunterForm from "@/pages/volunter/add-form";
+import Registrants from "@/pages/volunter/list-registered";
 
 export default function Router() {
   const { token } = useToken();
@@ -110,7 +114,7 @@ export default function Router() {
     },
     {
       path: "/list-pendaftar-lowongan-relawan",
-      element: token === "" ? <Navigate to="/login" /> : <ListVolunter />,
+      element: token === "" ? <Navigate to="/login" /> : <Registrants />,
     },
     {
       path: "/respon-pendaftar-lowongan-relawan/:id",

@@ -1,29 +1,36 @@
 import {
-  getVolunters,
-  addVolunter,
-  deleteVolunter,
-  getVolunterById,
-  updateStatusVolunter,
-  editVolunter,
+  getVolunteerVacancies,
+  addVolunteerVacancy,
+  deleteVolunteerVacancy,
+  getVolunteerVacancyById,
+  updateStatusVolunteerVacancy,
+  editVolunteerVacancy,
   getDistricts,
   getProvinces,
   getRegencies,
   getVillages,
+  getVolunteerRegistrants,
 } from "./api";
 
-import { volunterSchema, editVolunterSchema } from "./schema";
+import {
+  volunterSchema,
+  editVolunterSchema,
+  registrantVolunterSchema,
+} from "./schema";
 
 export {
-  getVolunters,
-  addVolunter,
-  deleteVolunter,
-  getVolunterById,
-  updateStatusVolunter,
-  editVolunter,
+  getVolunteerVacancies,
+  addVolunteerVacancy,
+  deleteVolunteerVacancy,
+  getVolunteerVacancyById,
+  updateStatusVolunteerVacancy,
+  editVolunteerVacancy,
   getDistricts,
   getProvinces,
   getRegencies,
   getVillages,
   volunterSchema,
   editVolunterSchema,
+  registrantVolunterSchema,
+  getVolunteerRegistrants,
 };

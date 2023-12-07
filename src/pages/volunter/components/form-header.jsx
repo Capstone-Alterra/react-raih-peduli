@@ -18,7 +18,7 @@ const FormHeader = ({ title }) => {
           ? "Detail Lowongan Relawan"
           : title === "add"
           ? "Tambah Lowongan Relawan"
-          : ""}
+          : "Respon Pendaftar Lowongan Relawan"}
       </h3>
     </div>
   );

@@ -3,14 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ApproveIcon from "@/assets/icons/approve";
 
-export const listColumns = [
+export const registrantColumns = [
   {
     header: "No",
-    accessorKey: "no",
+    accessorKey: "id",
   },
   {
     header: "Full Name",
-    accessorKey: "fullName",
+    accessorKey: "fullname",
   },
   {
     header: "Address",
@@ -48,7 +48,7 @@ export const listColumns = [
   {
     header: "Aksi",
     cell: ({ row }) => {
-      const id = row.original.no;
+      const id = row.original.id;
 
       return (
         <div className="flex gap-2">

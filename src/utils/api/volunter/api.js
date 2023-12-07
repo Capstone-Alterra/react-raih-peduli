@@ -49,11 +49,15 @@ export const addVolunteerVacancy = async ({ ...data }) => {
 
 export const editVolunteerVacancy = async (id, { ...data }) => {
   try {
-    const response = await axiosWithConfig.put(`/volunteer-vacancies/${id}`, ...data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axiosWithConfig.put(
+      `/volunteer-vacancies/${id}`,
+      ...data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data.message;
   } catch (error) {
     console.error(error);
@@ -132,6 +136,25 @@ export const getVillages = async (id) => {
   try {
     const response = await externalAxiosWithConfig.get(`/villages/${id}.json`);
     return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getVolunteerRegistrants = async (pageIndex, pageSize, title) => {
+  try {
+    if (title) {
+      const response = await axiosWithConfig.get(
+        `/volunteer-vacancies/1/registrants`
+      );
+      return response.data;
+    } else {
+      const response = await axiosWithConfig.get(
+        `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}&title=${title}`
+      );
+      return response.data;
+    }
   } catch (error) {
     console.error(error);
     throw error;
