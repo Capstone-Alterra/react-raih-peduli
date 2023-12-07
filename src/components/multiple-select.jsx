@@ -1,16 +1,6 @@
-import React from "react";
 import Select from "react-select";
-import { Label } from "./ui/label";
 
-function MultipleSelect({
-  onChange,
-  error,
-  label,
-  id,
-  placeholder,
-  name,
-  type,
-}) {
+function MultipleSelect({ onChange }) {
   const options = [
     { value: "pendidikan", label: "Pendidikan", color: "#293066" },
     { value: "komunikasi", label: "Komunikasi", color: "#293066" },
@@ -51,63 +41,16 @@ function MultipleSelect({
       borderColor: "#E4E6FC",
     }),
   };
+
   return (
-    <>
-      <label htmlFor={id} className="font-semibold mb-2">
-        {label}
-      </label>
-      <Select
-        id={id}
-        isMulti
-        type={type}
-        name={name}
-        className="mt-2"
-        options={options}
-        styles={customStyles}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-      {error && (
-        <label>
-          <span className="break-words text-sm font-light text-red-500">
-            {error}
-          </span>
-        </label>
-      )}
-    </>
+    <Select
+      isMulti
+      options={options}
+      onChange={onChange}
+      styles={customStyles}
+      placeholder="Tambah keahlian"
+    />
   );
 }
 
-function SelectForm({
-  label,
-  placeholder,
-  id,
-  error,
-  register,
-  options = [],
-  name,
-}) {
-  return (
-    <div className="mb-[18px]">
-      <Label htmlFor={id}>{label}</Label>
-      <Select
-        id={id}
-        name={name}
-        className="mt-2"
-        placeholder={placeholder}
-        options={options}
-        {...(register ? register(name) : {})}
-      />
-
-      {error && (
-        <label>
-          <span className="break-words text-sm font-light text-red-500">
-            {error}
-          </span>
-        </label>
-      )}
-    </div>
-  );
-}
-
-export { MultipleSelect, SelectForm };
+export default MultipleSelect;
