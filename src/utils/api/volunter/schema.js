@@ -5,28 +5,39 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const volunterSchema = z
   .object({
-    title: z.string().min(2, { message: "Kolom judul lowongan relawan harus di isi" }),
-    description: z.string().min(2, { message: "Kolom deskripsi harus di isi" }),
-    skills_requred: z.string().min(1, { message: "Harus memiliki keahlian salah satu bidang" }),
-    number_of_vacancies: z
-      .number({ invalid_type_error: "Kolom harus di isi" })
-      .min(10, { message: "Jumlah lowongan relawan minimal 10 orang" }),
-    contact_email: z.string().min(2, { message: "Kontak email harus di isi" }),
+    title: z
+      .string()
+      .min(1, { message: "Kolom judul lowongan relawan harus diisi" })
+      .min(20, { message: "Judul lowongan relawan minimal 20 karakter" }),
+    description: z
+      .string()
+      .min(1, { message: "Kolom deskripsi lowongan relawan harus diisi" })
+      .min(50, {
+        message: " Kolom deskripsi lowongan relawan minimal 50 karakter",
+      }),
+    skills_required: z.string().array().nonempty({ message: "Kolom keahlian harus diisi" }),
+    number_of_vacancies: z.number({
+      invalid_type_error: "Kolom jumlah lowongan relawan harus diisi",
+    }),
+    contact_email: z
+      .string()
+      .min(1, { message: "Kolom alamat email harus diisi" })
+      .email({ message: "Alamat email tidak valid. Mohon periksa kembali." }),
     start_date: z.date({
-      required_error: "Kolom harus di isi",
-      invalid_type_error: "Kolom harus di isi",
+      required_error: "Kolom tanggal mulai lowongan relawan harus diisi",
+      invalid_type_error: "Kolom tanggal mulai lowongan relawan harus diisi",
     }),
     end_date: z.date({
-      required_error: "Kolom harus di isi",
-      invalid_type_error: "Kolom harus di isi",
+      required_error: "Kolom tanggal selesai lowongan relawan harus diisi",
+      invalid_type_error: "Kolom tanggal selesai lowongan relawan harus diisi",
     }),
-    province: z.string().min(1, { message: "Harus memilih provinsi" }),
-    city: z.string().min(1, { message: "Harus memilih kabupaten" }),
-    sub_district: z.string().min(1, { message: "Harus memilih kecamatan" }),
-    detail_location: z.string().min(1, { message: "Harus memilih kelurahan" }),
+    province: z.string().min(1, { message: "Kolom provinsi harus diisi" }),
+    city: z.string().min(1, { message: "Kolom kabupaten/kota harus diisi" }),
+    sub_district: z.string().min(1, { message: "Kolom kecamatan harus diisi" }),
+    detail_location: z.string().min(1, { message: "Kolom kelurahan/desa harus diisi" }),
     photo: z
       .any()
-      .refine((file) => !!file, { message: "Kolom harus di isi" })
+      .refine((file) => !!file, { message: "Kolom foto lowongan relawan harus diisi" })
       .refine((file) => file?.size <= MAX_FILE_SIZE, {
         message: "Ukuran gambar maksimal 5MB",
       })
@@ -39,24 +50,41 @@ export const volunterSchema = z
     path: ["end_date"],
   });
 
-export const editVolunterSchema = z.object({
-  title: z.string().min(2, { message: "Kolom judul lowongan relawan harus di isi" }),
-  description: z.string().min(2, { message: "Kolom deskripsi harus di isi" }),
-  skills_requred: z.string().min(1, { message: "Harus memiliki keahlian salah satu bidang" }),
-  number_of_vacancies: z
-    .number({ invalid_type_error: "Kolom harus di isi" })
-    .min(10, { message: "Jumlah lowongan relawan minimal 10 orang" }),
-  contact_email: z.string().min(2, { message: "Kontak email harus di isi" }),
-  start_date: z.date({
-    required_error: "Kolom harus di isi",
-    invalid_type_error: "Kolom harus di isi",
-  }),
-  end_date: z.date({
-    required_error: "Kolom harus di isi",
-    invalid_type_error: "Kolom harus di isi",
-  }),
-  province: z.string().min(1, { message: "Harus memilih provinsi" }),
-  city: z.string().min(2, { message: "Harus memilih kabupaten" }),
-  sub_district: z.string().min(2, { message: "Harus memilih kecamatan" }),
-  detail_location: z.string().min(2, { message: "Harus memilih kelurahan" }),
-});
+export const editVolunterSchema = z
+  .object({
+    title: z
+      .string()
+      .min(1, { message: "Kolom judul lowongan relawan harus diisi" })
+      .min(20, { message: "Judul lowongan relawan minimal 20 karakter" }),
+    description: z
+      .string()
+      .min(1, { message: "Kolom deskripsi lowongan relawan harus diisi" })
+      .min(20, {
+        message: "Kolom deskripsi lowongan relawan minimal 50 karakter",
+      }),
+    skills_required: z.string().array().nonempty({ message: "Kolom keahlian harus diisi" }),
+    number_of_vacancies: z.number({
+      invalid_type_error: "Kolom jumlah lowongan relawan harus diisi",
+    }),
+    contact_email: z
+      .string()
+      .min(1, { message: "Kolom alamat email harus diisi" })
+      .email({ message: "Alamat email tidak valid. Mohon periksa kembali." }),
+    start_date: z.date({
+      required_error: "Kolom tanggal mulai lowongan relawan harus diisi",
+      invalid_type_error: "Kolom tanggal mulai lowongan relawan harus diisi",
+    }),
+    end_date: z.date({
+      required_error: "Kolom tanggal selesai lowongan relawan harus diisi",
+      invalid_type_error: "Kolom tanggal selesai lowongan relawan harus diisi",
+    }),
+    province: z.string().min(1, { message: "Kolom provinsi harus diisi" }),
+    city: z.string().min(1, { message: "Kolom kabupaten/kota harus diisi" }),
+    sub_district: z.string().min(1, { message: "Kolom kecamatan harus diisi" }),
+    detail_location: z.string().min(1, { message: "Kolom kelurahan/desa harus diisi" }),
+    photo: z.any(),
+  })
+  .refine((data) => data.end_date > data.start_date, {
+    message: "Tanggal selesai tidak boleh kurang dari tanggal mulai",
+    path: ["end_date"],
+  });

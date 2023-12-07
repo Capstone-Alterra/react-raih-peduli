@@ -15,7 +15,8 @@ import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MultipleSelect } from "@/components/multiple-select";
+import toIsoDate from "@/utils/formatter/convertToIso";
+import MultipleSelect from "@/components/multiple-select";
 import { editVolunterSchema, volunterSchema } from "@/utils/api/volunter/schema";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
@@ -39,6 +40,7 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -48,7 +50,6 @@ const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
-  const [selectedSkills, setSelectedSkills] = useState([]);
   const [{ provinces, regencies, districts, villages }, setData] = useState({
     provinces: [],
     regencies: [],
@@ -67,15 +68,15 @@ const VolunterForm = ({ action, id }) => {
     defaultValues: {
       title: "",
       description: "",
-      skills_requred: [""],
-      number_of_vacancies: 0,
+      skills_required: [],
+      number_of_vacancies: "",
       contact_email: "",
       start_date: "",
       end_date: "",
       province: "",
-      regencie: "",
+      city: "",
       sub_district: "",
-      village: "",
+      detail_location: "",
     },
   });
 
@@ -95,7 +96,7 @@ const VolunterForm = ({ action, id }) => {
       const {
         title,
         description,
-        skill_requred,
+        skills_required,
         number_of_vacancies,
         contact_email,
         start_date,
@@ -116,7 +117,7 @@ const VolunterForm = ({ action, id }) => {
       form.reset({
         title,
         description,
-        skill_requred,
+        skills_required,
         number_of_vacancies,
         contact_email,
         start_date: formattedStartDate,
@@ -143,7 +144,7 @@ const VolunterForm = ({ action, id }) => {
     const {
       title,
       description,
-      skill_requred,
+      skills_required,
       number_of_vacancies,
       contact_email,
       start_date,
@@ -154,18 +155,19 @@ const VolunterForm = ({ action, id }) => {
       detail_location,
       photo,
     } = data;
-    const startISO = start_date.toISOString();
-    const endISO = end_date.toISOString();
+
+    const startDate = toIsoDate(start_date);
+    const endDate = toIsoDate(end_date);
 
     if (action === "add") {
       addVolunter({
         title,
         description,
-        skill_requred: selectedSkills,
+        skills_required,
         number_of_vacancies,
         contact_email,
-        start_date: startISO,
-        end_date: endISO,
+        start_date: startDate,
+        end_date: endDate,
         province,
         city,
         sub_district,
@@ -179,7 +181,7 @@ const VolunterForm = ({ action, id }) => {
       const editedData = {
         title,
         description,
-        skill_requred,
+        skills_required,
         number_of_vacancies,
         start_date: startISO,
         end_date: endISO,
@@ -285,20 +287,16 @@ const VolunterForm = ({ action, id }) => {
         />
         <FormField
           control={form.control}
-          name="skills_requred"
+          name="skills_required"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-volunter-skill">Keahlian</FormLabel>
+              <FormLabel>Keahlian yang dibutuhkan</FormLabel>
               <FormControl>
                 <MultipleSelect
-                  id="input-volunter-skill"
-                  name="skills_requred"
-                  placeholder="Tambahkan Keahlian"
-                  onChange={(e) => {
-                    setSelectedSkills([...selectedSkills, e.value]);
-                  }}
+                  onChange={(options) => field.onChange(options.map((opt) => opt.value))}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -462,11 +460,13 @@ const VolunterForm = ({ action, id }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {provinces.map((province) => (
-                      <SelectItem key={province.id} value={JSON.stringify(province)}>
-                        {province.name}
-                      </SelectItem>
-                    ))}
+                    <SelectGroup>
+                      {provinces.map((province) => (
+                        <SelectItem key={province.id} value={JSON.stringify(province)}>
+                          {province.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -497,11 +497,13 @@ const VolunterForm = ({ action, id }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {regencies.map((regency) => (
-                      <SelectItem key={regency.id} value={JSON.stringify(regency)}>
-                        {regency.name}
-                      </SelectItem>
-                    ))}
+                    <SelectGroup>
+                      {regencies.map((regency) => (
+                        <SelectItem key={regency.id} value={JSON.stringify(regency)}>
+                          {regency.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -618,7 +620,6 @@ const VolunterForm = ({ action, id }) => {
             </div>
           </div>
         )}
-
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
