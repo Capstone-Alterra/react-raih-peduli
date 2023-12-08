@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
 import PencilIcon from "@/assets/icons/pencil";
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
-import ButtonDelete from "@/pages/customer/components/alert-dialog"
+import ButtonDelete from "@/pages/customer/components/alert-dialog";
 
 export const columns = [
   {
@@ -13,7 +13,7 @@ export const columns = [
     accessorKey: "email",
   },
   {
-    header: "Fullname",
+    header: "Nama Lengkap",
     accessorKey: "fullname",
   },
   {
@@ -30,28 +30,32 @@ export const columns = [
   },
   {
     header: "Foto Profil",
-    accessorKey: "profile_picture",
+    cell: ({ row }) => {
+      const profile = row.original.profile_picture;
+
+      return <img src={profile} className="w-9 h-9 rounded-full border mx-auto" />;
+    },
   },
   {
     header: "Aksi",
     cell: ({ row }) => {
       const id = row.original.id;
-      
+
       return (
-      <div className="flex gap-2">
-        <Button
-        asChild
-          size="icon"
-          className="bg-[#E28100] hover:bg-[#E28100]/80"
-          style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-        >
-           <Link to={`/pelanggan/${id}?edit=true`}>
+        <div className="flex gap-2">
+          <Button
+            asChild
+            size="icon"
+            className="bg-[#E28100] hover:bg-[#E28100]/80"
+            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
+          >
+            <Link to={`/pelanggan/${id}?edit=true`}>
               <PencilIcon className="w-4 h-4" />
             </Link>
-            </Button>
+          </Button>
           <ButtonDelete id={id} />
-      </div>
-    );
+        </div>
+      );
     },
   },
 ];
