@@ -48,7 +48,6 @@ import {
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
-  const [skills, setSkills] = useState();
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const [{ provinces, regencies, districts, villages }, setData] = useState({
@@ -113,7 +112,6 @@ const VolunterForm = ({ action, id }) => {
 
       setStatus(status);
       setPreview(photo);
-      setSkills(formatedSkills);
 
       form.reset({
         title,
@@ -156,12 +154,13 @@ const VolunterForm = ({ action, id }) => {
     } = data;
 
     const endDate = toIsoDate(application_deadline);
+    const formattedSkills = skills_required.map((skill) => skill.value);
 
     if (action === "add") {
       addVolunteerVacancy({
         title,
         description,
-        skills_required,
+        skills_required: formattedSkills,
         number_of_vacancies,
         contact_email,
         application_deadline: endDate,
@@ -315,12 +314,9 @@ const VolunterForm = ({ action, id }) => {
               <FormLabel>Keahlian yang dibutuhkan</FormLabel>
               <FormControl>
                 <MultipleSelect
-                  value={skills}
-                  action={action}
+                  value={field.value}
+                  onChange={field.onChange}
                   isDisabled={action === "detail"}
-                  onChange={(options) => {
-                    field.onChange(options.map((opt) => opt.value));
-                  }}
                 />
               </FormControl>
               <FormMessage />

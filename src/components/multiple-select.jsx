@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Select from "react-select";
 import { getSkills } from "@/utils/api/volunter/api";
 
-function MultipleSelect({ onChange, isDisabled, value }) {
+function MultipleSelect({ isDisabled, onChange, value }) {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -50,9 +50,9 @@ function MultipleSelect({ onChange, isDisabled, value }) {
   return (
     <Select
       isMulti
+      value={value}
       options={options}
       onChange={onChange}
-      value={value}
       styles={customStyles}
       isDisabled={isDisabled}
       placeholder="Tambah keahlian"
