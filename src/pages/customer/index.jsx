@@ -1,63 +1,63 @@
-import { columns } from './components/customer-columns';
-import Header from '@/components/header';
-import Layout from '@/components/layout';
-import TableData from './components/customer-table';
-import TableHeader from '@/components/table/table-header';
-import TableLayout from '@/components/table/table-layout';
+import Header from "@/components/header";
+import Layout from "@/components/layout";
 import { useEffect, useState } from "react";
-import { useDebounce } from "@uidotdev/usehooks";
-import { getCustomers } from '@/utils/api/customer';
+import { getCustomers } from "@/utils/api/customer";
+import TableData from "./components/customer-table";
+import { columns } from "./components/customer-columns";
+import TableHeader from "@/components/table/table-header";
+import TableLayout from "@/components/table/table-layout";
 
 function Customer() {
-    const [data, setData] = useState([]);
-    const [pageCount, setPageCount] = useState();
-    const [filtering, setFiltering] = useState("");
-    const [loading, setLoading] = useState(false);
-    const debouncedSearchTerm = useDebounce(filtering, 500);
-    const [{ pageIndex, pageSize }, setPagination] = useState({
-      pageIndex: 1,
-      pageSize: 10,
-    });
-  
-    const pagination = {
-      pageIndex,
-      pageSize,
-    };
-  
-    useEffect(() => {
-      setLoading(true);
-      getCustomers(pageIndex, pageSize, debouncedSearchTerm)
-        .then((data) => {
-          setData(data.data);
-          setPageCount(data.pagination.total_page);
-          setPagination((prevState) => ({
-            ...prevState,
-            pageIndex: data.pagination.current_page,
-          }));
-        })
-        .catch(() => {
-          setData([]);
-        })
-        .finally(() => {
-          setLoading(false);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
+    pageIndex: 1,
+    pageSize: 10,
+    prevPage: 0,
+    currentPage: 0,
+    totalPage: 0,
+  });
+
+  const pagination = {
+    pageSize,
+    prevPage,
+    pageIndex,
+    totalPage,
+    currentPage,
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getCustomers(pageIndex, pageSize)
+      .then((data) => {
+        setData(data.data);
+        setPagination({
+          nextPage: data.pagination.next_page,
+          pageSize: data.pagination.page_size,
+          totalPage: data.pagination.total_page,
+          prevPage: data.pagination.previous_page,
+          pageIndex: data.pagination.current_page,
+          currentPage: data.pagination.current_page,
         });
-    }, [pageIndex, pageSize, debouncedSearchTerm]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setData([]);
+        setLoading(false);
+      });
+  }, [pageIndex, pageSize]);
 
   return (
-    <Layout currentPage="pelanggan">
+    <Layout>
       <Header titleHeader="Pelanggan" />
       <TableLayout>
-        <TableHeader heading="List Pelanggan"/>
-        <TableData 
-        columns={columns} 
-        data={data}
-        pageIndex={pageIndex}
-        filtering={filtering}
-        setFiltering={setFiltering}
-        pageCount={pageCount}
-        pagination={pagination}
-        setPagination={setPagination}
-        loading={loading}
+        <TableHeader heading="List Pelanggan" />
+        <TableData
+          data={data}
+          columns={columns}
+          loading={loading}
+          pagination={pagination}
+          setPagination={setPagination}
         />
       </TableLayout>
     </Layout>
