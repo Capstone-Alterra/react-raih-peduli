@@ -13,6 +13,7 @@ import Dollar from "@/assets/dashborad/coin.svg";
 import Volunteer from "@/assets/dashborad/Hand.svg";
 import Cards from "@/pages/dashboard/components/card";
 import { columns } from "./columns";
+import { columnss } from "./columnss";
 
 function Dashboard() {
   const [fundraiseData, setFundraiseData] = useState([]); 
@@ -20,7 +21,7 @@ function Dashboard() {
   const [fundraisePageCount, setFundraisePageCount] = useState();
   const [volunteerPageCount, setVolunteerPageCount] = useState();
   const [filtering, setFiltering] = useState("");
-  const debouncedSearchTerm = useDebounce(filtering, 100);
+  const debouncedSearchTerm = useDebounce(filtering, 500);
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 5,
@@ -90,20 +91,20 @@ function Dashboard() {
       });
   }, [pageIndex, pageSize, debouncedSearchTerm]);
 
-  // useEffect(() => {
-  //   getVolunteer(pageIndex, pageSize, debouncedSearchTerm)
-  //     .then((data) => {
-  //       setVolunteerData(data.data);
-  //       setVolunteerPageCount(data.pagination.total_page);
-  //       setPagination((prevState) => ({
-  //         ...prevState,
-  //         pageIndex: data.pagination.current_page,
-  //       }));
-  //     })
-  //     .catch(() => {
-  //       setVolunteerData([]);
-  //     });
-  // }, [pageIndex, pageSize, debouncedSearchTerm]);
+  useEffect(() => {
+    getVolunteer(pageIndex, pageSize, debouncedSearchTerm)
+      .then((data) => {
+        setVolunteerData(data.data);
+        setVolunteerPageCount(data.pagination.total_page);
+        setPagination((prevState) => ({
+          ...prevState,
+          pageIndex: data.pagination.current_page,
+        }));
+      })
+      .catch(() => {
+        setVolunteerData([]);
+      });
+  }, [pageIndex, pageSize, debouncedSearchTerm]);
 
   return (
     <>
@@ -117,7 +118,7 @@ function Dashboard() {
         </div>
         <div className="flex gap-4 mt-6">
           <Table header={'List Penggalangan Dana'} button={'/penggalangan-dana'} columns={columns} data={fundraiseData} />
-          <Table header={'List Daftar Relawan'} columns={columns} data={volunteerData} />
+          <Table header={'List Lowongan Relawan'} button={'/lowongan-relawan'} columns={columnss} data={volunteerData} />
         </div>
       </Layout>
     </>
