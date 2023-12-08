@@ -46,14 +46,14 @@ export const columns = [
       let status;
 
       switch (originalStatus) {
-        case "pending":
-          status = "Pending";
+        case "Paid":
+          status = "Dibayar";
           break;
-        case "accepted":
-          status = "Paid";
+        case "Failed / Cancelled":
+          status = "Dibatalkan";
           break;
-        case "rejected":
-          status = "Failed / Cancelled";
+        case "Waiting For Payment":
+          status = "Menunggu";
           break;
         default:
           status = originalStatus;
@@ -61,11 +61,11 @@ export const columns = [
       }
 
       const badgeClass =
-        status === "Pending"
-          ? "border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white"
-          : status === "Failed / Cancelled"
-          ? "border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
-          : "border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white";
+        status === "Menunggu"
+          ? "border-[#FFAF0F] bg-[#FEF2E5] hover:bg-[#CD6200] text-[#CD6200] hover:text-white"
+          : status === "Dibatalkan"
+          ? "border-white bg-[#FBE7E8] hover:bg-[#A30D11] text-[#A30D11] hover:text-white"
+          : "border-white bg-[#EBF9F1] hover:bg-[#1F9254] text-[#1F9254] hover:text-white";
 
       return <Badge className={`font-bold flex w-24 py-2 justify-center border ${badgeClass}`}>{status}</Badge>;
     },

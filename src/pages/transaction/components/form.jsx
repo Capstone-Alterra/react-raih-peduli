@@ -1,77 +1,63 @@
+import StatusBadge from "./status-badge";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 import { NumericFormat } from "react-number-format";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { getDetailTransaction } from "@/utils/api/transaction";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const TransactionForm = ({ action, id }) => {
-  const navigate = useNavigate();
+  const [status, setStatus] = useState("");
   const form = useForm({
     resolver: zodResolver(),
     defaultValues: {
-      email: "",
+      transaction_id: "",
+      paid_at: "",
       fullname: "",
       address: "",
+      email: "",
       phone_number: "",
+      payment_type: "",
       amount: "",
     },
   });
 
   useEffect(() => {
-    if (action !== "add") {
-      getDetailTransaction(id).then((data) => {
-        const { email, fullname, address, phone_number, amount, transaction_id, paid_at, title, status } = data;
-        console.log(data);
-        form.reset({
-          email,
-          fullname,
-          address,
-          phone_number,
-          amount,
-          transaction_id,
-          paid_at,
-          title,
-          status,
-        });
+    getDetailTransaction(id).then((data) => {
+      const {
+        transaction_id,
+        paid_at,
+        fullname,
+        address,
+        email,
+        phone_number,
+        fundraise_id,
+        payment_type,
+        amount,
+        status,
+      } = data;
+
+      setStatus(status);
+
+      form.reset({
+        transaction_id,
+        paid_at,
+        fullname,
+        address,
+        email,
+        phone_number,
+        payment_type,
+        amount,
+        fundraise_id,
       });
-    }
+    });
   }, []);
-
-  const onSubmit = (data) => {
-    const { email, fullname, address, phone_number, transaction_id, paid_at, title, status } = data;
-
-    if (action === "detail") {
-      getDetailTransaction({ email, fullname, address, phone_number, amount, transaction_id, paid_at, title, status })
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/transaction"));
-    }
-  };
-
-  const goBackHandler = () => {
-    navigate(-1);
-  };
-
-  const badgeClass = () => {
-    status === "Pending"
-      ? "border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white"
-      : status === "Failed / Cancelled"
-      ? "border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
-      : "border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white";
-
-    return <Badge className={`font-bold flex w-24 py-2 justify-center border ${badgeClass}`}>{status}</Badge>;
-  };
 
   return (
     <Form {...form}>
       <form className="px-6 py-6 mb-6 flex flex-col gap-y-4">
-        <div>
-          <Badge name="status">Pending</Badge>
-        </div>
+        <StatusBadge status={status} />
         <div className="flex gap-4">
           <FormField
             control={form.control}
@@ -238,7 +224,7 @@ const TransactionForm = ({ action, id }) => {
         <div>
           <FormField
             control={form.control}
-            name="title"
+            name="fundraise"
             render={({ field }) => (
               <FormItem className="w-1/2">
                 <FormLabel htmlFor="form-transaction-title">Judul Penggalangan Dana</FormLabel>
