@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -9,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-function TableDashboard({ columns, data }) {
+function TableDashboard({ columns, data, header,button }) {
   const table = useReactTable({
     data,
     columns,
@@ -20,11 +21,13 @@ function TableDashboard({ columns, data }) {
     <div className="w-full rounded overflow-auto shadow border-[1px] border-[#D1D1D1] flex flex-col mb-6">
       <div className="h-16 px-4 flex justify-between items-center">
         <div className="text-black text-md font-bold font-nunito break-words">
-          List Penggalangan Dana
+          {header}
         </div>
+        <Link to={button}>
         <Button size="sm" className="bg-[#293066] hover:bg-[#293066]/80 rounded-full">
-          Lihat semua
+          Lihat Semua
         </Button>
+        </Link>
       </div>
       <Table className="w-full">
         <TableHeader className="bg-[#F5F5F5]">

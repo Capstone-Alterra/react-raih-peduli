@@ -1,6 +1,4 @@
-import convertToRupiah from "@/utils/formatter/convertToRupiah";
-
-export const columns = [
+export const columnss = [
   {
     header: "No",
     accessorFn: (originalRow, index) => index + 1,
@@ -19,12 +17,12 @@ export const columns = [
     },
   },
   {
-    header: "Target",
-    accessorKey: "target",
+    header: "Slot",
+    accessorKey: "slot",
     cell: ({ row }) => {
-      const target = row.original.target;
+      const slot = row.original.number_of_vacancies;
 
-      return <div className="whitespace-nowrap">{convertToRupiah(target)}</div>;
+      return <div className="whitespace-nowrap">{slot}</div>;
     },
   },
 ];
