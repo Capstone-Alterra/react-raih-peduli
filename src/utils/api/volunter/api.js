@@ -51,7 +51,7 @@ export const editVolunteerVacancy = async (id, { ...data }) => {
   try {
     const response = await axiosWithConfig.put(
       `/volunteer-vacancies/${id}`,
-      ...data,
+      { ...data },
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -145,9 +145,7 @@ export const getVillages = async (id) => {
 export const getVolunteerRegistrants = async (pageIndex, pageSize, title) => {
   try {
     if (title) {
-      const response = await axiosWithConfig.get(
-        `/volunteer-vacancies/1/registrants`
-      );
+      const response = await axiosWithConfig.get(`/volunteer-vacancies/1/registrants`);
       return response.data;
     } else {
       const response = await axiosWithConfig.get(
