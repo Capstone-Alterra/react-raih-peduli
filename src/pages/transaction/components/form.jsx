@@ -5,14 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { NumericFormat } from "react-number-format";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { getDetailTransaction } from "@/utils/api/transaction";
 
 const TransactionForm = ({ action, id }) => {
@@ -45,10 +38,10 @@ const TransactionForm = ({ action, id }) => {
   }, []);
 
   const onSubmit = (data) => {
-    const { email, fullname, address, phone_number, amount, photo } = data;
+    const { email, fullname, address, phone_number, amount } = data;
 
     if (action === "detail") {
-      getDetailTransaction({ email, fullname, address, phone_number, amount, photo })
+      getDetailTransaction({ email, fullname, address, phone_number, amount })
         .then((message) => alert(message))
         .catch((message) => alert(message))
         .finally(navigate("/transaction"));
@@ -56,14 +49,7 @@ const TransactionForm = ({ action, id }) => {
   };
 
   const goBackHandler = () => {
-    if (action === "detail") {
-      updateStatusFundraise(id, "rejected")
-        .then((message) => alert(message))
-        .catch((message) => alert(message))
-        .finally(navigate("/transaksi"));
-    } else {
-      navigate(-1);
-    }
+    navigate(-1);
   };
 
   return (
