@@ -27,7 +27,7 @@ function OTPPage() {
       id="raih-peduli-tittle"
     >
       <p className="opacity-70 my-[2.5rem]">
-        Kode Verifikasi OTP telah dikirim ke admin@gmail.com
+        Kode Verifikasi OTP telah dikirim ke 
       </p>
       <div className="row">
         <div className="col text-center">

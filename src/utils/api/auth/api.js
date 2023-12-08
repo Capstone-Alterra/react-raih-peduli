@@ -1,26 +1,20 @@
-export const userLogin = async (data) => {
-    return new Promise((resolve, reject) => {
-        const dummyUser = { email: "admin@gmail.com", password: "1234" }
+import axiosWithConfig from "@/utils/api/axiosWithConfig";
 
-        setTimeout(() => {
-            if (
-                data.email === dummyUser.email &&
-                data.password === dummyUser.password
-            ) {
-                resolve({ message: "Login Success", payload: data });
-            } else if (
-                data.email === dummyUser.email &&
-                data.password !== dummyUser.password
-            ) {
-                reject({ message: "Password Salah", payload: data });
-            } else if (
-                data.email !== dummyUser.email &&
-                data.password === dummyUser.password
-            ) {
-                reject({ message: "Email salah", payload: null });
-            } else {
-                reject({ message: "Email atau password salah", payload: null });
-            }
-        }, 1000)
-    })
-}
+export const login = async (email, password) => {
+  try {
+    const response = await axiosWithConfig.post("/auth/login", { email, password });
+    return response.data;
+  } catch (error) {
+    throw new Error("Login failed. Please check your credentials.");
+  }
+};
+
+export const refreshJwt = async (refreshToken) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await axiosWithConfig.post("/auth/refresh-jwt", { refreshToken });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

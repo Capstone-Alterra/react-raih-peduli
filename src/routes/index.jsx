@@ -3,25 +3,35 @@ import News from "@/pages/news/index";
 import Volunter from "@/pages/volunter";
 import Dashboard from "@/pages/dashboard";
 import Transaction from "@/pages/transaction";
+import TransactionDetail from "@/pages/transaction/transaction-detail";
 import EditUser from "@/pages/customer/edit.jsx";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import User from "@/pages/customer/index";
 import VolunterForm from "@/pages/volunter/form";
 import DetailVolunter from "@/pages/volunter/detail";
 import ListVolunter from "@/pages/volunter/list-registered/list-volunter";
-import TransactionDetail from "@/pages/transaction/transaction-detail";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
 import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
 import DetailFundraise from "@/pages/fundraising/detail-fundraise";
 import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { useEffect } from "react";
+import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
+import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
-import NewsDetail from "@/pages/news/form";
-import User from "@/pages/customer/index";
+import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
+import AddNews from "@/pages/news/add-news";
 
 export default function Router() {
+  const { token } = useToken();
+  useEffect(() => {
+    setAxiosConfig(token, "http://34.128.91.0:8000");
+  }, [token]);
+
   const router = createBrowserRouter([
     {
       path: "/login",
@@ -45,67 +55,71 @@ export default function Router() {
     },
     {
       path: "/dashboard",
-      element: <Dashboard />,
+      element: token === "" ? <Navigate to="/login" /> : <Dashboard />,
     },
     {
       path: "/pelanggan",
-      element: <User />,
+      element: token === "" ? <Navigate to="/login" /> : <User />,
     },
     {
       path: "/pelanggan/:id",
-      element: <EditUser />,
+      element: token === "" ? <Navigate to="/login" /> : <EditUser />,
     },
     {
       path: "/transaksi",
-      element: <Transaction />,
+      element: token === "" ? <Navigate to="/login" /> : <Transaction />,
     },
     {
       path: "/transaksi/:id",
-      element: <TransactionDetail />,
+      element: token === "" ? <Navigate to="/login" /> : <TransactionDetail />,
     },
     {
       path: "/penggalangan-dana",
-      element: <Fundraise />,
+      element: token === "" ? <Navigate to="/login" /> : <Fundraise />,
     },
     {
       path: "/penggalangan-dana/tambah-penggalangan-dana",
-      element: <AddFundraise />,
+      element: token === "" ? <Navigate to="/login" /> : <AddFundraise />,
     },
     {
       path: "/penggalangan-dana/:id",
-      element: <DetailFundraise />,
+      element: token === "" ? <Navigate to="/login" /> : <DetailFundraise />,
     },
     {
       path: "/berita",
-      element: <News />,
+      element: token === "" ? <Navigate to="/login" /> : <News />,
+    },
+    {
+      path: "/berita/tambah-berita",
+      element: <AddNews />,
     },
     {
       path: "/berita/:id",
-      element: <NewsDetail />,
+      element: token === "" ? <Navigate to="/login" /> : <NewsDetail />,
     },
     {
       path: "/lowongan-relawan",
-      element: <Volunter />,
+      element: token === "" ? <Navigate to="/login" /> : <Volunter />,
     },
     {
       path: "/lowongan-relawan/:id",
-      element: <VolunterForm />,
+      element: token === "" ? <Navigate to="/login" /> : <VolunterForm />,
     },
     {
       path: "/tambah-lowongan-relawan",
-      element: <VolunterForm />,
+      element: token === "" ? <Navigate to="/login" /> : <VolunterForm />,
     },
     {
       path: "/detail-lowongan-relawan",
-      element: <DetailVolunter />,
+      element: token === "" ? <Navigate to="/login" /> : <DetailVolunter />,
     },
     {
       path: "/list-pendaftar-lowongan-relawan",
-      element: <ListVolunter />,
+      element: token === "" ? <Navigate to="/login" /> : <ListVolunter />,
     },
     {
       path: "/respon-pendaftar-lowongan-relawan/:id",
-      element: <ResponseForm />,
+      element: token === "" ? <Navigate to="/login" /> : <ResponseForm />,
     },
     {
       path: "*",
@@ -113,7 +127,7 @@ export default function Router() {
     },
     {
       path: "/",
-      element: <LandingPage/>,
+      element: <LandingPage />,
     },
   ]);
 

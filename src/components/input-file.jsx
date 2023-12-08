@@ -1,16 +1,16 @@
 import { Input } from "./ui/input";
 import placeholder from "@/assets/icons/foto-icon.svg";
 
-function FileInput({ onChange, preview, image, id }) {
+function FileInput({ onChange, id, preview }) {
   return (
     <div
       className={`relative h-28 rounded-lg border border-input flex items-center ${
-        preview || image ? "justify-start" : "justify-center"
+        preview ? "justify-start" : "justify-center"
       }`}
     >
-      {preview || image ? (
+      {preview ? (
         <div className="absolute flex items-end gap-3">
-          <img src={preview || image} className="h-24 rounded-lg ms-2 border" />
+          <img src={preview} className="h-24 rounded-lg ms-2 border" />
         </div>
       ) : (
         <div className="absolute">

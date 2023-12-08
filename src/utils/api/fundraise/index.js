@@ -1,20 +1,23 @@
 import {
-  getFundraises,
-  getDetailFundraise,
+  getAllFundraises,
+  getFundraiseById,
+  getFundraiseByTitle,
   addFundraise,
   editFundraise,
   deleteFundraise,
   updateStatusFundraise,
 } from "./api";
 
-import { fundraiseSchema } from "./schema";
+import { addFundraiseSchema, editFundraiseSchema } from "./schema";
 
 export {
-  getFundraises,
-  getDetailFundraise,
+  getAllFundraises,
+  getFundraiseById,
+  getFundraiseByTitle,
   addFundraise,
   editFundraise,
   deleteFundraise,
   updateStatusFundraise,
-  fundraiseSchema,
+  addFundraiseSchema,
+  editFundraiseSchema,
 };
