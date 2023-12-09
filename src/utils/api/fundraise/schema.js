@@ -5,7 +5,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const addFundraiseSchema = z
   .object({
-    title: z.string().min(1, { message: "Kolom harus judul penggalangan dana diisi" }).min(20, {
+    title: z.string().min(1, { message: "Kolom judul penggalangan dana harus diisi" }).min(20, {
       message: "Judul penggalangan dana minimal 20 karakter",
     }),
     description: z
