@@ -40,21 +40,20 @@ const NewsForm = ({ action, id }) => {
         .then((data) => {
           const { title, photo, description } = data;
           setPreview(photo);
-  
+
           form.reset({
-            title,          
-            description
+            title,
+            description,
           });
         })
         .catch((message) => {
           Toast.fire({ icon: "error", title: message });
         })
         .finally(() => {
-          setLoading(false); 
+          setLoading(false);
         });
     }
   }, []);
-  
 
   const onSubmit = (data) => {
     const { title, photo, description } = data;
@@ -95,7 +94,7 @@ const NewsForm = ({ action, id }) => {
         });
     }
   };
-  
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -113,10 +112,7 @@ const NewsForm = ({ action, id }) => {
 
   return (
     <Form {...form}>
-      <form
-        className="px-6 py-6 mb-6 flex flex-col gap-y-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {loading ? (
           <SkeletonForm />
         ) : (
@@ -170,9 +166,7 @@ const NewsForm = ({ action, id }) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="input-news-description">
-                    Deskripsi
-                  </FormLabel>
+                  <FormLabel htmlFor="input-news-description">Deskripsi</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -192,8 +186,9 @@ const NewsForm = ({ action, id }) => {
                   size="sm"
                   type="reset"
                   onClick={goBackHandler}
-                  className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+                  disabled={processing}
                   id="btn-action-negative"
+                  className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
                 >
                   Batal
                 </Button>
@@ -203,11 +198,7 @@ const NewsForm = ({ action, id }) => {
                   className="bg-[#293066] w-24 hover:bg-[#293066]/80"
                   id="btn-action-positive"
                 >
-                  {processing ? (
-                    <Loader2 className="animate-spin w-7 h-7" />
-                  ) : (
-                    "Simpan"
-                  )}
+                  {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Simpan"}
                 </Button>
               </div>
             )}
