@@ -62,7 +62,7 @@ const Alert = ({ id }) => {
         <AlertDialogHeader>
           <AlertCircle className="text-[#E31F1F] mx-auto w-20 h-20" />
           <AlertDialogTitle className="text-center font-semibold">
-            Apakah anda yakin ingin menghapus pelanggan?
+            Apakah anda yakin ingin menghapus data pelanggan?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center">
             Data yang dihapus tidak dapat dikembalikan!
