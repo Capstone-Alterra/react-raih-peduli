@@ -1,17 +1,4 @@
-import {
-    getCustomers,
-    getDetailCustomer,
-    addCustomer,
-    editCustomer,
-    deleteCustomer,
-    updateStatusCustomer,
-  } from "./api";
-  
-  export {
-    getCustomers,
-    getDetailCustomer,
-    addCustomer,
-    editCustomer,
-    deleteCustomer,
-    updateStatusCustomer,
-  };
+import { customerSchema } from "./schema";
+import { getCustomers, getDetailCustomer, editCustomer, deleteCustomer } from "./api";
+
+export { getCustomers, getDetailCustomer, editCustomer, deleteCustomer, customerSchema };

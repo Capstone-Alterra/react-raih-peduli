@@ -11,17 +11,10 @@ export const getTotalDataCustomer = async () => {
   }
 };
 
-export const getCustomers = async (pageIndex, pageSize, fullname) => {
+export const getCustomers = async (pageIndex, pageSize) => {
   try {
-    if (fullname) {
-      const response = await axiosWithConfig.get(`/users?fullname=${fullname}`);
-      return response.data;
-    } else {
-      const response = await axiosWithConfig.get(
-        `/users?page=${pageIndex}&page_size=${pageSize}&fullname=${fullname}`
-      );
-      return response.data;
-    }
+    const response = await axiosWithConfig.get(`/users?page=${pageIndex}&page_size=${pageSize}`);
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -38,26 +31,9 @@ export const getDetailCustomer = async (id) => {
   }
 };
 
-export const addCustomer = async ({ ...data }) => {
-  try {
-    const response = await axiosWithConfig.post(
-      "/users",
-      { ...data },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return response.data.message;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
 export const editCustomer = async (id, { ...data }) => {
   try {
-    const response = await axiosWithConfig.put(
+    await axiosWithConfig.put(
       `/users/${id}`,
       {
         ...data,
@@ -68,7 +44,7 @@ export const editCustomer = async (id, { ...data }) => {
         },
       }
     );
-    return response.data.message;
+    return "Berhasil mengedit data pelanggan";
   } catch (error) {
     console.error(error);
     throw error;
@@ -77,20 +53,8 @@ export const editCustomer = async (id, { ...data }) => {
 
 export const deleteCustomer = async (id) => {
   try {
-    const response = await axiosWithConfig.delete(`/users/${id}`);
-    return response.data.message;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const updateStatusCustomer = async (id, status) => {
-  try {
-    const response = await axiosWithConfig.patch(`/users/${id}`, {
-      status,
-    });
-    return response.data.message;
+    await axiosWithConfig.delete(`/users/${id}`);
+    return "Berhasil menghapus data customer";
   } catch (error) {
     console.error(error);
     throw error;
