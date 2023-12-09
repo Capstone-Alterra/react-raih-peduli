@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import InfoIcon from '@/assets/icons/info';
-import PencilIcon from '@/assets/icons/pencil';
-import { Button } from '@/components/ui/button';
-import ButtonDelete from '@/pages/news/components/alert-dialog'
+import { Link } from "react-router-dom";
+import InfoIcon from "@/assets/icons/info";
+import PencilIcon from "@/assets/icons/pencil";
+import { Button } from "@/components/ui/button";
+import ButtonDelete from "@/pages/news/components/alert-dialog";
 
 export const columns = [
   {
@@ -10,20 +10,30 @@ export const columns = [
     accessorFn: (originalRow, index) => index + 1,
   },
   {
-    header: 'Judul',
-    accessorKey: 'title',
+    header: "Judul",
+    accessorKey: "title",
   },
   {
-    header: 'Gambar',
-    accessorKey: 'photo',
+    header: "Gambar",
+
+    cell: ({ row }) => {
+      const image = row.original.photo;
+      const imageAlt = row.original.title;
+
+      return (
+        <div className="w-48">
+          <img src={image} alt={imageAlt} className="w-full h-20 object-cover rounded-lg" />
+        </div>
+      );
+    },
   },
   {
-    header: 'Deskripsi',
-    accessorKey: 'description',
+    header: "Deskripsi",
+    accessorKey: "description",
   },
-  
+
   {
-    header: 'Aksi',
+    header: "Aksi",
     cell: ({ row }) => {
       const id = row.original.id;
 
@@ -33,7 +43,7 @@ export const columns = [
             asChild
             size="icon"
             className="bg-[#E28100] hover:bg-[#E28100]/80"
-            style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
+            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           >
             <Link to={`/berita/${id}?edit=true`}>
               <PencilIcon className="w-4 h-4" />
@@ -43,7 +53,7 @@ export const columns = [
             asChild
             size="icon"
             className="bg-[#166648] hover:bg-[#166648]/80"
-            style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
+            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           >
             <Link to={`/berita/${id}`}>
               <InfoIcon className="w-4 h-4" />
