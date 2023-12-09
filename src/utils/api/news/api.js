@@ -1,15 +1,15 @@
 import axiosWithConfig from "../axiosWithConfig";
 
 export const getTotalDataNews = async () => {
-    try {
-      const response = await axiosWithConfig.get('/news');
-      const { total_data } = response.data.pagination;
-      return total_data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return 0;
-    }
-  };
+  try {
+    const response = await axiosWithConfig.get("/news");
+    const { total_data } = response.data.pagination;
+    return total_data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return 0;
+  }
+};
 
 export const getNews = async (pageIndex, pageSize, title) => {
   try {
@@ -40,7 +40,7 @@ export const getDetailNews = async (id) => {
 
 export const addNews = async ({ ...data }) => {
   try {
-    const response = await axiosWithConfig.post(
+    await axiosWithConfig.post(
       "/news",
       { ...data },
       {
@@ -49,7 +49,7 @@ export const addNews = async ({ ...data }) => {
         },
       }
     );
-    return response.data.message;
+    return "Berhasil menambahkan berita";
   } catch (error) {
     console.error(error);
     throw error;
@@ -57,7 +57,7 @@ export const addNews = async ({ ...data }) => {
 };
 export const editNews = async (id, { ...data }) => {
   try {
-    const response = await axiosWithConfig.put(
+    await axiosWithConfig.put(
       `/news/${id}`,
       {
         ...data,
@@ -68,7 +68,7 @@ export const editNews = async (id, { ...data }) => {
         },
       }
     );
-    return response.data.message;
+    return "Berhasil mengedit berita";
   } catch (error) {
     console.error(error);
     throw error;
@@ -77,8 +77,8 @@ export const editNews = async (id, { ...data }) => {
 
 export const deleteNews = async (id) => {
   try {
-    const response = await axiosWithConfig.delete(`/news/${id}`);
-    return response.data.message;
+    await axiosWithConfig.delete(`/news/${id}`);
+    return "Berhasil menghapus berita";
   } catch (error) {
     console.error(error);
     throw error;
