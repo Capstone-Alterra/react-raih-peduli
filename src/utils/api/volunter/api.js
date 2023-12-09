@@ -7,7 +7,7 @@ export const getVolunteer = async (pageIndex, pageSize, title) => {
       return response.data;
     } else {
       const response = await axiosWithConfig.get(
-        `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}&title=${title}`
+        `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}`
       );
       return response.data;
     }
@@ -17,16 +17,13 @@ export const getVolunteer = async (pageIndex, pageSize, title) => {
   }
 };
 
-
 export const getTotalDataVolunteer = async () => {
-    try {
-      const response = await axiosWithConfig.get('/volunteer-vacancies');
-      const { total_data } = response.data.pagination;
-      return total_data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return 0;
-    }
-  };
-
-
+  try {
+    const response = await axiosWithConfig.get("/volunteer-vacancies");
+    const { total_data } = response.data.pagination;
+    return total_data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return 0;
+  }
+};
