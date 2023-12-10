@@ -10,6 +10,7 @@ import {
   getRegencies,
   getVillages,
   getVolunteerRegistrants,
+  getVolunteerRegistrantById,
 } from "./api";
 
 import {
@@ -33,4 +34,5 @@ export {
   editVolunterSchema,
   registrantVolunterSchema,
   getVolunteerRegistrants,
+  getVolunteerRegistrantById,
 };

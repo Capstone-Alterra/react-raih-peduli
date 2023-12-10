@@ -17,8 +17,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toIsoDate from "@/utils/formatter/convertToIso";
 import MultipleSelect from "@/components/multiple-select";
-import { editVolunterSchema, volunterSchema } from "@/utils/api/volunter/schema";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  editVolunterSchema,
+  volunterSchema,
+} from "@/utils/api/volunter/schema";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Form,
   FormControl,
@@ -64,7 +71,9 @@ const VolunterForm = ({ action, id }) => {
   });
 
   const form = useForm({
-    resolver: zodResolver(action === "edit" ? editVolunterSchema : volunterSchema),
+    resolver: zodResolver(
+      action === "edit" ? editVolunterSchema : volunterSchema
+    ),
     defaultValues: {
       title: "",
       description: "",
@@ -95,7 +104,7 @@ const VolunterForm = ({ action, id }) => {
       const {
         title,
         description,
-        skills_requred,
+        skills_required,
         number_of_vacancies,
         contact_email,
         application_deadline,
@@ -108,7 +117,10 @@ const VolunterForm = ({ action, id }) => {
       } = await getVolunteerVacancyById(id);
 
       const formattedEndDate = new Date(application_deadline);
-      const formatedSkills = skills_requred.map((skill) => ({ value: skill, label: skill }));
+      const formatedSkills = skills_required.map((skill) => ({
+        value: skill,
+        label: skill,
+      }));
 
       setStatus(status);
       setPreview(photo);
@@ -241,14 +253,18 @@ const VolunterForm = ({ action, id }) => {
 
   return (
     <Form {...form}>
-      <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className="px-6 py-6 mb-6 flex flex-col gap-y-4"
+        onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex gap-4">
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
+                <FormLabel htmlFor="input-volunter-title">
+                  Judul Lowongan Relawan
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -267,7 +283,9 @@ const VolunterForm = ({ action, id }) => {
             name="number_of_vacancies"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
+                <FormLabel htmlFor="input-volunter-number">
+                  Jumlah Lowongan
+                </FormLabel>
                 <FormControl>
                   <NumericFormat
                     value={field.value}
@@ -292,7 +310,9 @@ const VolunterForm = ({ action, id }) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
+              <FormLabel htmlFor="input-volunter-description">
+                Isi Deskripsi
+              </FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
@@ -342,8 +362,7 @@ const VolunterForm = ({ action, id }) => {
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
-                        )}
-                      >
+                        )}>
                         {field.value ? (
                           format(field.value, "PPP", { locale: Id })
                         ) : (
@@ -373,7 +392,9 @@ const VolunterForm = ({ action, id }) => {
               name="contact_email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
+                  <FormLabel htmlFor="input-volunter-email">
+                    Kontak Email
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -395,7 +416,9 @@ const VolunterForm = ({ action, id }) => {
             control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
+                <FormLabel htmlFor="input-volunter-provinces">
+                  Provinsi
+                </FormLabel>
                 <Select
                   defaultValue={field.value}
                   disabled={action === "detail"}
@@ -407,8 +430,7 @@ const VolunterForm = ({ action, id }) => {
                       ...prevState,
                       province: { id: data.id, name: data.name },
                     }));
-                  }}
-                >
+                  }}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Provinsi" />
@@ -417,7 +439,9 @@ const VolunterForm = ({ action, id }) => {
                   <SelectContent>
                     <SelectGroup>
                       {provinces.map((province) => (
-                        <SelectItem key={province.id} value={JSON.stringify(province)}>
+                        <SelectItem
+                          key={province.id}
+                          value={JSON.stringify(province)}>
                           {province.name}
                         </SelectItem>
                       ))}
@@ -445,8 +469,7 @@ const VolunterForm = ({ action, id }) => {
                       ...prevState,
                       regency: { id: data.id, name: data.name },
                     }));
-                  }}
-                >
+                  }}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kabupaten" />
@@ -455,7 +478,9 @@ const VolunterForm = ({ action, id }) => {
                   <SelectContent>
                     <SelectGroup>
                       {regencies.map((regency) => (
-                        <SelectItem key={regency.id} value={JSON.stringify(regency)}>
+                        <SelectItem
+                          key={regency.id}
+                          value={JSON.stringify(regency)}>
                           {regency.name}
                         </SelectItem>
                       ))}
@@ -485,8 +510,7 @@ const VolunterForm = ({ action, id }) => {
                       ...prevState,
                       district: { id: data.id, name: data.name },
                     }));
-                  }}
-                >
+                  }}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kecamatan" />
@@ -494,7 +518,9 @@ const VolunterForm = ({ action, id }) => {
                   </FormControl>
                   <SelectContent>
                     {districts.map((district) => (
-                      <SelectItem key={district.id} value={JSON.stringify(district)}>
+                      <SelectItem
+                        key={district.id}
+                        value={JSON.stringify(district)}>
                         {district.name}
                       </SelectItem>
                     ))}
@@ -521,8 +547,7 @@ const VolunterForm = ({ action, id }) => {
                       ...prevState,
                       village: { id: data.id, name: data.name },
                     });
-                  }}
-                >
+                  }}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kelurahan" />
@@ -530,7 +555,9 @@ const VolunterForm = ({ action, id }) => {
                   </FormControl>
                   <SelectContent>
                     {villages.map((village) => (
-                      <SelectItem key={village.id} value={JSON.stringify(village)}>
+                      <SelectItem
+                        key={village.id}
+                        value={JSON.stringify(village)}>
                         {village.name}
                       </SelectItem>
                     ))}
@@ -566,12 +593,13 @@ const VolunterForm = ({ action, id }) => {
           )}
         />
         {action === "detail" && (
-          <div style={{ display: action !== "detail" ? "none" : "" }} className=" pt-[18px] py-5">
+          <div
+            style={{ display: action !== "detail" ? "none" : "" }}
+            className=" pt-[18px] py-5">
             <Label>Pendaftar Lowongan</Label>
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-              onClick={() => navigate("/list-pendaftar-lowongan-relawan")}
-            >
+              onClick={() => navigate(`/list-pendaftar-lowongan-relawan/`)}>
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />
               <p className="ml-2">50+</p>
@@ -582,12 +610,14 @@ const VolunterForm = ({ action, id }) => {
           <Button
             size="sm"
             type="reset"
-            // onClick={goBackHandler}
             disabled={action === "detail" && status !== "pending"}
             className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-            id="btn-action-negative"
-          >
-            {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
+            id="btn-action-negative">
+            {action === "editing"
+              ? "Batal"
+              : action === "detail"
+              ? "Tolak"
+              : "kembali"}
           </Button>
           <Button
             size="sm"
@@ -595,8 +625,11 @@ const VolunterForm = ({ action, id }) => {
             type={action === "detail" ? "button" : "submit"}
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-action-positive"
-            onClick={action === "detail" ? () => updateVolunter(id, "accepted") : undefined}
-          >
+            onClick={
+              action === "detail"
+                ? () => updateVolunter(id, "accepted")
+                : undefined
+            }>
             {action === "edit"
               ? "Edit data"
               : action === "detail"

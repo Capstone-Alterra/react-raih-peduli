@@ -24,12 +24,13 @@ import {
 } from "@/components/ui/select";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getVolunteerRegistrantById } from "@/utils/api/volunter";
 
-const RegistrantForm = () => {
+const RegistrantForm = ({ id }) => {
   const navigate = useNavigate();
-  const [skills, setSkills] = useState();
   const [preview, setPreview] = useState("");
+  const [status, setStatus] = useState("");
 
   const Toast = Swal.mixin({
     toast: true,
@@ -45,12 +46,60 @@ const RegistrantForm = () => {
   const form = useForm({
     resolver: zodResolver(registrantVolunterSchema),
     defaultValues: {
+      email: "",
       fullname: "",
       address: "",
+      phone_number: "",
+      gender: "",
       nik: "",
+      skills_required: [],
       resume: "",
+      reason: "",
     },
   });
+
+  const getDetailVolunteerRegistrants = async () => {
+    try {
+      const {
+        email,
+        fullname,
+        address,
+        phone_number,
+        gender,
+        nik,
+        skills_required,
+        resume,
+        reason,
+        photo,
+        status,
+      } = await getVolunteerRegistrantById();
+
+      const formattedSkills = skills_required.map((skill) => ({
+        value: skill,
+        label: skill,
+      }));
+
+      setStatus(status);
+      setPreview(photo);
+
+      form.reset({
+        email,
+        fullname,
+        address,
+        phone_number,
+        gender,
+        nik,
+        skills_required: formattedSkills,
+        resume,
+        reason,
+        photo,
+      });
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getDetailVolunteerRegistrants(id);
+  }, [id]);
 
   const handleBack = () => {
     navigate(-1);
@@ -126,16 +175,16 @@ const RegistrantForm = () => {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="phone"
+            name="phone_number"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-phone">
+                <FormLabel htmlFor="input-volunter-phone-number">
                   No. Handphone
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    id="input-volunter-phone"
+                    id="input-volunter-phone-number"
                     className="disabled:opacity-100"
                     placeholder="Masukkan No. Handphone"
                   />
@@ -152,7 +201,9 @@ const RegistrantForm = () => {
                 <FormLabel htmlFor="input-volunter-gender">
                   Jenis Kelamin
                 </FormLabel>
-                <Select defaultValue={field.value}>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={(e) => field.onChange(e)}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Jenis Kelamin" />
@@ -194,10 +245,10 @@ const RegistrantForm = () => {
             name="skills_required"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Keahlian yang dibutuhkan</FormLabel>
+                <FormLabel>Keahlian</FormLabel>
                 <FormControl>
                   <MultipleSelect
-                    value={skills}
+                    value={field.value}
                     onChange={(options) => {
                       field.onChange(options.map((opt) => opt.value));
                     }}
@@ -254,15 +305,12 @@ const RegistrantForm = () => {
               <FormLabel htmlFor="input-volunter-image">Pas Foto</FormLabel>
               <FormControl>
                 <FileInput
-                  // preview={preview}
+                  preview={preview}
                   id="input-volunter-image"
                   placeholder="Tambahkan Pas Foto di sini"
                   onChange={(e) => {
                     field.onChange(e.target.files[0]);
-
-                    // if (action !== "detail") {
-                    //   setPreview(URL.createObjectURL(e.target.files[0]));
-                    // }
+                    setPreview(URL.createObjectURL(e.target.files[0]));
                   }}
                 />
               </FormControl>

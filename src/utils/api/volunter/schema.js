@@ -84,6 +84,10 @@ export const editVolunterSchema = z.object({
 });
 
 export const registrantVolunterSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Kolom alamat email harus diisi" })
+    .email({ message: "Alamat email tidak valid. Mohon periksa kembali." }),
   fullname: z
     .string()
     .min(1, { message: "Kolom nama lengkap harus diisi" })
@@ -91,12 +95,23 @@ export const registrantVolunterSchema = z.object({
   address: z.string().min(1, { message: "Kolom alamat harus diisi" }).min(20, {
     message: "Kolom alamat minimal 20 karakter",
   }),
+  phone_number: z
+    .string()
+    .min(12, { message: "Harus memiliki nomor handphone" }),
+  gender: z.string().min(1, { message: "Harus pilih jenis kelamin" }),
   nik: z
     .string()
     .min(1, { message: "Kolom NIK harus diisi" })
     .min(20, { message: "Standart NIK berjumlah 20" }),
+  skills_required: z
+    .string()
+    .array()
+    .nonempty({ message: "Kolom keahlian harus diisi" }),
   resume: z.string().min(1, { message: "Kolom resume harus diisi" }).min(20, {
     message: "Kolom resume minimal 20 karakter",
+  }),
+  reason: z.string().min(1, { message: "Kolom alasan harus diisi" }).min(20, {
+    message: "Kolom alasan minimal 20 karakter",
   }),
   photo: z
     .any()

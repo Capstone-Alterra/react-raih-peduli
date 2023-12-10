@@ -28,6 +28,18 @@ export const getVolunteerVacancyById = async (id) => {
   }
 };
 
+export const getVolunteerRegistrantById = async () => {
+  try {
+    const response = await axiosWithConfig.get(
+      `/volunteer-vacancies/1/registrants/1`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const addVolunteerVacancy = async ({ ...data }) => {
   console.log({ ...data });
   try {
@@ -142,17 +154,12 @@ export const getVillages = async (id) => {
   }
 };
 
-export const getVolunteerRegistrants = async (pageIndex, pageSize, title) => {
+export const getVolunteerRegistrants = async () => {
   try {
-    if (title) {
-      const response = await axiosWithConfig.get(`/volunteer-vacancies/1/registrants`);
-      return response.data;
-    } else {
-      const response = await axiosWithConfig.get(
-        `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}&title=${title}`
-      );
-      return response.data;
-    }
+    const response = await axiosWithConfig.get(
+      `/volunteer-vacancies/1/registrants`
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;

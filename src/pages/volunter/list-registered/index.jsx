@@ -9,7 +9,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect } from "react";
 import { getVolunteerRegistrants } from "@/utils/api/volunter";
 
-function Registrants() {
+function Registrants({ id }) {
   const [data, setData] = useState([]);
   const [pageCount, setPageCount] = useState();
   const [filtering, setFiltering] = useState("");
@@ -22,14 +22,9 @@ function Registrants() {
   const pagination = { pageIndex, pageSize };
 
   useEffect(() => {
-    getVolunteerRegistrants(pageIndex, pageSize, debounceSearchTerm)
+    getVolunteerRegistrants()
       .then((data) => {
         setData(data.data);
-        setPageCount(data.pagination.total_page);
-        setPagination((prevState) => ({
-          ...prevState,
-          pageIndex: data.pagination.current_page,
-        }));
       })
       .catch(() => {
         setData([]);
