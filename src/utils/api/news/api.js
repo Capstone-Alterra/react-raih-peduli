@@ -84,3 +84,15 @@ export const deleteNews = async (id) => {
     throw error;
   }
 };
+
+export const generateContent = async (prompt) => {
+  try {
+    const response = await axiosWithConfig.post("/generate-content", {
+      message: prompt,
+    });
+    return response.data.data.content;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
