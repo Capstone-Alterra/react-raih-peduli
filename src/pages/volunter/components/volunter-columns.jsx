@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import PencilIcon from "@/assets/icons/pencil";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
+import Alert from "./alert-dialog";
 
 const handleDelete = (id) => {
   Swal.fire({
@@ -97,14 +98,7 @@ export const columns = [
               <InfoIcon className="w-4 h-4" />
             </Link>
           </Button>
-          <Button
-            size="icon"
-            id={`btn-delete-volunter-${id}`}
-            className="bg-[#BF1616] hover:bg-[#BF1616]/80"
-            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-            onClick={(id) => handleDelete(id)}>
-            <TrashIcon className="w-4 h-4" />
-          </Button>
+          <Alert id={id} />
         </div>
       );
     },
