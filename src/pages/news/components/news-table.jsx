@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import SkeletonTable from "@/pages/news/components/skeleton/skeleton-table";
 import { flexRender, useReactTable, getCoreRowModel } from "@tanstack/react-table";
-import SkeletonTable from "@/pages/fundraising/components/skeleton/skeleton-table";
 import {
   Table,
   TableBody,
