@@ -1,12 +1,12 @@
-import { columns } from "./columns";
-import Header from "@/components/header";
-import Layout from "@/components/layout";
-import TableLayout from "@/components/table/table-layout";
-import TableHeader from "@/components/table/table-header";
-import TableData from "@/pages/transaction/components/transaction-table";
 import { useState } from "react";
 import { useEffect } from "react";
+import Header from "@/components/header";
+import Layout from "@/components/layout";
 import { getTransaction } from "@/utils/api/transaction";
+import TableLayout from "@/components/table/table-layout";
+import TableHeader from "@/components/table/table-header";
+import { columns } from "./components/transaction-columns";
+import TableData from "@/pages/transaction/components/transaction-table";
 
 function Transaction() {
   const [data, setData] = useState([]);
@@ -40,6 +40,7 @@ function Transaction() {
           pageIndex: data.pagination.current_page,
           currentPage: data.pagination.current_page,
         });
+        setLoading(false);
       })
       .catch(() => {
         setData([]);
