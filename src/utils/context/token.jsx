@@ -1,6 +1,6 @@
 import { createContext, useState, useMemo, useContext, useCallback, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import axiosWithConfig from "../api/axiosConfig";
+import axiosWithConfig from "../setAxiosWithConfig";
 import { refreshJwt } from "../api/auth";
 
 const contextValue = {

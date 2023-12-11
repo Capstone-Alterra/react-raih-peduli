@@ -18,7 +18,7 @@ import ResponseForm from "@/pages/volunter/response-form";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
-import { setAxiosConfig } from "@/utils/api/axiosWithConfig";
+import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
 import NewsDetail from "@/pages/news/detail-news";
