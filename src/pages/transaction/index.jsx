@@ -5,39 +5,47 @@ import TableLayout from "@/components/table/table-layout";
 import TableHeader from "@/components/table/table-header";
 import TableData from "@/pages/transaction/components/transaction-table";
 import { useState } from "react";
-import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect } from "react";
 import { getTransaction } from "@/utils/api/transaction";
 
 function Transaction() {
   const [data, setData] = useState([]);
-  const [pageCount, setPageCount] = useState();
-  const [filtering, setFiltering] = useState("");
-  const debouncedSearchTerm = useDebounce(filtering, 500);
-  const [{ pageIndex, pageSize }, setPagination] = useState({
+  const [loading, setLoading] = useState(false);
+  const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 10,
+    prevPage: 0,
+    currentPage: 0,
+    totalPage: 0,
   });
 
   const pagination = {
-    pageIndex,
     pageSize,
+    prevPage,
+    pageIndex,
+    totalPage,
+    currentPage,
   };
 
   useEffect(() => {
-    getTransaction(pageIndex, pageSize, debouncedSearchTerm)
+    setLoading(true);
+    getTransaction(pageIndex, pageSize)
       .then((data) => {
         setData(data.data);
-        setPageCount(data.pagination.total_page);
-        setPagination((prevState) => ({
-          ...prevState,
+        setPagination({
+          nextPage: data.pagination.next_page,
+          pageSize: data.pagination.page_size,
+          totalPage: data.pagination.total_page,
+          prevPage: data.pagination.previous_page,
           pageIndex: data.pagination.current_page,
-        }));
+          currentPage: data.pagination.current_page,
+        });
       })
       .catch(() => {
         setData([]);
+        setLoading(false);
       });
-  }, [pageIndex, pageSize, debouncedSearchTerm]);
+  }, [pageIndex, pageSize]);
 
   return (
     <Layout currentPage="Transaction">
@@ -47,10 +55,7 @@ function Transaction() {
         <TableData
           data={data}
           columns={columns}
-          pageIndex={pageIndex}
-          filtering={filtering}
-          setFiltering={setFiltering}
-          pageCount={pageCount}
+          loading={loading}
           pagination={pagination}
           setPagination={setPagination}
         />
