@@ -21,7 +21,7 @@ const StatusBadge = ({ status }) => {
   const badgeClass =
     currentStatus === "Menunggu"
       ? "border-white bg-[#FEF2E5] hover:bg-[#CD6200] text-[#CD6200] hover:text-white"
-      : status === "Dibayar"
+      : currentStatus === "Dibatalkan"
       ? "border-white bg-[#FBE7E8] hover:bg-[#A30D11] text-[#A30D11] hover:text-white"
       : "border-white bg-[#EBF9F1] hover:bg-[#1F9254] text-[#1F9254] hover:text-white";
 
