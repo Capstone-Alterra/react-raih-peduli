@@ -24,6 +24,7 @@ import Fundraise from "@/pages/fundraising/index";
 import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
 import AddNews from "@/pages/news/add-news";
+import Page404 from "@/pages/404/index"
 
 export default function Router() {
   const { token } = useToken();
@@ -90,7 +91,7 @@ export default function Router() {
     },
     {
       path: "/berita/tambah-berita",
-      element: <AddNews />,
+      element: token ==="" ? <Navigate to="/login"/> : <AddNews />,
     },
     {
       path: "/berita/:id",
@@ -122,7 +123,7 @@ export default function Router() {
     },
     {
       path: "*",
-      element: <div>404 page found</div>,
+      element: <Page404/>,
     },
     {
       path: "/",
