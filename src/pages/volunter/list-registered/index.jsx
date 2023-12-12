@@ -22,7 +22,7 @@ function Registrants({ id }) {
   const pagination = { pageIndex, pageSize };
 
   useEffect(() => {
-    getVolunteerRegistrants()
+    getVolunteerRegistrants(id)
       .then((data) => {
         setData(data.data);
       })

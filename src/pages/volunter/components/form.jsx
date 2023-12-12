@@ -612,13 +612,15 @@ const VolunterForm = ({ action, id }) => {
           )}
         />
         {action === "detail" && (
-          <div
-            style={{ display: action !== "detail" ? "none" : "" }}
-            className=" pt-[18px] py-5">
+          <div className=" pt-[18px] py-5">
             <Label>Pendaftar Lowongan</Label>
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-              onClick={() => navigate(`/list-pendaftar-lowongan-relawan`)}>
+              onClick={() =>
+                navigate(
+                  `/lowongan-relawan/${id}/list-pendaftar-lowongan-relawan`
+                )
+              }>
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />
             </div>

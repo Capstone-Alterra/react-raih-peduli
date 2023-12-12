@@ -2,15 +2,10 @@ import axiosWithConfig, { externalAxiosWithConfig } from "../axiosWithConfig";
 
 export const getVolunteerVacancies = async (pageIndex, pageSize, title) => {
   try {
-    if (title) {
-      const response = await axiosWithConfig.get(`/volunteer-vacancies`);
-      return response.data;
-    } else {
-      const response = await axiosWithConfig.get(
-        `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}&title=${title}`
-      );
-      return response.data;
-    }
+    const response = await axiosWithConfig.get(
+      `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}`
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -26,6 +21,15 @@ export const getVolunteerVacancyById = async (id) => {
     console.error(error);
     throw error;
   }
+};
+
+export const getVolunteerByTitle = async (title) => {
+  try {
+    const response = await axiosWithConfig.get(
+      `/volunteer-vacancies?title=${title}`
+    );
+    return response.data;
+  } catch (error) {}
 };
 
 export const addVolunteerVacancy = async ({ ...data }) => {
@@ -143,10 +147,10 @@ export const getVillages = async (id) => {
   }
 };
 
-export const getVolunteerRegistrants = async () => {
+export const getVolunteerRegistrants = async (vacancyId) => {
   try {
     const response = await axiosWithConfig.get(
-      `/volunteer-vacancies/6/registrants`
+      `/volunteer-vacancies/${vacancyId}/registrants`
     );
     return response.data;
   } catch (error) {

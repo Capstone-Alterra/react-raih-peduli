@@ -11,6 +11,7 @@ import {
   getVillages,
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
+  getVolunteerByTitle,
 } from "./api";
 
 import {
@@ -35,4 +36,5 @@ export {
   registrantVolunterSchema,
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
+  getVolunteerByTitle,
 };
