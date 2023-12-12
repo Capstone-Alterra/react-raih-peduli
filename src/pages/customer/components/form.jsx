@@ -174,6 +174,7 @@ const CustomerForm = ({ action, id }) => {
                         allowLeadingZeros
                         customInput={Input}
                         value={field.value}
+                        allowNegative={false}
                         onValueChange={(value) => {
                           field.onChange(value.formattedValue);
                         }}

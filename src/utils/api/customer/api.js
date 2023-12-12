@@ -11,10 +11,15 @@ export const getTotalDataCustomer = async () => {
   }
 };
 
-export const getCustomers = async (pageIndex, pageSize) => {
+export const getCustomers = async (pageIndex, pageSize, name) => {
   try {
-    const response = await axiosWithConfig.get(`/users?page=${pageIndex}&page_size=${pageSize}`);
-    return response.data;
+    if (name) {
+      const response = await axiosWithConfig.get(`/users?name=${name}`);
+      return response.data;
+    } else {
+      const response = await axiosWithConfig.get(`/users?page=${pageIndex}&page_size=${pageSize}`);
+      return response.data;
+    }
   } catch (error) {
     console.error(error);
     throw error;

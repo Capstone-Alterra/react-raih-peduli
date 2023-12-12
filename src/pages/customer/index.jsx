@@ -1,6 +1,7 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
 import { useEffect, useState } from "react";
+import { useDebounce } from "@uidotdev/usehooks";
 import { getCustomers } from "@/utils/api/customer";
 import TableData from "./components/customer-table";
 import { columns } from "./components/customer-columns";
@@ -9,7 +10,9 @@ import TableLayout from "@/components/table/table-layout";
 
 function Customer() {
   const [data, setData] = useState([]);
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const debouncedSearchTerm = useDebounce(query, 800);
   const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 10,
@@ -28,7 +31,7 @@ function Customer() {
 
   useEffect(() => {
     setLoading(true);
-    getCustomers(pageIndex, pageSize)
+    getCustomers(pageIndex, pageSize, debouncedSearchTerm)
       .then((data) => {
         setData(data.data);
         setPagination({
@@ -45,7 +48,7 @@ function Customer() {
         setData([]);
         setLoading(false);
       });
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, debouncedSearchTerm]);
 
   return (
     <Layout>
@@ -56,6 +59,8 @@ function Customer() {
           data={data}
           columns={columns}
           loading={loading}
+          query={query}
+          setQuery={setQuery}
           pagination={pagination}
           setPagination={setPagination}
         />
