@@ -28,18 +28,6 @@ export const getVolunteerVacancyById = async (id) => {
   }
 };
 
-export const getVolunteerRegistrantById = async () => {
-  try {
-    const response = await axiosWithConfig.get(
-      `/volunteer-vacancies/1/registrants/1`
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
 export const addVolunteerVacancy = async ({ ...data }) => {
   console.log({ ...data });
   try {
@@ -87,12 +75,13 @@ export const deleteVolunteerVacancy = async (id) => {
   }
 };
 
-export const updateStatusVolunteerVacancy = async (id, status) => {
+export const updateStatusVolunteerVacancy = async (id, status, reason) => {
   try {
     const response = await axiosWithConfig.patch(`/volunteer-vacancies/${id}`, {
       status,
+      rejected_reason: reason,
     });
-    return response.data.message;
+    return "Berhasil mengupdate status lowongan relawan";
   } catch (error) {
     console.error(error);
     throw error;
@@ -157,9 +146,21 @@ export const getVillages = async (id) => {
 export const getVolunteerRegistrants = async () => {
   try {
     const response = await axiosWithConfig.get(
-      `/volunteer-vacancies/1/registrants`
+      `/volunteer-vacancies/6/registrants`
     );
     return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getVolunteerRegistrantById = async () => {
+  try {
+    const response = await axiosWithConfig.get(
+      `/volunteer-vacancies/6/registrants/5`
+    );
+    return response.data.data;
   } catch (error) {
     console.error(error);
     throw error;

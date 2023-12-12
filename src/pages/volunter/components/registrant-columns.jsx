@@ -28,21 +28,37 @@ export const registrantColumns = [
     header: "Status",
     accessorKey: "status",
     cell: ({ row }) => {
-      const label = row.original.status;
+      const originalStatus = row.original.status;
+      let status;
 
-      if (label === "Menunggu") {
-        return (
-          <Badge className="font-bold flex w-24 py-2 justify-center border border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white">
-            {label}
-          </Badge>
-        );
-      } else {
-        return (
-          <Badge className="font-bold flex w-24 py-2 justify-center border border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white">
-            {label}
-          </Badge>
-        );
+      switch (originalStatus) {
+        case "pending":
+          status = "Menunggu";
+          break;
+        case "accepted":
+          status = "Diterima";
+          break;
+        case "rejected":
+          status = "Ditolak";
+          break;
+        default:
+          status = originalStatus;
+          break;
       }
+
+      const badgeClass =
+        status === "Menunggu"
+          ? "border-[#FFAF0F] bg-white hover:bg-[#FFAF0F] text-[#FFAF0F] hover:text-white"
+          : status === "Ditolak"
+          ? "border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
+          : "border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white";
+
+      return (
+        <Badge
+          className={`font-bold flex w-24 py-2 justify-center border ${badgeClass}`}>
+          {status}
+        </Badge>
+      );
     },
   },
   {

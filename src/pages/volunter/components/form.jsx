@@ -52,11 +52,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ResponseDialogue from "./response-dialogue";
 
 const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [open, setOpen] = useState(false);
   const [{ provinces, regencies, districts, villages }, setData] = useState({
     provinces: [],
     regencies: [],
@@ -204,6 +207,22 @@ const VolunterForm = ({ action, id }) => {
         .catch((message) => Toast.fire({ icon: "error", title: message }))
         .finally(navigate("/lowongan-relawan"));
     }
+  };
+
+  const updateVolunteer = (id, status) => {
+    setProcessing(true);
+    updateStatusVolunteerVacancy(id, status)
+      .then((message) => {
+        navigate("/lowongan-relawan");
+        Toast.fire({ icon: "success", title: message });
+      })
+      .catch((message) => {
+        navigate("/lowongan-relawan");
+        Toast.fire({ icon: "error", title: message });
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
   };
 
   const updateVolunter = (id, status) => {
@@ -599,20 +618,28 @@ const VolunterForm = ({ action, id }) => {
             <Label>Pendaftar Lowongan</Label>
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-              onClick={() => navigate(`/list-pendaftar-lowongan-relawan/`)}>
+              onClick={() => navigate(`/list-pendaftar-lowongan-relawan`)}>
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />
-              <p className="ml-2">50+</p>
             </div>
           </div>
         )}
         <div className="flex justify-end gap-3 pt-5">
           <Button
             size="sm"
-            type="reset"
-            disabled={action === "detail" && status !== "pending"}
-            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-            id="btn-action-negative">
+            type="button"
+            id="btn-action-negative"
+            disabled={
+              (action === "detail" && status !== "pending") || processing
+            }
+            onClick={() => {
+              if (action !== "detail") {
+                navigate("/lowongan-relawan");
+              } else {
+                setOpen(true);
+              }
+            }}
+            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white">
             {action === "editing"
               ? "Batal"
               : action === "detail"
@@ -627,7 +654,7 @@ const VolunterForm = ({ action, id }) => {
             id="btn-action-positive"
             onClick={
               action === "detail"
-                ? () => updateVolunter(id, "accepted")
+                ? () => updateVolunteer(id, "accepted")
                 : undefined
             }>
             {action === "edit"
@@ -640,6 +667,12 @@ const VolunterForm = ({ action, id }) => {
           </Button>
         </div>
       </form>
+      <ResponseDialogue
+        open={open}
+        onOpenChange={setOpen}
+        status={status}
+        id={id}
+      />
     </Form>
   );
 };
