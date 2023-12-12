@@ -81,7 +81,7 @@ export const deleteVolunteerVacancy = async (id) => {
 
 export const updateStatusVolunteerVacancy = async (id, status, reason) => {
   try {
-    const response = await axiosWithConfig.patch(`/volunteer-vacancies/${id}`, {
+    await axiosWithConfig.patch(`/volunteer-vacancies/${id}`, {
       status,
       rejected_reason: reason,
     });
@@ -171,10 +171,15 @@ export const getVolunteerRegistrantById = async (vacancyId, volunteerId) => {
   }
 };
 
-export const updateStatusVolunteerRegistrant = async (id, status, reason) => {
+export const updateStatusVolunteerRegistrant = async (
+  id,
+  volunteerId,
+  status,
+  reason
+) => {
   try {
-    const response = await axiosWithConfig.patch(
-      `/volunteer-vacancies/${vacancyId}/registrants`,
+    await axiosWithConfig.patch(
+      `/volunteer-vacancies/${id}/registrants/${volunteerId}`,
       {
         status,
         rejected_reason: reason,

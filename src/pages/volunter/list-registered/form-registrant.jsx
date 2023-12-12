@@ -32,9 +32,8 @@ import {
 import ResponseRegDialogue from "../components/response-reg-dialogue";
 
 const RegistrantForm = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const { vacancyId, volunteerId } = useParams();
+  const { id, vacancyId, volunteerId } = useParams();
   const [preview, setPreview] = useState("");
   const [status, setStatus] = useState("");
   const [processing, setProcessing] = useState(false);
@@ -109,15 +108,15 @@ const RegistrantForm = () => {
     getDetailVolunteerRegistrants();
   }, [vacancyId, volunteerId]);
 
-  const updateRegistrant = (id, status) => {
+  const updateRegistrant = (vacancyId, volunteerId, status) => {
     setProcessing(true);
-    updateStatusVolunteerRegistrant(id, status)
+    updateStatusVolunteerRegistrant(vacancyId, volunteerId, status)
       .then((message) => {
-        navigate(-1);
+        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
         Toast.fire({ icon: "success", title: message });
       })
       .catch((message) => {
-        navigate(-1);
+        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
         Toast.fire({ icon: "error", title: message });
       })
       .finally(() => {
@@ -349,7 +348,9 @@ const RegistrantForm = () => {
             type={"submit"}
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-action-positive"
-            onClick={() => updateRegistrant(id, "accepted")}>
+            onClick={() =>
+              updateRegistrant(vacancyId, volunteerId, "accepted")
+            }>
             Terima
           </Button>
         </div>

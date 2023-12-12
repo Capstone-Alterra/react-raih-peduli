@@ -34,8 +34,9 @@ const responseFormSchema = z.object({
     }),
 });
 
-const ResponseRegDialogue = ({ open, onOpenChange, id }) => {
+const ResponseRegDialogue = ({ open, onOpenChange }) => {
   const navigate = useNavigate();
+  const { vacancyId, volunteerId } = useParams();
   const [processing, setProcessing] = useState(false);
   const form = useForm({
     resolver: zodResolver(responseFormSchema),
@@ -47,16 +48,22 @@ const ResponseRegDialogue = ({ open, onOpenChange, id }) => {
   const onSubmit = (data) => {
     const { rejected_reason } = data;
     setProcessing(true);
-    updateStatusVolunteerRegistrant(id, "rejected", rejected_reason)
+    updateStatusVolunteerRegistrant(
+      vacancyId,
+      volunteerId,
+      "rejected",
+      rejected_reason
+    )
       .then((message) => {
+        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
         Toast.fire({ icon: "success", title: message });
       })
       .catch((message) => {
+        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
         Toast.fire({ icon: "error", title: message });
       })
       .finally(() => {
         setProcessing(false);
-        navigate(`/lowongan-relawan/${id}/list-pendaftar`);
       });
   };
 

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import FileInput from "@/components/input-file";
 import ProfileIcon from "@/assets/icons/profile";
@@ -54,8 +54,9 @@ import {
 } from "@/components/ui/select";
 import ResponseDialogue from "./response-dialogue";
 
-const VolunterForm = ({ action, id }) => {
+const VolunterForm = ({ action }) => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const [processing, setProcessing] = useState(false);
