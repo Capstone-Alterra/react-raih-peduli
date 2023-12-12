@@ -18,8 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SkeletonTable from "./skeleton/skeleton-table";
+import { Input } from "@/components/ui/input";
 
-function TableData({ columns, data, pagination, setPagination, loading }) {
+function TableData({ columns, data, pagination, setPagination, loading, query, setQuery }) {
   const { totalPage, currentPage, pageIndex, pageSize, prevPage } = pagination;
   const table = useReactTable({
     data: data,
@@ -48,6 +49,18 @@ function TableData({ columns, data, pagination, setPagination, loading }) {
 
   return (
     <>
+      <div className="px-8 flex gap-2 items-center py-6">
+        Cari :
+        <Input
+          type="text"
+          value={query}
+          disabled={loading}
+          className="w-52 h-9 rounded-e-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          id="input-search-fundraise"
+          placeholder="Masukkan kata pencarian"
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
       <Table>
         <TableHeader className="bg-[#F5F5F5]">
           {table.getHeaderGroups().map((headerGroup) => (
