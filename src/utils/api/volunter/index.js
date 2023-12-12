@@ -12,6 +12,7 @@ import {
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
   getVolunteerByTitle,
+  updateStatusVolunteerRegistrant,
 } from "./api";
 
 import {
@@ -37,4 +38,5 @@ export {
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
   getVolunteerByTitle,
+  updateStatusVolunteerRegistrant,
 };

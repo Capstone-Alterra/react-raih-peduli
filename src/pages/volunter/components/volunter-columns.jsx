@@ -4,30 +4,7 @@ import TrashIcon from "@/assets/icons/trash";
 import { Badge } from "@/components/ui/badge";
 import PencilIcon from "@/assets/icons/pencil";
 import { Button } from "@/components/ui/button";
-import Swal from "sweetalert2";
 import Alert from "./alert-dialog";
-
-const handleDelete = (id) => {
-  Swal.fire({
-    title: "Apakah Anda Yakin Menghapus Data Lowongan Relawan",
-    text: "Data yang dihapus tidak dapat dikembalikan!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#E31F1F",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Ya, Hapus!",
-    cancelButtonText: "Batal",
-    reverseButtons: true,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success",
-      });
-    }
-  });
-};
 
 export const columns = [
   {

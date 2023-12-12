@@ -25,13 +25,20 @@ import {
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getVolunteerRegistrantById } from "@/utils/api/volunter";
+import {
+  getVolunteerRegistrantById,
+  updateStatusVolunteerRegistrant,
+} from "@/utils/api/volunter";
+import ResponseRegDialogue from "../components/response-reg-dialogue";
 
 const RegistrantForm = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const { vacancyId, volunteerId } = useParams();
   const [preview, setPreview] = useState("");
   const [status, setStatus] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -102,13 +109,22 @@ const RegistrantForm = () => {
     getDetailVolunteerRegistrants();
   }, [vacancyId, volunteerId]);
 
-  const handleBack = () => {
-    navigate(-1);
-    Toast.fire({
-      icon: "success",
-      title: "Berhasil menerima Pendaftar Lowongan Relawan",
-    });
+  const updateRegistrant = (id, status) => {
+    setProcessing(true);
+    updateStatusVolunteerRegistrant(id, status)
+      .then((message) => {
+        navigate(-1);
+        Toast.fire({ icon: "success", title: message });
+      })
+      .catch((message) => {
+        navigate(-1);
+        Toast.fire({ icon: "error", title: message });
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
   };
+
   return (
     <Form {...form}>
       <form
@@ -325,7 +341,7 @@ const RegistrantForm = () => {
             type="reset"
             className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
             id="btn-action-negative"
-            onClick={handleBack}>
+            onClick={() => setOpen(true)}>
             Tolak
           </Button>
           <Button
@@ -333,11 +349,17 @@ const RegistrantForm = () => {
             type={"submit"}
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-action-positive"
-            onClick={handleBack}>
+            onClick={() => updateRegistrant(id, "accepted")}>
             Terima
           </Button>
         </div>
       </form>
+      <ResponseRegDialogue
+        open={open}
+        onOpenChange={setOpen}
+        status={status}
+        id={id}
+      />
     </Form>
   );
 };

@@ -64,9 +64,8 @@ export const registrantColumns = [
   {
     header: "Aksi",
     cell: ({ row }) => {
-      const { vacancyId, volunteerId } = useParams();
-      // const volunteerId = row.original.id;
-      console.log(row.original);
+      const { id } = useParams();
+      const volunteerId = row.original.id;
       return (
         <div className="flex gap-2">
           <Button
@@ -75,7 +74,7 @@ export const registrantColumns = [
             className="bg-[#293066] hover:bg-[#293066]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}>
             <Link
-              to={`/lowongan-relawan/${vacancyId}/list-pendaftar/respon-pendaftar/${volunteerId}`}>
+              to={`/lowongan-relawan/${id}/list-pendaftar/respon-pendaftar/${volunteerId}`}>
               <ApproveIcon className="w-4 h-4" />
             </Link>
           </Button>

@@ -164,7 +164,23 @@ export const getVolunteerRegistrantById = async (vacancyId, volunteerId) => {
     const response = await axiosWithConfig.get(
       `/volunteer-vacancies/${vacancyId}/registrants/${volunteerId}`
     );
-    return response.data;
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const updateStatusVolunteerRegistrant = async (id, status, reason) => {
+  try {
+    const response = await axiosWithConfig.patch(
+      `/volunteer-vacancies/${vacancyId}/registrants`,
+      {
+        status,
+        rejected_reason: reason,
+      }
+    );
+    return "Berhasil mengupdate status pendaftar lowongan";
   } catch (error) {
     console.error(error);
     throw error;
