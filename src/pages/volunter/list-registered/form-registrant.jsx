@@ -345,7 +345,7 @@ const RegistrantForm = () => {
           </Button>
           <Button
             size="sm"
-            type={"submit"}
+            type="button"
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
             id="btn-action-positive"
             onClick={() =>
