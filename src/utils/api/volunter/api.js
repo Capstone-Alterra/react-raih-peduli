@@ -159,12 +159,12 @@ export const getVolunteerRegistrants = async (vacancyId) => {
   }
 };
 
-export const getVolunteerRegistrantById = async () => {
+export const getVolunteerRegistrantById = async (vacancyId, volunteerId) => {
   try {
     const response = await axiosWithConfig.get(
-      `/volunteer-vacancies/6/registrants/5`
+      `/volunteer-vacancies/${vacancyId}/registrants/${volunteerId}`
     );
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;

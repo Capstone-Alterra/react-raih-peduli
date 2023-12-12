@@ -225,15 +225,6 @@ const VolunterForm = ({ action, id }) => {
       });
   };
 
-  const updateVolunter = (id, status) => {
-    updateStatusVolunteerVacancy(id, status)
-      .then((message) => {
-        Toast.fire({ icon: "success", title: message });
-      })
-      .catch((message) => Toast.fire({ icon: "error", title: message }))
-      .finally(navigate("lowongan-relawan"));
-  };
-
   const isFutureDate = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -617,9 +608,7 @@ const VolunterForm = ({ action, id }) => {
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
               onClick={() =>
-                navigate(
-                  `/lowongan-relawan/${id}/list-pendaftar-lowongan-relawan`
-                )
+                navigate(`/lowongan-relawan/${id}/list-pendaftar`)
               }>
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />

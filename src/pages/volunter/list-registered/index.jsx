@@ -2,14 +2,16 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import TableHeader from "@/components/table/table-header";
 import React from "react";
-import TableData from "../components/registrant-table";
-import { registrantColumns } from "../components/registrant-columns";
+import TableData from "./registrant-table";
+import { registrantColumns } from "./registrant-columns";
 import { useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect } from "react";
 import { getVolunteerRegistrants } from "@/utils/api/volunter";
+import { useParams } from "react-router-dom";
 
-function Registrants({ id }) {
+function Registrants() {
+  const { id } = useParams();
   const [data, setData] = useState([]);
   const [pageCount, setPageCount] = useState();
   const [filtering, setFiltering] = useState("");

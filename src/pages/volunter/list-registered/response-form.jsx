@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import React from "react";
 import FormHeader from "../components/form-header";
-import RegistrantForm from "../components/form-registrant";
+import RegistrantForm from "./form-registrant";
 
 function ResponseForm() {
   return (

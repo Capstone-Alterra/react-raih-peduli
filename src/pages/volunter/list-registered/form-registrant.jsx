@@ -23,12 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getVolunteerRegistrantById } from "@/utils/api/volunter";
 
-const RegistrantForm = ({ id }) => {
+const RegistrantForm = () => {
   const navigate = useNavigate();
+  const { vacancyId, volunteerId } = useParams();
   const [preview, setPreview] = useState("");
   const [status, setStatus] = useState("");
 
@@ -72,7 +73,7 @@ const RegistrantForm = ({ id }) => {
         reason,
         photo,
         status,
-      } = await getVolunteerRegistrantById();
+      } = await getVolunteerRegistrantById(vacancyId, volunteerId);
 
       const formattedSkills = skills_required.map((skill) => ({
         value: skill,
@@ -98,8 +99,8 @@ const RegistrantForm = ({ id }) => {
   };
 
   useEffect(() => {
-    getDetailVolunteerRegistrants(id);
-  }, [id]);
+    getDetailVolunteerRegistrants();
+  }, [vacancyId, volunteerId]);
 
   const handleBack = () => {
     navigate(-1);

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ApproveIcon from "@/assets/icons/approve";
@@ -64,8 +64,9 @@ export const registrantColumns = [
   {
     header: "Aksi",
     cell: ({ row }) => {
-      const id = row.original.id;
-
+      const { vacancyId, volunteerId } = useParams();
+      // const volunteerId = row.original.id;
+      console.log(row.original);
       return (
         <div className="flex gap-2">
           <Button
@@ -73,7 +74,8 @@ export const registrantColumns = [
             size="icon"
             className="bg-[#293066] hover:bg-[#293066]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}>
-            <Link to={`/respon-pendaftar-lowongan-relawan/${id}`}>
+            <Link
+              to={`/lowongan-relawan/${vacancyId}/list-pendaftar/respon-pendaftar/${volunteerId}`}>
               <ApproveIcon className="w-4 h-4" />
             </Link>
           </Button>
