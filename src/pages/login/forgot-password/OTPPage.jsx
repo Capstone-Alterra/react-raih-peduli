@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axiosWithConfig from "@/utils/api/axiosWithConfig";
 
 function OTPPage() {
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState(new Array(6).fill(""));
   const navigate = useNavigate();
 
   const handleOTP = (element, index) => {
@@ -28,29 +28,6 @@ function OTPPage() {
       alert("Error verifying OTP. Please try again later.");
     }
   };
-
-  const calculateTimeLeft = () => {
-    const start = Moment().valueOf();
-    const end = Moment(time).valueOf();
-    var diffTime = end - start;
-    var formated1 = Moment(diffTime).format("mm:ss");
-    if (timeLeft === "00:00") {
-      setShow(true);
-    } else {
-      return formated1;
-    }
-  };
-
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-    };
-  });
 
   return (
     <LayoutLogin
