@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import Table from "./components/table-dashboard";
 import Cards from "@/pages/dashboard/components/card";
 import { getTotalDataNews } from "@/utils/api/news/api";
-import { getVolunteer } from "@/utils/api/volunter/api";
+import { getVolunteerVacancies } from "@/utils/api/volunter/api";
 import { getAllFundraises } from "@/utils/api/fundraise/api";
 import { volunteerColumn } from "./components/volunteer-column";
 import { fundraiseColumn } from "./components/fundraise-column";
@@ -43,7 +43,7 @@ function Dashboard() {
 
   const fetchVolunteerData = async () => {
     try {
-      const response = await getVolunteer(1, 5);
+      const response = await getVolunteerVacancies(1, 5);
       setVolunteerData(response.data);
       setTotalDataVolunteer(response.pagination.total_data);
     } catch (error) {
