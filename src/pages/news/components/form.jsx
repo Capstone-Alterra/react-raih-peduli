@@ -1,3 +1,6 @@
+import Swal from "sweetalert2";
+import AIDialog from "./ai-dialog";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -7,6 +10,7 @@ import FileInput from "@/components/input-file";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SkeletonForm from "./skeleton/skeleton-form";
+import { addNews, editNews, addNewsSchema, editNewsSchema, getDetailNews } from "@/utils/api/news";
 import {
   Form,
   FormControl,
@@ -15,15 +19,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { addNews, editNews, addNewsSchema, editNewsSchema, getDetailNews } from "@/utils/api/news";
-import Swal from "sweetalert2";
-import { Loader2 } from "lucide-react";
 
 const NewsForm = ({ action, id }) => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState("");
   const [preview, setPreview] = useState("");
-  const [processing, setProcessing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const form = useForm({
     resolver: zodResolver(action === "edit" ? editNewsSchema : addNewsSchema),
     defaultValues: {
@@ -34,27 +37,32 @@ const NewsForm = ({ action, id }) => {
   });
 
   useEffect(() => {
+    if (content !== "") {
+      form.setValue("description", content);
+    }
+  }, [content]);
+
+  useEffect(() => {
     if (action !== "add") {
       setLoading(true);
       getDetailNews(id)
         .then((data) => {
           const { title, photo, description } = data;
           setPreview(photo);
-  
+
           form.reset({
-            title,          
-            description
+            title,
+            description,
           });
         })
         .catch((message) => {
           Toast.fire({ icon: "error", title: message });
         })
         .finally(() => {
-          setLoading(false); 
+          setLoading(false);
         });
     }
   }, []);
-  
 
   const onSubmit = (data) => {
     const { title, photo, description } = data;
@@ -95,12 +103,12 @@ const NewsForm = ({ action, id }) => {
         });
     }
   };
-  
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
     showConfirmButton: false,
-    timer: 3000,
+    timer: 5000,
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
       toast.onmouseleave = Swal.resumeTimer;
@@ -113,10 +121,7 @@ const NewsForm = ({ action, id }) => {
 
   return (
     <Form {...form}>
-      <form
-        className="px-6 py-6 mb-6 flex flex-col gap-y-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {loading ? (
           <SkeletonForm />
         ) : (
@@ -150,6 +155,7 @@ const NewsForm = ({ action, id }) => {
                     <FileInput
                       id="input-news-image"
                       preview={preview}
+                      description="Tambahkan foto berita disini"
                       onChange={(e) => {
                         field.onChange(e.target.files[0]);
 
@@ -170,9 +176,7 @@ const NewsForm = ({ action, id }) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="input-news-description">
-                    Deskripsi
-                  </FormLabel>
+                  <FormLabel htmlFor="input-news-description">Deskripsi</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -187,33 +191,43 @@ const NewsForm = ({ action, id }) => {
               )}
             />
             {action != "detail" && (
-              <div className="flex justify-end gap-3 pt-5">
+              <div className="flex justify-between pt-5">
                 <Button
                   size="sm"
-                  type="reset"
-                  onClick={goBackHandler}
-                  className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+                  type="button"
+                  onClick={() => setOpen(true)}
+                  disabled={processing}
                   id="btn-action-negative"
-                >
-                  Batal
-                </Button>
-                <Button
-                  size="sm"
-                  type="submit"
                   className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-                  id="btn-action-positive"
                 >
-                  {processing ? (
-                    <Loader2 className="animate-spin w-7 h-7" />
-                  ) : (
-                    "Simpan"
-                  )}
+                  Generate AI
                 </Button>
+                <div className="flex gap-3">
+                  <Button
+                    size="sm"
+                    type="reset"
+                    onClick={goBackHandler}
+                    disabled={processing}
+                    id="btn-action-negative"
+                    className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    size="sm"
+                    type="submit"
+                    className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+                    id="btn-action-positive"
+                  >
+                    {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Simpan"}
+                  </Button>
+                </div>
               </div>
             )}
           </>
         )}
       </form>
+      <AIDialog open={open} onOpenChange={setOpen} setContent={setContent} />
     </Form>
   );
 };

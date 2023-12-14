@@ -157,7 +157,7 @@ const FundraiseForm = ({ action, id }) => {
     toast: true,
     position: "top-end",
     showConfirmButton: false,
-    timer: 3000,
+    timer: 5000,
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
       toast.onmouseleave = Swal.resumeTimer;
@@ -242,7 +242,7 @@ const FundraiseForm = ({ action, id }) => {
                 control={form.control}
                 name="start_date"
                 render={({ field }) => (
-                  <FormItem className="w-full">
+                  <FormItem className={`w-full ${action === "detail" && "cursor-not-allowed"}`}>
                     <FormLabel htmlFor="input-fundraise-start-date">
                       Tanggal Mulai Penggalangan Dana
                     </FormLabel>
@@ -254,7 +254,7 @@ const FundraiseForm = ({ action, id }) => {
                             disabled={action === "detail"}
                             id="input-fundraise-start-date"
                             className={cn(
-                              "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
+                              "pl-3 text-left font-normal w-full disabled:opacity-100",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -285,7 +285,7 @@ const FundraiseForm = ({ action, id }) => {
                 control={form.control}
                 name="end_date"
                 render={({ field }) => (
-                  <FormItem className="w-full">
+                  <FormItem className={`w-full ${action === "detail" && "cursor-not-allowed"}`}>
                     <FormLabel htmlFor="input-fundraise-end-date">
                       Tanggal Selesai Penggalangan Dana
                     </FormLabel>
@@ -333,8 +333,9 @@ const FundraiseForm = ({ action, id }) => {
                   <FormLabel htmlFor="input-fundraise-image">Foto</FormLabel>
                   <FormControl>
                     <FileInput
-                      id="input-fundraise-image"
                       preview={preview}
+                      id="input-fundraise-image"
+                      disabled={action === "detail"}
                       onChange={(e) => {
                         field.onChange(e.target.files[0]);
 

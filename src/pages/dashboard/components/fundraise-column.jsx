@@ -1,9 +1,9 @@
 import convertToRupiah from "@/utils/formatter/convertToRupiah";
 
-export const columns = [
+export const fundraiseColumn = [
   {
     header: "No",
-    accessorKey: "no",
+    accessorFn: (originalRow, index) => index + 1,
   },
   {
     header: "Judul Penggalangan Dana",

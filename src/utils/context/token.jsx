@@ -48,7 +48,7 @@ function TokenProvider({ children }) {
   useEffect(() => {
     const refreshInterval = setInterval(async () => {
       try {
-        const response = await refreshJwt(refreshToken);
+        const response = await refreshJwt(refreshToken, token);
         const newAccessToken = response.data.access_token;
         const newRefreshToken = response.data.refresh_token;
 
@@ -56,10 +56,10 @@ function TokenProvider({ children }) {
       } catch (error) {
         console.error("Failed to refresh token:", error);
       }
-    }, 10 * 60 * 1000);
+    }, 10 * 60 * 1000); // Setiap 10 menit
 
     return () => clearInterval(refreshInterval);
-  }, [refreshToken, changeToken]);
+  }, [refreshToken, token, changeToken]);
 
   axiosWithConfig.interceptors.response.use(
     (response) => {

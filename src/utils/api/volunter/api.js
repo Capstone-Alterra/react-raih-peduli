@@ -195,3 +195,14 @@ export const updateStatusVolunteerRegistrant = async (id, volunteerId, status, r
     throw error;
   }
 };
+
+export const getTotalDataVolunteer = async () => {
+  try {
+    const response = await axiosWithConfig.get("/volunteer-vacancies");
+    const { total_data } = response.data.pagination;
+    return total_data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return 0;
+  }
+};

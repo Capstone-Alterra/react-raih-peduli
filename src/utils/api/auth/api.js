@@ -1,4 +1,4 @@
-import axiosWithConfig from "@/utils/api/axiosWithConfig";
+import axiosWithConfig from "@/utils/setAxiosWithConfig";
 
 export const login = async (email, password) => {
   try {
@@ -12,11 +12,12 @@ export const login = async (email, password) => {
   }
 };
 
-export const refreshJwt = async (refreshToken) => {
+export const refreshJwt = async (token, refreshToken) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const response = await axiosWithConfig.post("/auth/refresh-jwt", {
-      refreshToken,
+      access_token: token,
+      refresh_token: refreshToken,
     });
     return response.data;
   } catch (error) {

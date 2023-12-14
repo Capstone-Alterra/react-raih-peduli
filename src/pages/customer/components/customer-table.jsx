@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import SkeletonTable from "@/pages/news/components/skeleton/skeleton-table";
 import { flexRender, useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import {
   Table,
@@ -19,8 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SkeletonTable from "./skeleton/skeleton-table";
+import { Input } from "@/components/ui/input";
 
-function TableData({ columns, data, pagination, setPagination, query, setQuery, loading }) {
+function TableData({ columns, data, pagination, setPagination, loading, query, setQuery }) {
   const { totalPage, currentPage, pageIndex, pageSize, prevPage } = pagination;
   const table = useReactTable({
     data: data,

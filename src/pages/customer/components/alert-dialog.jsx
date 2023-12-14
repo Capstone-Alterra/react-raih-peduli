@@ -4,7 +4,7 @@ import TrashIcon from "@/assets/icons/trash";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { deleteNews } from "@/utils/api/news";
+import { deleteCustomer } from "@/utils/api/customer";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +17,7 @@ import {
 
 const deleteHandler = (id, setOpen, navigate, setProcessing) => {
   setProcessing(true);
-  deleteNews(id)
+  deleteCustomer(id)
     .then((message) => {
       Toast.fire({ icon: "success", title: message });
     })
@@ -51,7 +51,7 @@ const Alert = ({ id }) => {
     <AlertDialog open={open}>
       <Button
         size="icon"
-        id={`btn-delete-news-${id}`}
+        id={`btn-delete-customer-${id}`}
         className="bg-[#BF1616] hover:bg-[#BF1616]/80"
         style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
         onClick={() => setOpen(true)}
@@ -62,7 +62,7 @@ const Alert = ({ id }) => {
         <AlertDialogHeader>
           <AlertCircle className="text-[#E31F1F] mx-auto w-20 h-20" />
           <AlertDialogTitle className="text-center font-semibold">
-            Apakah anda yakin ingin menghapus berita?
+            Apakah anda yakin ingin menghapus data pelanggan?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center">
             Data yang dihapus tidak dapat dikembalikan!

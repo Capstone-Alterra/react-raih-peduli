@@ -12,18 +12,23 @@ import TableData from "@/pages/news/components/news-table";
 
 function Index() {
   const [data, setData] = useState([]);
-  const [pageCount, setPageCount] = useState();
-  const [filtering, setFiltering] = useState("");
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const debouncedSearchTerm = useDebounce(filtering, 500);
-  const [{ pageIndex, pageSize }, setPagination] = useState({
+  const debouncedSearchTerm = useDebounce(query, 800);
+  const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 10,
+    prevPage: 0,
+    currentPage: 0,
+    totalPage: 0,
   });
 
   const pagination = {
-    pageIndex,
     pageSize,
+    prevPage,
+    pageIndex,
+    totalPage,
+    currentPage,
   };
 
   useEffect(() => {
@@ -31,11 +36,14 @@ function Index() {
     getNews(pageIndex, pageSize, debouncedSearchTerm)
       .then((data) => {
         setData(data.data);
-        setPageCount(data.pagination.total_page);
-        setPagination((prevState) => ({
-          ...prevState,
+        setPagination({
+          nextPage: data.pagination.next_page,
+          pageSize: data.pagination.page_size,
+          totalPage: data.pagination.total_page,
+          prevPage: data.pagination.previous_page,
           pageIndex: data.pagination.current_page,
-        }));
+          currentPage: data.pagination.current_page,
+        });
       })
       .catch(() => {
         setData([]);
@@ -62,13 +70,11 @@ function Index() {
         <TableData
           data={data}
           columns={columns}
-          pageIndex={pageIndex}
-          filtering={filtering}
-          setFiltering={setFiltering}
-          pageCount={pageCount}
+          loading={loading}
+          query={query}
+          setQuery={setQuery}
           pagination={pagination}
           setPagination={setPagination}
-          loading={loading}
         />
       </TableLayout>
     </Layout>
