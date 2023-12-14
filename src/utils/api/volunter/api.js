@@ -47,12 +47,12 @@ export const addVolunteerVacancy = async (data) => {
       }
     }
 
-    const response = await axiosWithConfig.post("/volunteer-vacancies", formData, {
+    await axiosWithConfig.post("/volunteer-vacancies", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    return response.data.message;
+    return "Berhasil menambah lowongan relawan";
   } catch (error) {
     console.error(error);
     throw error;
@@ -96,10 +96,11 @@ export const deleteVolunteerVacancy = async (id) => {
   }
 };
 
-export const updateStatusVolunteerVacancy = async (id, status) => {
+export const updateStatusVolunteerVacancy = async (id, status, reason) => {
   try {
     await axiosWithConfig.patch(`/volunteer-vacancies/${id}`, {
       status,
+      rejected_reason: reason,
     });
     return "Berhasil mengupdate status lowongan relawan";
   } catch (error) {
@@ -193,7 +194,7 @@ export const updateStatusVolunteerRegistrant = async (id, volunteerId, status, r
       status,
       rejected_reason: reason,
     });
-    return "Berhasil mengupdate status pendaftar lowongan";
+    return "Berhasil mengupdate status pendaftar";
   } catch (error) {
     console.error(error);
     throw error;
