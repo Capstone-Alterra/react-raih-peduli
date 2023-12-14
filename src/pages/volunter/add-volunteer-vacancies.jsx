@@ -1,8 +1,8 @@
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import FormLayout from "./components/form-layout";
-import FormHeader from "./components/form-header";
 import VolunterForm from "./components/form";
+import FormHeader from "./components/form-header";
+import FormLayout from "@/components/form/form-layout";
 
 function AddVolunterForm() {
   return (

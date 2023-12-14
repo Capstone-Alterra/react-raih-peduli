@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { id as Id } from "date-fns/locale";
 import { useEffect, useState } from "react";
-import { CalendarIcon, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,8 @@ import ResponseDialogue from "./response-dialogue";
 import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
+import SkeletonForm from "./skeletons/skeleton-form";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toIsoDate from "@/utils/formatter/convertToIso";
 import MultipleSelect from "@/components/multiple-select";
@@ -53,6 +54,7 @@ const VolunterForm = ({ action, id }) => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
+  const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
   const [{ provinces, regencies, districts, villages }, setData] = useState({
@@ -89,6 +91,7 @@ const VolunterForm = ({ action, id }) => {
   });
 
   const getDetailVolunteerVacancy = async (id) => {
+    setLoading(true);
     try {
       const {
         title,
@@ -158,7 +161,7 @@ const VolunterForm = ({ action, id }) => {
         label: skill,
       }));
 
-      return {
+      form.reset({
         title,
         description,
         skills_required: formatedSkills,
@@ -169,18 +172,18 @@ const VolunterForm = ({ action, id }) => {
         city: filteredRegency[0].id,
         sub_district: filteredDistrict[0].id,
         detail_location: filteredVillage[0].id,
-      };
+      });
     } catch (error) {
       console.error(error);
-      throw error;
     } finally {
+      setLoading(false);
       setFirstRender(false);
     }
   };
 
   useEffect(() => {
     if (action !== "add") {
-      getDetailVolunteerVacancy(id).then((data) => form.reset(data));
+      getDetailVolunteerVacancy(id);
     }
   }, [action, id]);
 
@@ -331,396 +334,410 @@ const VolunterForm = ({ action, id }) => {
   return (
     <Form {...form}>
       <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id="input-volunter-title"
-                    className="disabled:opacity-100"
-                    disabled={action === "detail"}
-                    placeholder="Masukkan judul lowongan relawan"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="number_of_vacancies"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
-                <FormControl>
-                  <NumericFormat
-                    value={field.value}
-                    customInput={Input}
-                    allowNegative={false}
-                    id="input-volunter-number"
-                    disabled={action === "detail"}
-                    className="disabled:opacity-100"
-                    placeholder="Masukkan Jumlah Lowongan"
-                    onValueChange={(v) => {
-                      field.onChange(Number(v.value));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  id="input-volunter-description"
-                  className="min-h-[100px] disabled:opacity-100"
-                  disabled={action === "detail"}
-                  placeholder="Masukkan deskripsi lowongan relawan"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="skills_required"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Keahlian yang dibutuhkan</FormLabel>
-              <FormControl>
-                <MultipleSelect
-                  value={field.value}
-                  onChange={field.onChange}
-                  isDisabled={action === "detail"}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="application_deadline"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-application-deadline">
-                  Tanggal Selesai Lowongan Relawan
-                </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
+        {loading ? (
+          <SkeletonForm action={action} />
+        ) : (
+          <>
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
                     <FormControl>
-                      <Button
-                        variant={"outline"}
+                      <Input
+                        {...field}
+                        id="input-volunter-title"
+                        className="disabled:opacity-100"
                         disabled={action === "detail"}
-                        id="input-volunter-application-deadline"
-                        className={cn(
-                          "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: Id })
-                        ) : (
-                          <span>Pilih tanggal mulai lowongan relawan</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
+                        placeholder="Masukkan judul lowongan relawan"
+                      />
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      initialFocus
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => isFutureDate(date)}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {action !== "edit" && (
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="number_of_vacancies"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
+                    <FormControl>
+                      <NumericFormat
+                        value={field.value}
+                        customInput={Input}
+                        allowNegative={false}
+                        id="input-volunter-number"
+                        disabled={action === "detail"}
+                        className="disabled:opacity-100"
+                        placeholder="Masukkan Jumlah Lowongan"
+                        onValueChange={(v) => {
+                          field.onChange(Number(v.value));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
-              name="contact_email"
+              name="description"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
+                <FormItem>
+                  <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       {...field}
-                      id="input-volunter-email"
-                      className="disabled:opacity-100"
+                      id="input-volunter-description"
+                      className="min-h-[100px] disabled:opacity-100"
                       disabled={action === "detail"}
-                      placeholder="Masukkan kontak email"
+                      placeholder="Masukkan deskripsi lowongan relawan"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          )}
-        </div>
-        <div className="flex gap-4">
-          <FormField
-            name="province"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
-                <Select
-                  value={field.value}
-                  disabled={action === "detail"}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    form.setValue("city", "");
-                    form.setValue("sub_district", "");
-                    form.setValue("detail_location", "");
-                    setData((prevState) => ({
-                      ...prevState,
-                      regencies: [],
-                      districts: [],
-                      villages: [],
-                    }));
-                    const filteredProvince = provinces.filter((province) => province.id === value);
-                    setSelectedData((prevState) => ({
-                      ...prevState,
-                      selectedProvince: filteredProvince,
-                    }));
-                  }}
-                >
+            <FormField
+              control={form.control}
+              name="skills_required"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Keahlian yang dibutuhkan</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Provinsi" />
-                    </SelectTrigger>
+                    <MultipleSelect
+                      value={field.value}
+                      onChange={field.onChange}
+                      isDisabled={action === "detail"}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {provinces.map((province) => (
-                        <SelectItem key={province.id} value={province.id}>
-                          {province.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Kabupaten</FormLabel>
-                <Select
-                  value={field.value}
-                  disabled={action === "detail"}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    form.setValue("sub_district", "");
-                    form.setValue("detail_location", "");
-                    setData((prevState) => ({
-                      ...prevState,
-                      districts: [],
-                      villages: [],
-                    }));
-                    const filteredRegencies = regencies.filter((regency) => regency.id === value);
-                    setSelectedData((prevState) => ({
-                      ...prevState,
-                      selectedRegency: filteredRegencies,
-                    }));
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Kabupaten" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {regencies.map((regency) => (
-                        <SelectItem key={regency.id} value={regency.id}>
-                          {regency.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="sub_district"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Kecamatan</FormLabel>
-                <Select
-                  value={field.value}
-                  disabled={action === "detail"}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    form.setValue("detail_location", "");
-                    const filteredDistrict = districts.filter((district) => district.id === value);
-                    setData((prevState) => ({
-                      ...prevState,
-                      villages: [],
-                    }));
-                    setSelectedData((prevState) => ({
-                      ...prevState,
-                      selectedDistrict: filteredDistrict,
-                    }));
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Kecamatan" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {districts.map((district) => (
-                      <SelectItem key={district.id} value={district.id}>
-                        {district.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="detail_location"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Lokasi Detail</FormLabel>
-                <Select
-                  value={field.value}
-                  disabled={action === "detail"}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    const filteredVillage = villages.filter((village) => village.id === value);
-                    setSelectedData((prevState) => ({
-                      ...prevState,
-                      selectedVillage: filteredVillage,
-                    }));
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Lokasi Detail" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {villages.map((village) => (
-                      <SelectItem key={village.id} value={village.id}>
-                        {village.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          name="photo"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="input-volunter-image">Foto</FormLabel>
-              <FormControl>
-                <FileInput
-                  preview={preview}
-                  id="input-volunter-image"
-                  placeholder="Tambahkan foto Lowongan Relawan di sini"
-                  onChange={(e) => {
-                    field.onChange(e.target.files[0]);
-
-                    if (action !== "detail") {
-                      setPreview(e.target.files[0] ? URL.createObjectURL(e.target.files[0]) : null);
-                    }
-                  }}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="application_deadline"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel htmlFor="input-volunter-application-deadline">
+                      Tanggal Selesai Lowongan Relawan
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            disabled={action === "detail"}
+                            id="input-volunter-application-deadline"
+                            className={cn(
+                              "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP", { locale: Id })
+                            ) : (
+                              <span>Pilih tanggal mulai lowongan relawan</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          initialFocus
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) => isFutureDate(date)}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {action !== "edit" && (
+                <FormField
+                  control={form.control}
+                  name="contact_email"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          id="input-volunter-email"
+                          className="disabled:opacity-100"
+                          disabled={action === "detail"}
+                          placeholder="Masukkan kontak email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {action === "detail" && (
-          <div className=" pt-[18px] py-5">
-            <Label>Pendaftar Lowongan</Label>
-            <div
-              className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-              onClick={() => navigate(`/lowongan-relawan/${id}/list-pendaftar`)}
-            >
-              <ProfileIcon className="w-2 h-2" />
-              <ProfileIcon className="w-2 h-2 ml-3" />
+              )}
             </div>
-          </div>
-        )}
-        <div className="flex justify-end gap-3 pt-5">
-          <Button
-            size="sm"
-            type="button"
-            id="btn-action-negative"
-            disabled={(action === "detail" && status !== "pending") || processing}
-            onClick={() => {
-              if (action !== "detail") {
-                navigate("/lowongan-relawan");
-              } else {
-                setOpen(true);
-              }
-            }}
-            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
-          >
-            {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
-          </Button>
-          <Button
-            size="sm"
-            id="btn-action-positive"
-            type={action === "detail" ? "button" : "submit"}
-            className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-            disabled={(action === "detail" && status !== "pending") || processing}
-            onClick={action === "detail" ? () => updateVolunteer(id, "accepted") : undefined}
-          >
-            {processing ? (
-              <Loader2 className="animate-spin w-7 h-7" />
-            ) : action === "edit" ? (
-              "Edit data"
-            ) : action === "detail" ? (
-              "Terima"
-            ) : action === "add" ? (
-              "Tambah"
-            ) : (
-              ""
+            <div className="flex gap-4">
+              <FormField
+                name="province"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
+                    <Select
+                      value={field.value}
+                      disabled={action === "detail"}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        form.setValue("city", "");
+                        form.setValue("sub_district", "");
+                        form.setValue("detail_location", "");
+                        setData((prevState) => ({
+                          ...prevState,
+                          regencies: [],
+                          districts: [],
+                          villages: [],
+                        }));
+                        const filteredProvince = provinces.filter(
+                          (province) => province.id === value
+                        );
+                        setSelectedData((prevState) => ({
+                          ...prevState,
+                          selectedProvince: filteredProvince,
+                        }));
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Provinsi" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          {provinces.map((province) => (
+                            <SelectItem key={province.id} value={province.id}>
+                              {province.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Kabupaten</FormLabel>
+                    <Select
+                      value={field.value}
+                      disabled={action === "detail"}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        form.setValue("sub_district", "");
+                        form.setValue("detail_location", "");
+                        setData((prevState) => ({
+                          ...prevState,
+                          districts: [],
+                          villages: [],
+                        }));
+                        const filteredRegencies = regencies.filter(
+                          (regency) => regency.id === value
+                        );
+                        setSelectedData((prevState) => ({
+                          ...prevState,
+                          selectedRegency: filteredRegencies,
+                        }));
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Kabupaten" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          {regencies.map((regency) => (
+                            <SelectItem key={regency.id} value={regency.id}>
+                              {regency.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="sub_district"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Kecamatan</FormLabel>
+                    <Select
+                      value={field.value}
+                      disabled={action === "detail"}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        form.setValue("detail_location", "");
+                        const filteredDistrict = districts.filter(
+                          (district) => district.id === value
+                        );
+                        setData((prevState) => ({
+                          ...prevState,
+                          villages: [],
+                        }));
+                        setSelectedData((prevState) => ({
+                          ...prevState,
+                          selectedDistrict: filteredDistrict,
+                        }));
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Kecamatan" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {districts.map((district) => (
+                          <SelectItem key={district.id} value={district.id}>
+                            {district.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="detail_location"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Lokasi Detail</FormLabel>
+                    <Select
+                      value={field.value}
+                      disabled={action === "detail"}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        const filteredVillage = villages.filter((village) => village.id === value);
+                        setSelectedData((prevState) => ({
+                          ...prevState,
+                          selectedVillage: filteredVillage,
+                        }));
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Lokasi Detail" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {villages.map((village) => (
+                          <SelectItem key={village.id} value={village.id}>
+                            {village.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              name="photo"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="input-volunter-image">Foto</FormLabel>
+                  <FormControl>
+                    <FileInput
+                      preview={preview}
+                      id="input-volunter-image"
+                      placeholder="Tambahkan foto Lowongan Relawan di sini"
+                      onChange={(e) => {
+                        field.onChange(e.target.files[0]);
+
+                        if (action !== "detail") {
+                          setPreview(
+                            e.target.files[0] ? URL.createObjectURL(e.target.files[0]) : null
+                          );
+                        }
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {action === "detail" && (
+              <div className=" pt-[18px] py-5">
+                <Label>Pendaftar Lowongan</Label>
+                <div
+                  className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
+                  onClick={() => navigate(`/lowongan-relawan/${id}/list-pendaftar`)}
+                >
+                  <ProfileIcon className="w-2 h-2" />
+                  <ProfileIcon className="w-2 h-2 ml-3" />
+                </div>
+              </div>
             )}
-          </Button>
-        </div>
+            <div className="flex justify-end gap-3 pt-5">
+              <Button
+                size="sm"
+                type="button"
+                id="btn-action-negative"
+                disabled={(action === "detail" && status !== "pending") || processing}
+                onClick={() => {
+                  if (action !== "detail") {
+                    navigate("/lowongan-relawan");
+                  } else {
+                    setOpen(true);
+                  }
+                }}
+                className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+              >
+                {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
+              </Button>
+              <Button
+                size="sm"
+                id="btn-action-positive"
+                type={action === "detail" ? "button" : "submit"}
+                className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+                disabled={(action === "detail" && status !== "pending") || processing}
+                onClick={action === "detail" ? () => updateVolunteer(id, "accepted") : undefined}
+              >
+                {processing ? (
+                  <Loader2 className="animate-spin w-7 h-7" />
+                ) : action === "edit" ? (
+                  "Edit data"
+                ) : action === "detail" ? (
+                  "Terima"
+                ) : action === "add" ? (
+                  "Tambah"
+                ) : (
+                  ""
+                )}
+              </Button>
+            </div>
+          </>
+        )}
       </form>
       <ResponseDialogue open={open} onOpenChange={setOpen} id={id} />
     </Form>

@@ -1,4 +1,4 @@
-import Alert from "./alert-dialog";
+import Alert from "./delete-dialog";
 import { Link } from "react-router-dom";
 import InfoIcon from "@/assets/icons/info";
 import { Badge } from "@/components/ui/badge";

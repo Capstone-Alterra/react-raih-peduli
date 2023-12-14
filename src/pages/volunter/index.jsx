@@ -1,40 +1,55 @@
-import TableLayout from "@/components/table/table-layout";
-import TableHeader from "@/components/table/table-header";
-import TableData from "@/pages/volunter/components/volunter-table";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Header from "@/components/header";
 import Layout from "@/components/layout";
-import { Link } from "react-router-dom";
-import { columns } from "./components/volunter-columns";
-import { useEffect } from "react";
-import { getVolunteerVacancies } from "@/utils/api/volunter/api";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useDebounce } from "@uidotdev/usehooks";
+import { columns } from "./components/volunter-columns";
+import TableHeader from "@/components/table/table-header";
+import TableLayout from "@/components/table/table-layout";
+import { getVolunteerVacancies } from "@/utils/api/volunter";
+import TableData from "@/pages/volunter/components/volunter-table";
 
 function Volunter() {
   const [data, setData] = useState([]);
-  const [pageCount, setPageCount] = useState();
-  const [filtering, setFiltering] = useState("");
-  const debounceSearchTerm = useDebounce(filtering, 500);
-  const [{ pageIndex, pageSize }, setPagination] = useState({
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const debounceSearchTerm = useDebounce(query, 800);
+  const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 10,
+    prevPage: 0,
+    currentPage: 0,
+    totalPage: 0,
   });
 
-  const pagination = { pageIndex, pageSize };
+  const pagination = {
+    pageSize,
+    prevPage,
+    pageIndex,
+    totalPage,
+    currentPage,
+  };
 
   useEffect(() => {
+    setLoading(true);
     getVolunteerVacancies(pageIndex, pageSize, debounceSearchTerm)
       .then((data) => {
         setData(data.data);
-        setPageCount(data.pagination.total_page);
-        setPagination((prevState) => ({
-          ...prevState,
+        setPagination({
+          nextPage: data.pagination.next_page,
+          pageSize: data.pagination.page_size,
+          totalPage: data.pagination.total_page,
+          prevPage: data.pagination.previous_page,
           pageIndex: data.pagination.current_page,
-        }));
+          currentPage: data.pagination.current_page,
+        });
+        setLoading(false);
       })
       .catch(() => {
         setData([]);
+        setLoading(false);
       });
   }, [pageIndex, pageSize, debounceSearchTerm]);
 
@@ -50,10 +65,9 @@ function Volunter() {
         <TableData
           data={data}
           columns={columns}
-          pageIndex={pageIndex}
-          filtering={filtering}
-          setFiltering={setFiltering}
-          pageCount={pageCount}
+          loading={loading}
+          query={query}
+          setQuery={setQuery}
           pagination={pagination}
           setPagination={setPagination}
         />

@@ -1,19 +1,19 @@
-import { Link, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ApproveIcon from "@/assets/icons/approve";
+import { Link, useParams } from "react-router-dom";
 
 export const registrantColumns = [
   {
     header: "No",
-    accessorKey: "id",
+    accessorFn: (originalRow, index) => index + 1,
   },
   {
-    header: "Full Name",
+    header: "Nama Lengkap",
     accessorKey: "fullname",
   },
   {
-    header: "Address",
+    header: "Alamat",
     accessorKey: "address",
   },
   {
@@ -21,15 +21,15 @@ export const registrantColumns = [
     accessorKey: "nik",
   },
   {
-    header: "Resume",
+    header: "Pengalaman",
     accessorKey: "resume",
   },
   {
     header: "Status",
     accessorKey: "status",
     cell: ({ row }) => {
-      const originalStatus = row.original.status;
       let status;
+      const originalStatus = row.original.status;
 
       switch (originalStatus) {
         case "pending":
@@ -54,8 +54,7 @@ export const registrantColumns = [
           : "border-[#293066] bg-white hover:bg-[#293066] text-[#293066] hover:text-white";
 
       return (
-        <Badge
-          className={`font-bold flex w-24 py-2 justify-center border ${badgeClass}`}>
+        <Badge className={`font-bold flex w-24 py-2 justify-center border ${badgeClass}`}>
           {status}
         </Badge>
       );
@@ -72,9 +71,9 @@ export const registrantColumns = [
             asChild
             size="icon"
             className="bg-[#293066] hover:bg-[#293066]/80"
-            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}>
-            <Link
-              to={`/lowongan-relawan/${id}/list-pendaftar/respon-pendaftar/${volunteerId}`}>
+            style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
+          >
+            <Link to={`/lowongan-relawan/${id}/list-pendaftar/respon-pendaftar/${volunteerId}`}>
               <ApproveIcon className="w-4 h-4" />
             </Link>
           </Button>

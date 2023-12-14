@@ -163,9 +163,11 @@ export const getVillages = async (id) => {
   }
 };
 
-export const getVolunteerRegistrants = async (vacancyId) => {
+export const getVolunteerRegistrants = async (vacancyId, page, pageSize) => {
   try {
-    const response = await axiosWithConfig.get(`/volunteer-vacancies/${vacancyId}/registrants`);
+    const response = await axiosWithConfig.get(
+      `/volunteer-vacancies/${vacancyId}/registrants?page=${page}&page_size=${pageSize}`
+    );
     return response.data;
   } catch (error) {
     console.error(error);

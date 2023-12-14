@@ -3,16 +3,12 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateStatusVolunteerRegistrant } from "@/utils/api/volunter";
+import { Dialog, DialogClose, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -21,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { updateStatusVolunteerRegistrant } from "@/utils/api/volunter";
 
 const responseFormSchema = z.object({
   rejected_reason: z
@@ -34,7 +29,7 @@ const responseFormSchema = z.object({
     }),
 });
 
-const ResponseRegDialogue = ({ open, onOpenChange }) => {
+const ResponseDialog = ({ open, onOpenChange }) => {
   const navigate = useNavigate();
   const { vacancyId, volunteerId } = useParams();
   const [processing, setProcessing] = useState(false);
@@ -48,12 +43,7 @@ const ResponseRegDialogue = ({ open, onOpenChange }) => {
   const onSubmit = (data) => {
     const { rejected_reason } = data;
     setProcessing(true);
-    updateStatusVolunteerRegistrant(
-      vacancyId,
-      volunteerId,
-      "rejected",
-      rejected_reason
-    )
+    updateStatusVolunteerRegistrant(vacancyId, volunteerId, "rejected", rejected_reason)
       .then((message) => {
         navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
         Toast.fire({ icon: "success", title: message });
@@ -88,9 +78,7 @@ const ResponseRegDialogue = ({ open, onOpenChange }) => {
               name="rejected_reason"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold text-lg">
-                    Alasan ditolak
-                  </FormLabel>
+                  <FormLabel className="font-semibold text-lg">Alasan ditolak</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -106,7 +94,8 @@ const ResponseRegDialogue = ({ open, onOpenChange }) => {
                     type="button"
                     disabled={processing}
                     id="btn-action-negative"
-                    className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white">
+                    className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+                  >
                     Batal
                   </Button>
                 </DialogClose>
@@ -115,12 +104,9 @@ const ResponseRegDialogue = ({ open, onOpenChange }) => {
                   type="submit"
                   disabled={processing}
                   id="btn-action-positive"
-                  className="bg-[#293066] w-24 hover:bg-[#293066]/80">
-                  {processing ? (
-                    <Loader2 className="animate-spin w-7 h-7" />
-                  ) : (
-                    "Tolak"
-                  )}
+                  className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+                >
+                  {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Tolak"}
                 </Button>
               </div>
             </DialogFooter>
@@ -131,4 +117,4 @@ const ResponseRegDialogue = ({ open, onOpenChange }) => {
   );
 };
 
-export default ResponseRegDialogue;
+export default ResponseDialog;

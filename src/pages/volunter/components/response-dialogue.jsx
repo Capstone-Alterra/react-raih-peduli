@@ -7,12 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { updateStatusVolunteerVacancy } from "@/utils/api/volunter";
+import { Dialog, DialogClose, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -21,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { updateStatusVolunteerVacancy } from "@/utils/api/volunter";
 
 const responseFormSchema = z.object({
   rejected_reason: z
@@ -81,9 +76,7 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
               name="rejected_reason"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold text-lg">
-                    Alasan ditolak
-                  </FormLabel>
+                  <FormLabel className="font-semibold text-lg">Alasan ditolak</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -99,7 +92,8 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
                     type="button"
                     disabled={processing}
                     id="btn-action-negative"
-                    className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white">
+                    className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+                  >
                     Batal
                   </Button>
                 </DialogClose>
@@ -108,12 +102,9 @@ const ResponseDialogue = ({ open, onOpenChange, id }) => {
                   type="submit"
                   disabled={processing}
                   id="btn-action-positive"
-                  className="bg-[#293066] w-24 hover:bg-[#293066]/80">
-                  {processing ? (
-                    <Loader2 className="animate-spin w-7 h-7" />
-                  ) : (
-                    "Tolak"
-                  )}
+                  className="bg-[#293066] w-24 hover:bg-[#293066]/80"
+                >
+                  {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Tolak"}
                 </Button>
               </div>
             </DialogFooter>

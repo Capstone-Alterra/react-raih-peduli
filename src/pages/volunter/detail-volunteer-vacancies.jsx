@@ -2,7 +2,7 @@ import Header from "@/components/header";
 import Layout from "@/components/layout";
 import VolunterForm from "./components/form";
 import FormHeader from "./components/form-header";
-import FormLayout from "./components/form-layout";
+import FormLayout from "../../components/form/form-layout";
 import { useParams, useSearchParams } from "react-router-dom";
 
 function DetailVolunter() {

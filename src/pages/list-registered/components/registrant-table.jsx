@@ -1,8 +1,7 @@
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import SkeletonTable from "@/pages/list-registered/components/skeleton/skeleton-table";
 import { flexRender, useReactTable, getCoreRowModel } from "@tanstack/react-table";
-import SkeletonTable from "@/pages/volunter/components/skeletons/skeleton-table";
 import {
   Table,
   TableBody,
@@ -20,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-function TableData({ columns, data, pagination, setPagination, query, setQuery, loading }) {
+function TableData({ columns, data, pagination, setPagination, loading }) {
   const { totalPage, currentPage, pageIndex, pageSize, prevPage } = pagination;
   const table = useReactTable({
     data: data,
@@ -49,18 +48,6 @@ function TableData({ columns, data, pagination, setPagination, query, setQuery, 
 
   return (
     <>
-      <div className="px-8 flex gap-2 items-center py-6">
-        Cari :
-        <Input
-          type="text"
-          value={query}
-          disabled={loading}
-          className="w-52 h-9 rounded-e-none focus-visible:ring-0 focus-visible:ring-offset-0"
-          id="input-search-fundraise"
-          placeholder="Masukkan kata pencarian"
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </div>
       <Table>
         <TableHeader className="bg-[#F5F5F5]">
           {table.getHeaderGroups().map((headerGroup) => (

@@ -4,6 +4,7 @@ import TrashIcon from "@/assets/icons/trash";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { deleteVolunteerVacancy } from "@/utils/api/volunter";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +14,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteVolunteerVacancy } from "@/utils/api/volunter";
 
 const deleteHandler = (id, setOpen, navigate, setProcessing) => {
   setProcessing(true);
@@ -42,7 +42,7 @@ const Toast = Swal.mixin({
   },
 });
 
-const Alert = ({ id }) => {
+const DeleteDialog = ({ id }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -54,7 +54,8 @@ const Alert = ({ id }) => {
         id={`btn-delete-fundraise-${id}`}
         className="bg-[#BF1616] hover:bg-[#BF1616]/80"
         style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-        onClick={() => setOpen(true)}>
+        onClick={() => setOpen(true)}
+      >
         <TrashIcon className="w-4 h-4" />
       </Button>
       <AlertDialogContent className="w-96">
@@ -72,19 +73,17 @@ const Alert = ({ id }) => {
             disabled={processing}
             onClick={() => setOpen(false)}
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
-            className="w-[100px] font-semibold border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white">
+            className="w-[100px] font-semibold border-[#E31F1F] bg-white hover:bg-[#E31F1F] text-[#E31F1F] hover:text-white"
+          >
             Batal
           </AlertDialogCancel>
           <AlertDialogAction
             disabled={processing}
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
             onClick={() => deleteHandler(id, setOpen, navigate, setProcessing)}
-            className="w-[100px] font-semibold border-[#E31F1F] bg-[#E31F1F] hover:bg-[#E31F1F]/80 text-white">
-            {processing ? (
-              <Loader2 className="animate-spin w-7 h-7" />
-            ) : (
-              "Ya, Hapus!"
-            )}
+            className="w-[100px] font-semibold border-[#E31F1F] bg-[#E31F1F] hover:bg-[#E31F1F]/80 text-white"
+          >
+            {processing ? <Loader2 className="animate-spin w-7 h-7" /> : "Ya, Hapus!"}
           </AlertDialogAction>
         </div>
       </AlertDialogContent>
@@ -92,4 +91,4 @@ const Alert = ({ id }) => {
   );
 };
 
-export default Alert;
+export default DeleteDialog;

@@ -7,18 +7,14 @@ import TransactionDetail from "@/pages/transaction/transaction-detail";
 import EditUser from "@/pages/customer/edit.jsx";
 import OTPPage from "@/pages/login/forgot-password/OTPPage";
 import User from "@/pages/customer/index";
-import DetailVolunter from "@/pages/volunter/detail";
+import DetailVolunter from "@/pages/volunter/detail-volunteer-vacancies";
 import ForgotPasswordPage from "@/pages/login/forgot-password/ForgotPasswordPage";
 import RePasswordPage from "@/pages/login/forgot-password/RePasswordPage";
 import DetailFundraise from "@/pages/fundraising/detail-fundraise";
 import AddFundraise from "@/pages/fundraising/add-fundraise";
-import ResponseForm from "@/pages/volunter/list-registered/response-form";
+import ResponseForm from "@/pages/list-registered/detail-registrant";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
 import { useToken } from "@/utils/context/token";
@@ -26,8 +22,8 @@ import Fundraise from "@/pages/fundraising/index";
 import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
 import AddNews from "@/pages/news/add-news";
-import AddVolunterForm from "@/pages/volunter/add-form";
-import Registrants from "@/pages/volunter/list-registered";
+import AddVolunterForm from "@/pages/volunter/add-volunteer-vacancies";
+import Registrants from "@/pages/list-registered";
 
 export default function Router() {
   const { token } = useToken();
