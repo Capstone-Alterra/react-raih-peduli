@@ -11,7 +11,6 @@ import {
   getVillages,
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
-  getVolunteerByTitle,
   updateStatusVolunteerRegistrant,
 } from "./api";
 
@@ -33,6 +32,5 @@ export {
   registrantVolunterSchema,
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
-  getVolunteerByTitle,
   updateStatusVolunteerRegistrant,
 };

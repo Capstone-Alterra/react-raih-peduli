@@ -1,11 +1,16 @@
 import axiosWithConfig, { externalAxiosWithConfig } from "../axiosWithConfig";
 
-export const getVolunteerVacancies = async (pageIndex, pageSize) => {
+export const getVolunteerVacancies = async (pageIndex, pageSize, title) => {
   try {
-    const response = await axiosWithConfig.get(
-      `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}`
-    );
-    return response.data;
+    if (title) {
+      const response = await axiosWithConfig.get(`/volunteer-vacancies?title=${title}`);
+      return response.data;
+    } else {
+      const response = await axiosWithConfig.get(
+        `/volunteer-vacancies?page=${pageIndex}&page_size=${pageSize}`
+      );
+      return response.data;
+    }
   } catch (error) {
     console.error(error);
     throw error;
@@ -18,16 +23,6 @@ export const getVolunteerVacancyById = async (id) => {
     return response.data.data;
   } catch (error) {
     console.error(error);
-    throw error;
-  }
-};
-
-export const getVolunteerByTitle = async (title) => {
-  try {
-    const response = await axiosWithConfig.get(`/volunteer-vacancies?title=${title}`);
-    return response.data;
-  } catch (error) {
-    console.error;
     throw error;
   }
 };
