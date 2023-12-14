@@ -15,11 +15,7 @@ import {
   updateStatusVolunteerRegistrant,
 } from "./api";
 
-import {
-  volunterSchema,
-  editVolunterSchema,
-  registrantVolunterSchema,
-} from "./schema";
+import { volunteerSchema, editVolunteerSchema, registrantVolunterSchema } from "./schema";
 
 export {
   getVolunteerVacancies,
@@ -32,8 +28,8 @@ export {
   getProvinces,
   getRegencies,
   getVillages,
-  volunterSchema,
-  editVolunterSchema,
+  volunteerSchema,
+  editVolunteerSchema,
   registrantVolunterSchema,
   getVolunteerRegistrants,
   getVolunteerRegistrantById,
