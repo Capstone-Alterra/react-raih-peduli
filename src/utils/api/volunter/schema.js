@@ -3,7 +3,7 @@ import * as z from "zod";
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
-export const volunterSchema = z.object({
+export const volunteerSchema = z.object({
   title: z
     .string()
     .min(1, { message: "Kolom judul lowongan relawan harus diisi" })
@@ -14,10 +14,7 @@ export const volunterSchema = z.object({
     .min(50, {
       message: " Kolom deskripsi lowongan relawan minimal 50 karakter",
     }),
-  skills_required: z
-    .string()
-    .array()
-    .nonempty({ message: "Kolom keahlian harus diisi" }),
+  skills_required: z.any().array().nonempty({ message: "Kolom keahlian harus diisi" }),
   number_of_vacancies: z.number({
     invalid_type_error: "Kolom jumlah lowongan relawan harus diisi",
   }),
@@ -30,11 +27,9 @@ export const volunterSchema = z.object({
     invalid_type_error: "Kolom tanggal selesai lowongan relawan harus diisi",
   }),
   province: z.string().min(1, { message: "Kolom provinsi harus diisi" }),
-  city: z.string().min(1, { message: "Kolom kabupaten/kota harus diisi" }),
+  city: z.string().min(2, { message: "Kolom kabupaten/kota harus diisi" }),
   sub_district: z.string().min(1, { message: "Kolom kecamatan harus diisi" }),
-  detail_location: z
-    .string()
-    .min(1, { message: "Kolom kelurahan/desa harus diisi" }),
+  detail_location: z.string().min(1, { message: "Kolom lokasi detail harus diisi" }),
   photo: z
     .any()
     .refine((file) => !!file, {
@@ -48,7 +43,7 @@ export const volunterSchema = z.object({
     }),
 });
 
-export const editVolunterSchema = z.object({
+export const editVolunteerSchema = z.object({
   title: z
     .string()
     .min(1, { message: "Kolom judul lowongan relawan harus diisi" })
@@ -59,10 +54,7 @@ export const editVolunterSchema = z.object({
     .min(20, {
       message: "Kolom deskripsi lowongan relawan minimal 50 karakter",
     }),
-  skills_required: z
-    .string()
-    .array()
-    .nonempty({ message: "Kolom keahlian harus diisi" }),
+  skills_required: z.any().array().nonempty({ message: "Kolom keahlian harus diisi" }),
   number_of_vacancies: z.number({
     invalid_type_error: "Kolom jumlah lowongan relawan harus diisi",
   }),
@@ -77,10 +69,17 @@ export const editVolunterSchema = z.object({
   province: z.string().min(1, { message: "Kolom provinsi harus diisi" }),
   city: z.string().min(1, { message: "Kolom kabupaten/kota harus diisi" }),
   sub_district: z.string().min(1, { message: "Kolom kecamatan harus diisi" }),
-  detail_location: z
-    .string()
-    .min(1, { message: "Kolom kelurahan/desa harus diisi" }),
-  photo: z.any(),
+  detail_location: z.string().min(1, { message: "Kolom lokasi detail harus diisi" }),
+  photo: z
+    .any()
+    .refine((file) => !!file, "Kolom foto lowongan relawan harus diisi")
+    .refine((file) => file?.size <= MAX_FILE_SIZE, "Ukuran gambar maksimal 5MB")
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Format gambar harus .jpg, .png, .jpeg"
+    )
+    .optional()
+    .or(z.literal("")),
 });
 
 export const registrantVolunterSchema = z.object({
@@ -95,18 +94,13 @@ export const registrantVolunterSchema = z.object({
   address: z.string().min(1, { message: "Kolom alamat harus diisi" }).min(20, {
     message: "Kolom alamat minimal 20 karakter",
   }),
-  phone_number: z
-    .string()
-    .min(12, { message: "Harus memiliki nomor handphone" }),
+  phone_number: z.string().min(12, { message: "Harus memiliki nomor handphone" }),
   gender: z.string().min(1, { message: "Harus pilih jenis kelamin" }),
   nik: z
     .string()
     .min(1, { message: "Kolom NIK harus diisi" })
     .min(20, { message: "Standart NIK berjumlah 20" }),
-  skills_required: z
-    .string()
-    .array()
-    .nonempty({ message: "Kolom keahlian harus diisi" }),
+  skills_required: z.string().array().nonempty({ message: "Kolom keahlian harus diisi" }),
   resume: z.string().min(1, { message: "Kolom resume harus diisi" }).min(20, {
     message: "Kolom resume minimal 20 karakter",
   }),
