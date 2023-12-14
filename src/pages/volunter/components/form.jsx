@@ -4,28 +4,21 @@ import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { id as Id } from "date-fns/locale";
 import { useEffect, useState } from "react";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import FileInput from "@/components/input-file";
 import ProfileIcon from "@/assets/icons/profile";
+import ResponseDialogue from "./response-dialogue";
 import { NumericFormat } from "react-number-format";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toIsoDate from "@/utils/formatter/convertToIso";
 import MultipleSelect from "@/components/multiple-select";
-import {
-  editVolunterSchema,
-  volunterSchema,
-} from "@/utils/api/volunter/schema";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Form,
   FormControl,
@@ -35,6 +28,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  editVolunteerSchema,
+  volunteerSchema,
   getVolunteerVacancyById,
   addVolunteerVacancy,
   editVolunteerVacancy,
@@ -43,41 +46,33 @@ import {
   getProvinces,
   getRegencies,
   getVillages,
-} from "@/utils/api/volunter/api";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import ResponseDialogue from "./response-dialogue";
+} from "@/utils/api/volunter";
 
-const VolunterForm = ({ action }) => {
+const VolunterForm = ({ action, id }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [firstRender, setFirstRender] = useState(true);
   const [{ provinces, regencies, districts, villages }, setData] = useState({
     provinces: [],
     regencies: [],
     districts: [],
     villages: [],
   });
-  const [{ province, regency, district }, setSelectedData] = useState({
-    province: { id: "", name: "" },
-    regency: { id: "", name: "" },
-    district: { id: "", name: "" },
-    village: { id: "", name: "" },
+  const [
+    { selectedProvince, selectedRegency, selectedDistrict, selectedVillage },
+    setSelectedData,
+  ] = useState({
+    selectedProvince: [],
+    selectedRegency: [],
+    selectedDistrict: [],
+    selectedVillage: [],
   });
 
   const form = useForm({
-    resolver: zodResolver(
-      action === "edit" ? editVolunterSchema : volunterSchema
-    ),
+    resolver: zodResolver(action === "edit" ? editVolunteerSchema : volunteerSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -89,17 +84,7 @@ const VolunterForm = ({ action }) => {
       city: "",
       sub_district: "",
       detail_location: "",
-    },
-  });
-
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
+      photo: "",
     },
   });
 
@@ -114,11 +99,58 @@ const VolunterForm = ({ action }) => {
         application_deadline,
         province,
         city,
-        sub_disctrict,
+        sub_district,
         detail_location,
         status,
         photo,
       } = await getVolunteerVacancyById(id);
+
+      const provinces = await getProvinces();
+      setData((prevState) => ({
+        ...prevState,
+        provinces: provinces,
+      }));
+      const filteredProvince = provinces.filter((data) => data.name === province);
+      setSelectedData((prevState) => ({
+        ...prevState,
+        selectedProvince: filteredProvince,
+      }));
+
+      const regencies = await getRegencies(filteredProvince[0].id);
+      setData((prevState) => ({
+        ...prevState,
+        regencies: regencies,
+      }));
+      const filteredRegency = regencies.filter((data) => data.name === city);
+      setSelectedData((prevState) => ({
+        ...prevState,
+        selectedRegency: filteredRegency,
+      }));
+
+      const districts = await getDistricts(filteredRegency[0].id);
+      setData((prevState) => ({
+        ...prevState,
+        districts: districts,
+      }));
+      const filteredDistrict = districts.filter((data) => data.name === sub_district);
+      setSelectedData((prevState) => ({
+        ...prevState,
+        selectedDistrict: filteredDistrict,
+      }));
+
+      const villages = await getVillages(filteredDistrict[0].id);
+      setData((prevState) => ({
+        ...prevState,
+        villages: villages,
+      }));
+      const filteredVillage = villages.filter((data) => data.name === detail_location);
+      setSelectedData((prevState) => ({
+        ...prevState,
+        selectedVillage: filteredVillage,
+      }));
+
+      setStatus(status);
+      setPreview(photo);
 
       const formattedEndDate = new Date(application_deadline);
       const formatedSkills = skills_required.map((skill) => ({
@@ -126,33 +158,75 @@ const VolunterForm = ({ action }) => {
         label: skill,
       }));
 
-      setStatus(status);
-      setPreview(photo);
-
-      form.reset({
+      return {
         title,
         description,
         skills_required: formatedSkills,
         number_of_vacancies,
         contact_email,
         application_deadline: formattedEndDate,
-        province,
-        city,
-        sub_disctrict,
-        detail_location,
-        photo,
-      });
+        province: filteredProvince[0].id,
+        city: filteredRegency[0].id,
+        sub_district: filteredDistrict[0].id,
+        detail_location: filteredVillage[0].id,
+      };
     } catch (error) {
       console.error(error);
       throw error;
+    } finally {
+      setFirstRender(false);
     }
   };
 
   useEffect(() => {
     if (action !== "add") {
-      getDetailVolunteerVacancy(id);
+      getDetailVolunteerVacancy(id).then((data) => form.reset(data));
     }
   }, [action, id]);
+
+  useEffect(() => {
+    if (action === "add") {
+      getProvinces().then((data) => setData((prevState) => ({ ...prevState, provinces: data })));
+    } else if (action === "edit" && !firstRender) {
+      getProvinces().then((data) => setData((prevState) => ({ ...prevState, provinces: data })));
+    }
+  }, [action, firstRender]);
+
+  useEffect(() => {
+    if (selectedProvince.length > 0 && action === "add") {
+      getRegencies(selectedProvince[0].id).then((data) => {
+        setData((prevState) => ({ ...prevState, regencies: data }));
+      });
+    } else if (action === "edit" && !firstRender) {
+      getRegencies(selectedProvince[0].id).then((data) => {
+        setData((prevState) => ({ ...prevState, regencies: data }));
+      });
+    }
+  }, [selectedProvince, firstRender, action]);
+
+  useEffect(() => {
+    if (selectedRegency.length > 0 && action === "add") {
+      getDistricts(selectedRegency[0].id).then((data) => {
+        setData((prevState) => ({ ...prevState, districts: data }));
+      });
+    } else if (action === "edit" && !firstRender) {
+      getDistricts(selectedRegency[0].id).then((data) => {
+        setData((prevState) => ({ ...prevState, districts: data }));
+      });
+    }
+  }, [selectedRegency, action, firstRender]);
+
+  useEffect(() => {
+    if (selectedDistrict.length > 0 && action === "add") {
+      getVillages(selectedDistrict[0].id).then((data) =>
+        setData((prevState) => ({ ...prevState, villages: data }))
+      );
+    } else if (action === "edit" && !firstRender) {
+      getVillages(selectedDistrict[0].id).then((data) =>
+        setData((prevState) => ({ ...prevState, villages: data }))
+      );
+    }
+  }, [selectedDistrict, action, firstRender]);
 
   const onSubmit = (data) => {
     const {
@@ -162,10 +236,6 @@ const VolunterForm = ({ action }) => {
       number_of_vacancies,
       contact_email,
       application_deadline,
-      province,
-      city,
-      sub_district,
-      detail_location,
       photo,
     } = data;
 
@@ -173,6 +243,7 @@ const VolunterForm = ({ action }) => {
     const formattedSkills = skills_required.map((skill) => skill.value);
 
     if (action === "add") {
+      setProcessing(true);
       addVolunteerVacancy({
         title,
         description,
@@ -180,33 +251,47 @@ const VolunterForm = ({ action }) => {
         number_of_vacancies,
         contact_email,
         application_deadline: endDate,
-        province,
-        city,
-        sub_district,
-        detail_location,
+        province: selectedProvince[0].name,
+        city: selectedRegency[0].name,
+        sub_district: selectedDistrict[0].name,
+        detail_location: selectedVillage[0].name,
         photo,
       })
-        .then((message) => Toast.fire({ icon: "success", title: message }))
-        .catch((message) => Toast.fire({ icon: "error", title: message }))
-        .finally(navigate("/lowongan-relawan"));
+        .then((message) => {
+          Toast.fire({ icon: "success", title: message });
+          navigate("/lowongan-relawan");
+        })
+        .catch((message) => {
+          Toast.fire({ icon: "error", title: message });
+          navigate("/lowongan-relawan");
+        })
+        .finally(() => setProcessing(false));
     } else if (action === "edit") {
+      setProcessing(true);
       const editedData = {
         title,
         description,
-        skills_required,
+        skills_required: formattedSkills,
         number_of_vacancies,
+        contact_email,
         application_deadline: endDate,
-        province,
-        city,
-        sub_district,
-        detail_location,
+        province: selectedProvince[0].name,
+        city: selectedRegency[0].name,
+        sub_district: selectedDistrict[0].name,
+        detail_location: selectedVillage[0].name,
         ...(photo instanceof File && { photo }),
       };
 
       editVolunteerVacancy(id, editedData)
-        .then((message) => Toast.fire({ icon: "success", title: message }))
-        .catch((message) => Toast.fire({ icon: "error", title: message }))
-        .finally(navigate("/lowongan-relawan"));
+        .then((message) => {
+          Toast.fire({ icon: "success", title: message });
+          navigate("/lowongan-relawan");
+        })
+        .catch((message) => {
+          Toast.fire({ icon: "error", title: message });
+          navigate("/lowongan-relawan");
+        })
+        .finally(() => setProcessing(false));
     }
   };
 
@@ -214,12 +299,12 @@ const VolunterForm = ({ action }) => {
     setProcessing(true);
     updateStatusVolunteerVacancy(id, status)
       .then((message) => {
-        navigate("/lowongan-relawan");
         Toast.fire({ icon: "success", title: message });
+        navigate("/lowongan-relawan");
       })
       .catch((message) => {
-        navigate("/lowongan-relawan");
         Toast.fire({ icon: "error", title: message });
+        navigate("/lowongan-relawan");
       })
       .finally(() => {
         setProcessing(false);
@@ -232,50 +317,27 @@ const VolunterForm = ({ action }) => {
     return date < today;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (province.id === "") {
-          const provincesData = await getProvinces();
-          setData((prevState) => ({ ...prevState, provinces: provincesData }));
-        }
-
-        if (province.id !== "" && regency.id === "") {
-          const regenciesData = await getRegencies(province.id);
-          setData((prevState) => ({ ...prevState, regencies: regenciesData }));
-        }
-
-        if (regency.id !== "" && district.id === "") {
-          const districtsData = await getDistricts(regency.id);
-          setData((prevState) => ({ ...prevState, districts: districtsData }));
-        }
-
-        if (district.id !== "") {
-          const villagesData = await getVillages(district.id);
-          setData((prevState) => ({ ...prevState, villages: villagesData }));
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, [province.id, regency.id, district.id]);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   return (
     <Form {...form}>
-      <form
-        className="px-6 py-6 mb-6 flex flex-col gap-y-4"
-        onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="px-6 py-6 mb-6 flex flex-col gap-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex gap-4">
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-title">
-                  Judul Lowongan Relawan
-                </FormLabel>
+                <FormLabel htmlFor="input-volunter-title">Judul Lowongan Relawan</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -294,9 +356,7 @@ const VolunterForm = ({ action }) => {
             name="number_of_vacancies"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-number">
-                  Jumlah Lowongan
-                </FormLabel>
+                <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
                 <FormControl>
                   <NumericFormat
                     value={field.value}
@@ -321,9 +381,7 @@ const VolunterForm = ({ action }) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="input-volunter-description">
-                Isi Deskripsi
-              </FormLabel>
+              <FormLabel htmlFor="input-volunter-description">Isi Deskripsi</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
@@ -373,7 +431,8 @@ const VolunterForm = ({ action }) => {
                         className={cn(
                           "pl-3 text-left font-normal w-full disabled:opacity-100 disabled:cursor-not-allowed",
                           !field.value && "text-muted-foreground"
-                        )}>
+                        )}
+                      >
                         {field.value ? (
                           format(field.value, "PPP", { locale: Id })
                         ) : (
@@ -403,9 +462,7 @@ const VolunterForm = ({ action }) => {
               name="contact_email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel htmlFor="input-volunter-email">
-                    Kontak Email
-                  </FormLabel>
+                  <FormLabel htmlFor="input-volunter-email">Kontak Email</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -427,21 +484,28 @@ const VolunterForm = ({ action }) => {
             control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel htmlFor="input-volunter-provinces">
-                  Provinsi
-                </FormLabel>
+                <FormLabel htmlFor="input-volunter-provinces">Provinsi</FormLabel>
                 <Select
-                  defaultValue={field.value}
+                  value={field.value}
                   disabled={action === "detail"}
-                  onValueChange={(e) => {
-                    const data = JSON.parse(e);
-
-                    field.onChange(data.name);
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    form.setValue("city", "");
+                    form.setValue("sub_district", "");
+                    form.setValue("detail_location", "");
+                    setData((prevState) => ({
+                      ...prevState,
+                      regencies: [],
+                      districts: [],
+                      villages: [],
+                    }));
+                    const filteredProvince = provinces.filter((province) => province.id === value);
                     setSelectedData((prevState) => ({
                       ...prevState,
-                      province: { id: data.id, name: data.name },
+                      selectedProvince: filteredProvince,
                     }));
-                  }}>
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Provinsi" />
@@ -450,9 +514,7 @@ const VolunterForm = ({ action }) => {
                   <SelectContent>
                     <SelectGroup>
                       {provinces.map((province) => (
-                        <SelectItem
-                          key={province.id}
-                          value={JSON.stringify(province)}>
+                        <SelectItem key={province.id} value={province.id}>
                           {province.name}
                         </SelectItem>
                       ))}
@@ -470,17 +532,24 @@ const VolunterForm = ({ action }) => {
               <FormItem className="w-full">
                 <FormLabel>Kabupaten</FormLabel>
                 <Select
-                  defaultValue={field.value}
+                  value={field.value}
                   disabled={action === "detail"}
-                  onValueChange={(e) => {
-                    const data = JSON.parse(e);
-
-                    field.onChange(data.name);
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    form.setValue("sub_district", "");
+                    form.setValue("detail_location", "");
+                    setData((prevState) => ({
+                      ...prevState,
+                      districts: [],
+                      villages: [],
+                    }));
+                    const filteredRegencies = regencies.filter((regency) => regency.id === value);
                     setSelectedData((prevState) => ({
                       ...prevState,
-                      regency: { id: data.id, name: data.name },
+                      selectedRegency: filteredRegencies,
                     }));
-                  }}>
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kabupaten" />
@@ -489,9 +558,7 @@ const VolunterForm = ({ action }) => {
                   <SelectContent>
                     <SelectGroup>
                       {regencies.map((regency) => (
-                        <SelectItem
-                          key={regency.id}
-                          value={JSON.stringify(regency)}>
+                        <SelectItem key={regency.id} value={regency.id}>
                           {regency.name}
                         </SelectItem>
                       ))}
@@ -511,17 +578,22 @@ const VolunterForm = ({ action }) => {
               <FormItem className="w-full">
                 <FormLabel>Kecamatan</FormLabel>
                 <Select
-                  defaultValue={field.value}
+                  value={field.value}
                   disabled={action === "detail"}
-                  onValueChange={(e) => {
-                    const data = JSON.parse(e);
-
-                    field.onChange(data.name);
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    form.setValue("detail_location", "");
+                    const filteredDistrict = districts.filter((district) => district.id === value);
+                    setData((prevState) => ({
+                      ...prevState,
+                      villages: [],
+                    }));
                     setSelectedData((prevState) => ({
                       ...prevState,
-                      district: { id: data.id, name: data.name },
+                      selectedDistrict: filteredDistrict,
                     }));
-                  }}>
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Kecamatan" />
@@ -529,9 +601,7 @@ const VolunterForm = ({ action }) => {
                   </FormControl>
                   <SelectContent>
                     {districts.map((district) => (
-                      <SelectItem
-                        key={district.id}
-                        value={JSON.stringify(district)}>
+                      <SelectItem key={district.id} value={district.id}>
                         {district.name}
                       </SelectItem>
                     ))}
@@ -546,29 +616,27 @@ const VolunterForm = ({ action }) => {
             name="detail_location"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Kelurahan</FormLabel>
+                <FormLabel>Lokasi Detail</FormLabel>
                 <Select
-                  defaultValue={field.value}
+                  value={field.value}
                   disabled={action === "detail"}
-                  onValueChange={(e) => {
-                    const data = JSON.parse(e);
-
-                    field.onChange(data.name);
-                    (prevState) => ({
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    const filteredVillage = villages.filter((village) => village.id === value);
+                    setSelectedData((prevState) => ({
                       ...prevState,
-                      village: { id: data.id, name: data.name },
-                    });
-                  }}>
+                      selectedVillage: filteredVillage,
+                    }));
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Kelurahan" />
+                      <SelectValue placeholder="Lokasi Detail" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {villages.map((village) => (
-                      <SelectItem
-                        key={village.id}
-                        value={JSON.stringify(village)}>
+                      <SelectItem key={village.id} value={village.id}>
                         {village.name}
                       </SelectItem>
                     ))}
@@ -580,8 +648,8 @@ const VolunterForm = ({ action }) => {
           />
         </div>
         <FormField
-          control={form.control}
           name="photo"
+          control={form.control}
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="input-volunter-image">Foto</FormLabel>
@@ -594,7 +662,7 @@ const VolunterForm = ({ action }) => {
                     field.onChange(e.target.files[0]);
 
                     if (action !== "detail") {
-                      setPreview(URL.createObjectURL(e.target.files[0]));
+                      setPreview(e.target.files[0] ? URL.createObjectURL(e.target.files[0]) : null);
                     }
                   }}
                 />
@@ -608,9 +676,8 @@ const VolunterForm = ({ action }) => {
             <Label>Pendaftar Lowongan</Label>
             <div
               className="w-full rounded-md border p-3 flex flex-row items-center gap-1 cursor-pointer"
-              onClick={() =>
-                navigate(`/lowongan-relawan/${id}/list-pendaftar`)
-              }>
+              onClick={() => navigate(`/lowongan-relawan/${id}/list-pendaftar`)}
+            >
               <ProfileIcon className="w-2 h-2" />
               <ProfileIcon className="w-2 h-2 ml-3" />
             </div>
@@ -621,9 +688,7 @@ const VolunterForm = ({ action }) => {
             size="sm"
             type="button"
             id="btn-action-negative"
-            disabled={
-              (action === "detail" && status !== "pending") || processing
-            }
+            disabled={(action === "detail" && status !== "pending") || processing}
             onClick={() => {
               if (action !== "detail") {
                 navigate("/lowongan-relawan");
@@ -631,40 +696,33 @@ const VolunterForm = ({ action }) => {
                 setOpen(true);
               }
             }}
-            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white">
-            {action === "editing"
-              ? "Batal"
-              : action === "detail"
-              ? "Tolak"
-              : "kembali"}
+            className="bg-white w-24 text-[#293066] border-solid border-2 border-[#293066] hover:bg-[#293066] hover:text-white"
+          >
+            {action === "editing" ? "Batal" : action === "detail" ? "Tolak" : "kembali"}
           </Button>
           <Button
             size="sm"
-            disabled={action === "detail" && status !== "pending"}
+            id="btn-action-positive"
             type={action === "detail" ? "button" : "submit"}
             className="bg-[#293066] w-24 hover:bg-[#293066]/80"
-            id="btn-action-positive"
-            onClick={
-              action === "detail"
-                ? () => updateVolunteer(id, "accepted")
-                : undefined
-            }>
-            {action === "edit"
-              ? "Edit data"
-              : action === "detail"
-              ? "Terima"
-              : action === "add"
-              ? "Tambah"
-              : ""}
+            disabled={(action === "detail" && status !== "pending") || processing}
+            onClick={action === "detail" ? () => updateVolunteer(id, "accepted") : undefined}
+          >
+            {processing ? (
+              <Loader2 className="animate-spin w-7 h-7" />
+            ) : action === "edit" ? (
+              "Edit data"
+            ) : action === "detail" ? (
+              "Terima"
+            ) : action === "add" ? (
+              "Tambah"
+            ) : (
+              ""
+            )}
           </Button>
         </div>
       </form>
-      <ResponseDialogue
-        open={open}
-        onOpenChange={setOpen}
-        status={status}
-        id={id}
-      />
+      <ResponseDialogue open={open} onOpenChange={setOpen} id={id} />
     </Form>
   );
 };
