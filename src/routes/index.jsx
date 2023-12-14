@@ -109,11 +109,11 @@ export default function Router() {
       element: token === "" ? <Navigate to="/login" /> : <DetailVolunter />,
     },
     {
-      path: "/lowongan-relawan/:id/list-pendaftar",
+      path: "/lowongan-relawan/:id/pendaftar",
       element: token === "" ? <Navigate to="/login" /> : <Registrants />,
     },
     {
-      path: "/lowongan-relawan/:vacancyId/list-pendaftar/respon-pendaftar/:volunteerId",
+      path: "/lowongan-relawan/:vacancyId/pendaftar/:volunteerId",
       element: token === "" ? <Navigate to="/login" /> : <ResponseForm />,
     },
     {

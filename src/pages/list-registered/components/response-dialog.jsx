@@ -45,11 +45,11 @@ const ResponseDialog = ({ open, onOpenChange }) => {
     setProcessing(true);
     updateStatusVolunteerRegistrant(vacancyId, volunteerId, "rejected", rejected_reason)
       .then((message) => {
-        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
+        navigate(`/lowongan-relawan/${vacancyId}/pendaftar`);
         Toast.fire({ icon: "success", title: message });
       })
       .catch((message) => {
-        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
+        navigate(`/lowongan-relawan/${vacancyId}/pendaftar`);
         Toast.fire({ icon: "error", title: message });
       })
       .finally(() => {

@@ -73,7 +73,7 @@ export const registrantColumns = [
             className="bg-[#293066] hover:bg-[#293066]/80"
             style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
           >
-            <Link to={`/lowongan-relawan/${id}/list-pendaftar/respon-pendaftar/${volunteerId}`}>
+            <Link to={`/lowongan-relawan/${id}/pendaftar/${volunteerId}`}>
               <ApproveIcon className="w-4 h-4" />
             </Link>
           </Button>

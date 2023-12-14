@@ -109,11 +109,11 @@ const RegistrantForm = () => {
     setProcessing(true);
     updateStatusVolunteerRegistrant(vacancyId, volunteerId, status)
       .then((message) => {
-        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
+        navigate(`/lowongan-relawan/${vacancyId}/pendaftar`);
         Toast.fire({ icon: "success", title: message });
       })
       .catch((message) => {
-        navigate(`/lowongan-relawan/${vacancyId}/list-pendaftar`);
+        navigate(`/lowongan-relawan/${vacancyId}/pendaftar`);
         Toast.fire({ icon: "error", title: message });
       })
       .finally(() => {
