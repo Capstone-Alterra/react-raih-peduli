@@ -1,4 +1,4 @@
 import { ForgetPassword } from "./api";
-import { ForgetPasswordSchema } from "./type";
+import { ForgetPasswordSchema, ConfirmationPassword } from "./type";
 
-export { ForgetPassword, ForgetPasswordSchema };
+export { ForgetPassword, ForgetPasswordSchema, ConfirmationPassword};
