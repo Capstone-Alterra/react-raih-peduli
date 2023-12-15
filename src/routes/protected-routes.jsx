@@ -1,10 +1,11 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-
 import { useToken } from "@/utils/context/token";
+import { useCookies } from "react-cookie";
 
 const ProtectedRoutes = () => {
   const { token } = useToken();
   const { pathname } = useLocation();
+  const [cookies] = useCookies(["refreshToken"]);
 
   const authProtected = ["/login"];
 
@@ -27,19 +28,22 @@ const ProtectedRoutes = () => {
     "/respon-pendaftar-lowongan-relawan/:id",
   ];
 
-  const rememberPassword = [
-    "/lupa-password",
-    "/repassword",
-    "/otp-password",
-    "/lupa-password-sukses",
-  ];
+  const rememberPassword = ["/lupa-password", "/repassword", "/otp-password", "/lupa-password-sukses"];
 
   if (token && rememberPassword.includes(pathname)) {
-    return <Navigate to="/dashboard" />;
+    // Tambahkan pengecekan refreshToken di cookies sebelum mengarahkan ke /dashboard
+    if (cookies.refreshToken) {
+      return <Navigate to="/dashboard" />;
+    }
   }
 
   if (authProtected.includes(pathname)) {
-    if (token) return <Navigate to="/dashboard" />;
+    if (token) {
+      // Tambahkan pengecekan refreshToken di cookies sebelum mengarahkan ke /dashboard
+      if (cookies.refreshToken) {
+        return <Navigate to="/dashboard" />;
+      }
+    }
   }
 
   if (protectedByToken.includes(pathname)) {

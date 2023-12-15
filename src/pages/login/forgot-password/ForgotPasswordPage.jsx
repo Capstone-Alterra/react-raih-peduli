@@ -23,6 +23,7 @@ function ForgotPasswordPage() {
   async function handleOTP(data) {
     const { email } = data;
     try {
+      localStorage.setItem("email", email);
       const response = await ForgetPassword(email);
       navigate("/otp-password");
     } catch (error) {
@@ -30,32 +31,11 @@ function ForgotPasswordPage() {
     }
   }
   return (
-    <LayoutLogin
-      label="Raih Peduli - Lupa Password"
-      id="raih-peduli-tittle"
-      route="/login"
-    >
-      <p className="opacity-70 mb-[2rem]">
-        Kami akan mengirimkan OTP untuk mengatur ulang kata sandi anda
-      </p>
+    <LayoutLogin label="Raih Peduli - Lupa Password" id="raih-peduli-tittle" route="/login">
+      <p className="opacity-70 mb-[2rem]">Kami akan mengirimkan OTP untuk mengatur ulang kata sandi anda</p>
       <form onSubmit={handleSubmit(handleOTP)}>
-        <InputLabel
-          id="email-form-reset-password"
-          aria-label="email-form-reset-password"
-          type="email"
-          name="email"
-          isLogin={true}
-          label="Email"
-          placeholder="Masukkan email anda"
-          register={register}
-          error={errors.email?.message}
-        />
-        <ButtonClick
-          id="btn-submit"
-          aria-label="btn-submit-form"
-          label="Lupa Password"
-          className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2.5rem] mb-3"
-        />
+        <InputLabel id="email-form-reset-password" aria-label="email-form-reset-password" type="email" name="email" isLogin={true} label="Email" placeholder="Masukkan email anda" register={register} error={errors.email?.message} />
+        <ButtonClick id="btn-submit" aria-label="btn-submit-form" label="Lupa Password" className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2.5rem] mb-3" />
       </form>
       {errorMessage && <p className="text-[#FC544B] text-center font-base text-base">{errorMessage}</p>}
     </LayoutLogin>

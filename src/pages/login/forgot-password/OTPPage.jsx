@@ -1,12 +1,14 @@
 import { ButtonClick } from "@/components/button";
 import { LayoutLogin } from "@/components/card-login";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosWithConfig from "@/utils/api/axiosWithConfig";
+import { useToken } from "@/utils/context/token";
+import { otpVerification } from "@/utils/api/auth/forget-password/api";
 
 function OTPPage() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const navigate = useNavigate();
+  const { changeToken } = useToken();
 
   const handleOTP = (element, index) => {
     if (isNaN(element.value)) return false;
@@ -18,26 +20,24 @@ function OTPPage() {
 
   const handleNextClick = async () => {
     try {
-      const response = await axiosWithConfig.post("/users/verify-otp", {
-        otp: otp.join(""),
-      });
+      const response = await otpVerification(otp.join(""));
+
+      const accessToken = response.access_token;
+      const refreshToken = "";
+      console.log("accessToken: ", accessToken);
+
+      changeToken(accessToken, refreshToken);
+
       navigate("/repassword");
     } catch (error) {
-      // Handle error jika terjadi kesalahan pada permintaan ke server
-      console.error("Error verifying OTP:", error);
-      alert("Error verifying OTP. Please try again later.");
+      console.error("Error verifying OTP:", error.message);
+      alert(error.message);
     }
   };
 
   return (
-    <LayoutLogin
-      label="Raih Peduli - Lupa Password"
-      route="/lupa-password"
-      id="raih-peduli-tittle"
-    >
-      <p className="opacity-70 my-[2.5rem]">
-        Kode verifikasi OTP telah dikirim ke email kamu.
-      </p>
+    <LayoutLogin label="Raih Peduli - Lupa Password" route="/lupa-password" id="raih-peduli-tittle">
+      <p className="opacity-70 my-[2.5rem]">Kode verifikasi OTP telah dikirim ke email kamu.</p>
       <div className="row">
         <div className="col text-center">
           {otp.map((data, index) => (
@@ -49,21 +49,15 @@ function OTPPage() {
               type="text"
               name="otp"
               maxLength="1"
-              autoComplete="off" // Tambahkan autoComplete
+              autoComplete="off"
               value={data}
               onChange={(e) => handleOTP(e.target, index)}
               onFocus={(e) => e.target.select()}
-              autoFocus={index === 0} // Tambahkan autoFocus pada input pertama
+              autoFocus={index === 0}
             />
           ))}
           <p className="opacity-70">OTP Entered - {otp.join("")}</p>
-          <ButtonClick
-            label="Selanjutnya"
-            aria-label="btn-next-otp"
-            id="btn-next-otp"
-            className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2rem]"
-            onClick={handleNextClick}
-          />
+          <ButtonClick label="Selanjutnya" aria-label="btn-next-otp" id="btn-next-otp" className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2rem]" onClick={handleNextClick} />
         </div>
       </div>
     </LayoutLogin>
