@@ -31,18 +31,14 @@ const ProtectedRoutes = () => {
   const rememberPassword = ["/lupa-password", "/repassword", "/otp-password", "/lupa-password-sukses"];
 
   if (token && rememberPassword.includes(pathname)) {
-    // Tambahkan pengecekan refreshToken di cookies sebelum mengarahkan ke /dashboard
     if (cookies.refreshToken) {
       return <Navigate to="/dashboard" />;
     }
   }
 
   if (authProtected.includes(pathname)) {
-    if (token) {
-      // Tambahkan pengecekan refreshToken di cookies sebelum mengarahkan ke /dashboard
-      if (cookies.refreshToken) {
-        return <Navigate to="/dashboard" />;
-      }
+    if (token && cookies.refreshToken) {
+      return <Navigate to="/dashboard" />;
     }
   }
 

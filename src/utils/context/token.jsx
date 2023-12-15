@@ -12,13 +12,11 @@ const contextValue = {
 const TokenContext = createContext(contextValue);
 
 function TokenProvider({ children }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "refreshToken"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["refreshToken"]);
 
-  // Inisialisasi token dengan string kosong jika tidak ada dalam cookies
-  const [token, setToken] = useState(cookies.accessToken || "");
+  const [token, setToken] = useState("");
   const [refreshToken, setRefreshToken] = useState(cookies.refreshToken || "");
 
-  // Fungsi untuk mengganti nilai token
   const changeToken = useCallback(
     (newAccessToken, newRefreshToken) => {
       setToken(newAccessToken);
@@ -30,16 +28,12 @@ function TokenProvider({ children }) {
         setRefreshToken("");
         removeCookie("refreshToken", { path: "/" });
       }
-
-      setCookie("accessToken", newAccessToken, { path: "/" });
     },
     [setCookie, removeCookie]
   );
 
-  // Nilai konteks memoized untuk mencegah perhitungan berulang
   const tokenContextValue = useMemo(
     () => ({
-      // Pastikan token tidak pernah menjadi undefined
       token: token || "",
       refreshToken,
       changeToken,
@@ -47,7 +41,6 @@ function TokenProvider({ children }) {
     [token, refreshToken, changeToken]
   );
 
-  // Efek samping untuk memperbarui token secara berkala
   useEffect(() => {
     const refreshInterval = setInterval(async () => {
       try {
@@ -63,11 +56,9 @@ function TokenProvider({ children }) {
       }
     }, 10 * 60 * 1000);
 
-    // Membersihkan interval pada pembongkaran komponen
     return () => clearInterval(refreshInterval);
   }, [refreshToken, token, changeToken]);
 
-  // Interceptor untuk menanggapi perubahan token pada respon axios
   axiosWithConfig.interceptors.response.use(
     (response) => {
       if (response.data && response.data.data) {
@@ -84,7 +75,6 @@ function TokenProvider({ children }) {
   return <TokenContext.Provider value={tokenContextValue}>{children}</TokenContext.Provider>;
 }
 
-// Hook untuk menggunakan nilai konteks token
 function useToken() {
   const tokenContext = useContext(TokenContext);
 

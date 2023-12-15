@@ -24,7 +24,6 @@ function OTPPage() {
 
       const accessToken = response.access_token;
       const refreshToken = "";
-      console.log("accessToken: ", accessToken);
 
       changeToken(accessToken, refreshToken);
 
