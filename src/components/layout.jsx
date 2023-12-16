@@ -8,7 +8,7 @@ function Layout({ children }) {
   return (
     <div className="flex w-screen max-h-screen">
       <Sidebar isOpen={isSidebarOpen} />
-      <div className="w-full overflow-y-auto">
+      <div className="w-full relative overflow-y-auto">
         <Navbar />
         <div className="px-8">{children}</div>
       </div>

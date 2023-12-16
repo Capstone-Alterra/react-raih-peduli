@@ -1,29 +1,24 @@
-import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import Select from "react-select";
-import { Label } from "./ui/label";
+import { getSkills } from "@/utils/api/volunter/api";
 
-function MultipleSelect({
-  register,
-  error,
-  label,
-  id,
-  placeholder,
-  name,
-  type,
-}) {
-  const options = [
-    { value: "pendidikan", label: "Pendidikan", color: "#293066" },
-    { value: "komunikasi", label: "Komunikasi", color: "#293066" },
-    { value: "tekonologi", label: "Teknologi", color: "#293066" },
-    { value: "kesehatan", label: "Kesehatan", color: "#293066" },
-    { value: "pengajar", label: "Pengajar", color: "#293066" },
-  ];
+function MultipleSelect({ isDisabled, onChange, value }) {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    getSkills()
+      .then((data) => {
+        setOptions(data);
+      })
+      .catch((message) => console.error(message));
+  }, []);
 
   const customStyles = {
-    multiValue: (styles, { data }) => {
+    multiValue: (styles) => {
       return {
         ...styles,
-        backgroundColor: data.color,
+        backgroundColor: "#293066",
         color: "#fff",
         padding: "3px",
         borderRadius: "30px",
@@ -51,63 +46,21 @@ function MultipleSelect({
       borderColor: "#E4E6FC",
     }),
   };
+
   return (
-    <>
-      <label htmlFor={id} className="font-semibold mb-2">
-        {label}
-      </label>
-      <Select
-        id={id}
-        isMulti
-        type={type}
-        name={name}
-        className="mt-2"
-        options={options}
-        styles={customStyles}
-        placeholder={placeholder}
-        {...(register ? register(name) : {})}
-      />
-      {error && (
-        <label>
-          <span className="break-words text-sm font-light text-red-500">
-            {error}
-          </span>
-        </label>
-      )}
-    </>
+    <Select
+      isMulti
+      value={value}
+      options={options}
+      onChange={onChange}
+      styles={customStyles}
+      isDisabled={isDisabled}
+      placeholder="Tambah keahlian"
+      classNames={{
+        control: (state) => state.isDisabled && "!bg-white",
+      }}
+    />
   );
 }
 
-function SelectForm({
-  label,
-  placeholder,
-  id,
-  error,
-  register,
-  options = [],
-  name,
-}) {
-  return (
-    <div className="mb-[18px]">
-      <Label htmlFor={id}>{label}</Label>
-      <Select
-        id={id}
-        name={name}
-        className="mt-2"
-        placeholder={placeholder}
-        options={options}
-        {...(register ? register(name) : {})}
-      />
-
-      {error && (
-        <label>
-          <span className="break-words text-sm font-light text-red-500">
-            {error}
-          </span>
-        </label>
-      )}
-    </div>
-  );
-}
-
-export { MultipleSelect, SelectForm };
+export default MultipleSelect;
