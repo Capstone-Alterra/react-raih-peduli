@@ -30,7 +30,7 @@ import ProtectedRoutes from "./protected-routes";
 export default function Router() {
   const { token } = useToken();
   useEffect(() => {
-    setAxiosConfig(token, "https://raihpeduli.my.id/");
+    setAxiosConfig(token, "https://raihpeduli.my.id");
   }, [token]);
 
   const router = createBrowserRouter([

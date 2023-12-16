@@ -12,24 +12,20 @@ const contextValue = {
 const TokenContext = createContext(contextValue);
 
 function TokenProvider({ children }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["accessToken", "refreshToken"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["refreshToken"]);
 
-  const [token, setToken] = useState(cookies.accessToken || "");
+  const [token, setToken] = useState("");
   const [refreshToken, setRefreshToken] = useState(cookies.refreshToken || "");
 
   const changeToken = useCallback(
     (newAccessToken, newRefreshToken) => {
-      if (newAccessToken && newRefreshToken) {
-        setToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
+      setToken(newAccessToken);
 
-        setCookie("accessToken", newAccessToken, { path: "/" });
+      if (newRefreshToken) {
+        setRefreshToken(newRefreshToken);
         setCookie("refreshToken", newRefreshToken, { path: "/" });
       } else {
-        setToken("");
         setRefreshToken("");
-
-        removeCookie("accessToken", { path: "/" });
         removeCookie("refreshToken", { path: "/" });
       }
     },
@@ -38,7 +34,7 @@ function TokenProvider({ children }) {
 
   const tokenContextValue = useMemo(
     () => ({
-      token,
+      token: token || "",
       refreshToken,
       changeToken,
     }),
@@ -48,15 +44,17 @@ function TokenProvider({ children }) {
   useEffect(() => {
     const refreshInterval = setInterval(async () => {
       try {
-        const response = await refreshJwt(refreshToken, token);
-        const newAccessToken = response.data.access_token;
-        const newRefreshToken = response.data.refresh_token;
+        if (refreshToken) {
+          const response = await refreshJwt(refreshToken, token);
+          const newAccessToken = response.data.access_token;
+          const newRefreshToken = response.data.refresh_token;
 
-        changeToken(newAccessToken, newRefreshToken);
+          changeToken(newAccessToken, newRefreshToken);
+        }
       } catch (error) {
-        console.error("Failed to refresh token:", error);
+        console.error("Gagal memperbarui token:", error);
       }
-    }, 10 * 60 * 1000); // Setiap 10 menit
+    }, 10 * 60 * 1000);
 
     return () => clearInterval(refreshInterval);
   }, [refreshToken, token, changeToken]);
@@ -65,7 +63,7 @@ function TokenProvider({ children }) {
     (response) => {
       if (response.data && response.data.data) {
         const { access_token, refresh_token } = response.data.data;
-        changeToken(access_token, refresh_token);
+        changeToken(access_token, refresh_token || "");
       }
       return response;
     },
@@ -81,7 +79,7 @@ function useToken() {
   const tokenContext = useContext(TokenContext);
 
   if (tokenContext === undefined) {
-    console.error("ERROR, useToken must be used within TokenContext");
+    console.error("ERROR, useToken harus digunakan dalam TokenContext");
   }
 
   return tokenContext;
