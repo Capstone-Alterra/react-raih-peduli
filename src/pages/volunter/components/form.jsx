@@ -366,9 +366,11 @@ const VolunterForm = ({ action, id }) => {
                     <FormLabel htmlFor="input-volunter-number">Jumlah Lowongan</FormLabel>
                     <FormControl>
                       <NumericFormat
+                        decimalScale={0}
                         value={field.value}
                         customInput={Input}
                         allowNegative={false}
+                        allowLeadingZeros={false}
                         id="input-volunter-number"
                         disabled={action === "detail"}
                         className="disabled:opacity-100"
@@ -670,6 +672,7 @@ const VolunterForm = ({ action, id }) => {
                     <FileInput
                       preview={preview}
                       id="input-volunter-image"
+                      disabled={action === "detail"}
                       placeholder="Tambahkan foto Lowongan Relawan di sini"
                       onChange={(e) => {
                         field.onChange(e.target.files[0]);

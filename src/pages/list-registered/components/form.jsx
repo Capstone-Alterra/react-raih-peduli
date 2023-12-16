@@ -8,10 +8,8 @@ import FileInput from "@/components/input-file";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import SkeletonForm from "./skeleton/skeleton-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import MultipleSelect from "@/components/multiple-select";
 import { useNavigate, useParams } from "react-router-dom";
-import { registrantVolunterSchema } from "@/utils/api/volunter/schema";
 import { getVolunteerRegistrantById, updateStatusVolunteerRegistrant } from "@/utils/api/volunter";
 import {
   Form,
@@ -43,7 +41,6 @@ const RegistrantForm = () => {
   });
 
   const form = useForm({
-    resolver: zodResolver(registrantVolunterSchema),
     defaultValues: {
       email: "",
       fullname: "",
@@ -138,6 +135,7 @@ const RegistrantForm = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        disabled={true}
                         id="input-volunter-email"
                         className="disabled:opacity-100"
                         placeholder="Masukkan email"
@@ -156,6 +154,7 @@ const RegistrantForm = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        disabled={true}
                         id="input-volunter-fullname"
                         className="disabled:opacity-100"
                         placeholder="Masukkan Nama Lengkap"
@@ -175,9 +174,10 @@ const RegistrantForm = () => {
                   <FormControl>
                     <Textarea
                       {...field}
+                      disabled={true}
                       id="input-volunter-address"
-                      className="min-h-[100px] disabled:opacity-100"
                       placeholder="Masukkan alamat"
+                      className="min-h-[100px] disabled:opacity-100"
                     />
                   </FormControl>
                   <FormMessage />
@@ -194,6 +194,7 @@ const RegistrantForm = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        disabled={true}
                         id="input-volunter-phone-number"
                         className="disabled:opacity-100"
                         placeholder="Masukkan No. Handphone"
@@ -230,9 +231,10 @@ const RegistrantForm = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        disabled={true}
                         id="input-volunter-nik"
-                        className="disabled:opacity-100"
                         placeholder="Masukkan NIK"
+                        className="disabled:opacity-100"
                       />
                     </FormControl>
                     <FormMessage />
@@ -247,6 +249,7 @@ const RegistrantForm = () => {
                     <FormLabel>Keahlian</FormLabel>
                     <FormControl>
                       <MultipleSelect
+                        isDisabled={true}
                         value={field.value}
                         onChange={(options) => {
                           field.onChange(options.map((opt) => opt.value));
@@ -267,9 +270,10 @@ const RegistrantForm = () => {
                   <FormControl>
                     <Textarea
                       {...field}
+                      disabled={true}
                       id="input-volunter-resume"
-                      className="min-h-[100px] disabled:opacity-100"
                       placeholder="Masukkan resume"
+                      className="min-h-[100px] disabled:opacity-100"
                     />
                   </FormControl>
                   <FormMessage />
@@ -287,9 +291,10 @@ const RegistrantForm = () => {
                   <FormControl>
                     <Textarea
                       {...field}
+                      disabled={true}
                       id="input-volunter-reason"
-                      className="min-h-[100px] disabled:opacity-100"
                       placeholder="Masukkan alasan mengikuti"
+                      className="min-h-[100px] disabled:opacity-100"
                     />
                   </FormControl>
                   <FormMessage />
@@ -304,6 +309,7 @@ const RegistrantForm = () => {
                   <FormLabel htmlFor="input-volunter-image">Pas Foto</FormLabel>
                   <FormControl>
                     <FileInput
+                      disabled={true}
                       preview={preview}
                       id="input-volunter-image"
                       placeholder="Tambahkan Pas Foto di sini"
