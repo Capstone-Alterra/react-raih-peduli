@@ -5,18 +5,22 @@ import Layout from "@/components/layout";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useDebounce } from "@uidotdev/usehooks";
+import CsvDownloadButton from "react-json-to-csv";
 import { columns } from "./components/fundraise-columns";
 import TableHeader from "@/components/table/table-header";
 import TableLayout from "@/components/table/table-layout";
 import TableData from "@/pages/fundraising/components/fundraise-table";
 import { getAllFundraises, getFundraiseByTitle } from "@/utils/api/fundraise/api";
-import Papa from "papaparse";
+import { Loader2 } from "lucide-react";
+import Swal from "sweetalert2";
 
 function Fundraise() {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const debouncedSearchTerm = useDebounce(query, 800);
+  const [exportedData, setExportedData] = useState();
   const [{ pageIndex, pageSize, prevPage, currentPage, totalPage }, setPagination] = useState({
     pageIndex: 1,
     pageSize: 10,
@@ -73,27 +77,33 @@ function Fundraise() {
     }
   };
 
-  const exportToCsv = () => {
-    const csvData = Papa.unparse(data, {
-      quotes: true,
-      delimiter: ",",
-      header: true,
-    });
-  
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-  
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", "data_penggalangan_dana.csv");
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  const getExportedData = async () => {
+    setProcessing(true);
+    try {
+      const response = await getAllFundraises(1, 100);
+      setExportedData(response.data);
+      setTimeout(() => {
+        document.getElementById("export-csv").click();
+      }, 1000);
+      Toast.fire({ icon: "success", title: "Berhasil mengekspor csv" });
+    } catch (error) {
+      Toast.fire({ icon: "error", title: "Gagal mengekspor coba lagi nanti" });
+    } finally {
+      setProcessing(false);
     }
   };
-  
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 5000,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
   useEffect(() => {
     const fetchFundraises = async (pageIndex, pageSize, debouncedSearchTerm) => {
       if (debouncedSearchTerm !== "") {
@@ -123,11 +133,23 @@ function Fundraise() {
             id="btn-export-to-csv"
             size="sm"
             className="rounded-full bg-[#14513B] hover:bg-[#14513B]/80 flex gap-1"
-            onClick={exportToCsv}          
+            onClick={getExportedData}
           >
-            <CsvIcon className="w-5 h-5" />
-            Export CSV
+            {processing ? (
+              <Loader2 className="animate-spin w-7 h-7" />
+            ) : (
+              <>
+                <CsvIcon className="w-5 h-5" />
+                Ekspor CSV
+              </>
+            )}
           </Button>
+          <CsvDownloadButton
+            id="export-csv"
+            className="hidden"
+            data={exportedData}
+            filename="Data penggalangan dana"
+          />
         </TableHeader>
         <TableData
           data={data}
