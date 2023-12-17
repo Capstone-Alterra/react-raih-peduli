@@ -1,74 +1,106 @@
-import { createContext, useState, useMemo, useContext, useCallback, useEffect } from "react";
-import { useCookies } from "react-cookie";
-import axiosWithConfig from "../setAxiosWithConfig";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 import { refreshJwt } from "../api/auth";
+import axiosWithConfig from "@/utils/api/axiosWithConfig";
+import { createContext, useState, useContext } from "react";
 
 const contextValue = {
-  token: "",
+  profile: "",
+  accessToken: "",
   refreshToken: "",
   changeToken: () => {},
+  changeProfile: () => {},
 };
 
 const TokenContext = createContext(contextValue);
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
+
 function TokenProvider({ children }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["refreshToken"]);
+  const [profile, setProfile] = useState(Cookies.get("profile") || "");
+  const [accessToken, setAccessToken] = useState(Cookies.get("accessToken") || "");
+  const [refreshToken, setRefreshToken] = useState(Cookies.get("refreshToken") || "");
 
-  const [token, setToken] = useState("");
-  const [refreshToken, setRefreshToken] = useState(cookies.refreshToken || "");
+  const changeToken = (newAccessToken, newRefreshToken) => {
+    const accessToken = newAccessToken ?? "";
+    const refreshToken = newRefreshToken ?? "";
 
-  const changeToken = useCallback(
-    (newAccessToken, newRefreshToken) => {
-      setToken(newAccessToken);
+    if (accessToken && refreshToken) {
+      const oneDay = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
-      if (newRefreshToken) {
-        setRefreshToken(newRefreshToken);
-        setCookie("refreshToken", newRefreshToken, { path: "/" });
-      } else {
-        setRefreshToken("");
-        removeCookie("refreshToken", { path: "/" });
-      }
-    },
-    [setCookie, removeCookie]
-  );
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
 
-  const tokenContextValue = useMemo(
-    () => ({
-      token: token || "",
-      refreshToken,
-      changeToken,
-    }),
-    [token, refreshToken, changeToken]
-  );
+      Cookies.set("accessToken", accessToken, { path: "/", expires: oneDay });
+      Cookies.set("refreshToken", refreshToken, { path: "/", expires: oneDay });
+    } else {
+      setAccessToken("");
+      setRefreshToken("");
 
-  useEffect(() => {
-    const refreshInterval = setInterval(async () => {
-      try {
-        if (refreshToken) {
-          const response = await refreshJwt(refreshToken, token);
-          const newAccessToken = response.data.access_token;
-          const newRefreshToken = response.data.refresh_token;
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+    }
+  };
 
-          changeToken(newAccessToken, newRefreshToken);
-        }
-      } catch (error) {
-        console.error("Gagal memperbarui token:", error);
-      }
-    }, 10 * 60 * 1000);
+  const changeProfile = (profile) => {
+    const newProfile = profile ?? "";
 
-    return () => clearInterval(refreshInterval);
-  }, [refreshToken, token, changeToken]);
+    if (newProfile) {
+      setProfile(newProfile);
+      Cookies.set("profile", JSON.stringify(newProfile));
+    } else {
+      setProfile("");
+      Cookies.remove("profile");
+    }
+  };
+
+  const tokenContextValue = {
+    accessToken,
+    refreshToken,
+    profile,
+    changeToken,
+    changeProfile,
+  };
+
+  axiosWithConfig.interceptors.request.use((config) => {
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      return config;
+    }
+    return config;
+  });
 
   axiosWithConfig.interceptors.response.use(
-    (response) => {
-      if (response.data && response.data.data) {
-        const { access_token, refresh_token } = response.data.data;
-        changeToken(access_token, refresh_token || "");
-      }
-      return response;
-    },
+    (response) => response,
     async (error) => {
-      if (error.response?.status === 401) return Promise.reject(error);
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        if (accessToken && refreshToken) {
+          try {
+            const { access_token, refresh_token } = await refreshJwt(accessToken, refreshToken);
+            changeToken(access_token, refresh_token);
+            originalRequest._retry = true;
+            originalRequest.headers.Authorization = `Bearer ${access_token}`;
+            return axiosWithConfig(originalRequest);
+          } catch (error) {
+            changeToken("");
+            Toast.fire({ icon: "warning", title: "Sesi anda sudah berakhir, mohon login kembali" });
+            return Promise.reject(error);
+          }
+        }
+      } else {
+        return Promise.reject(error);
+      }
     }
   );
 

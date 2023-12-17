@@ -1,11 +1,9 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useToken } from "@/utils/context/token";
-import { useCookies } from "react-cookie";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-  const { token } = useToken();
+  const { accessToken } = useToken();
   const { pathname } = useLocation();
-  const [cookies] = useCookies(["refreshToken"]);
 
   const authProtected = ["/login"];
 
@@ -28,22 +26,23 @@ const ProtectedRoutes = () => {
     "/respon-pendaftar-lowongan-relawan/:id",
   ];
 
-  const rememberPassword = ["/lupa-password", "/repassword", "/otp-password", "/lupa-password-sukses"];
+  const rememberPassword = [
+    "/lupa-password",
+    "/repassword",
+    "/otp-password",
+    "/lupa-password-sukses",
+  ];
 
-  if (token && rememberPassword.includes(pathname)) {
-    if (cookies.refreshToken) {
-      return <Navigate to="/dashboard" />;
-    }
+  if (accessToken && rememberPassword.includes(pathname)) {
+    return <Navigate to="/dashboard" />;
   }
 
-  if (authProtected.includes(pathname)) {
-    if (token && cookies.refreshToken) {
-      return <Navigate to="/dashboard" />;
-    }
+  if (accessToken && authProtected.includes(pathname)) {
+    return <Navigate to="/dashboard" />;
   }
 
-  if (protectedByToken.includes(pathname)) {
-    if (!token) return <Navigate to="/login" />;
+  if (!accessToken && protectedByToken.includes(pathname)) {
+    return <Navigate to="/login" />;
   }
 
   return <Outlet />;
