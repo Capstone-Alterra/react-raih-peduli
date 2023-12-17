@@ -1,26 +1,25 @@
-export const userLogin = async (data) => {
-    return new Promise((resolve, reject) => {
-        const dummyUser = { email: "admin@gmail.com", password: "1234" }
+import axiosWithConfig from "../axiosWithConfig";
 
-        setTimeout(() => {
-            if (
-                data.email === dummyUser.email &&
-                data.password === dummyUser.password
-            ) {
-                resolve({ message: "Login Success", payload: data });
-            } else if (
-                data.email === dummyUser.email &&
-                data.password !== dummyUser.password
-            ) {
-                reject({ message: "Password Salah", payload: data });
-            } else if (
-                data.email !== dummyUser.email &&
-                data.password === dummyUser.password
-            ) {
-                reject({ message: "Email salah", payload: null });
-            } else {
-                reject({ message: "Email atau password salah", payload: null });
-            }
-        }, 1000)
-    })
-}
+export const login = async (email, password) => {
+  try {
+    const response = await axiosWithConfig.post("/auth/login", {
+      email,
+      password,
+    });
+    return response.data.data;
+  } catch (error) {
+    throw new Error("Email atau kata sandi salah");
+  }
+};
+
+export const refreshJwt = async (accesToken, refreshToken) => {
+  try {
+    const response = await axiosWithConfig.post("/auth/refresh-jwt", {
+      access_token: accesToken,
+      refresh_token: refreshToken,
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

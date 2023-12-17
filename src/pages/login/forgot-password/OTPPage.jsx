@@ -1,12 +1,15 @@
 import { ButtonClick } from "@/components/button";
 import { LayoutLogin } from "@/components/card-login";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToken } from "@/utils/context/token";
+import { otpVerification } from "@/utils/api/auth/forget-password/api";
 
 function OTPPage() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const navigate = useNavigate();
-  
+  const { changeToken } = useToken();
+
   const handleOTP = (element, index) => {
     if (isNaN(element.value)) return false;
     setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
@@ -15,46 +18,45 @@ function OTPPage() {
     }
   };
 
-  const handleNextClick = () => {
-    alert("Entered OTP is " + otp.join(""));
-    navigate("/repassword");
+  const handleNextClick = async () => {
+    try {
+      const response = await otpVerification(otp.join(""));
+
+      const accessToken = response.access_token;
+      const refreshToken = "";
+
+      changeToken(accessToken, refreshToken);
+
+      navigate("/repassword");
+    } catch (error) {
+      console.error("Error verifying OTP:", error.message);
+      alert(error.message);
+    }
   };
 
   return (
-    <LayoutLogin
-      label="Raih Peduli - Lupa Password"
-      route="/lupa-password"
-      id="raih-peduli-tittle"
-    >
-      <p className="opacity-70 my-[2.5rem]">
-        Kode Verifikasi OTP telah dikirim ke admin@gmail.com
-      </p>
+    <LayoutLogin label="Raih Peduli - Lupa Password" route="/lupa-password" id="raih-peduli-tittle">
+      <p className="opacity-70 my-[2.5rem]">Kode verifikasi OTP telah dikirim ke email kamu.</p>
       <div className="row">
         <div className="col text-center">
-          {otp.map((data, index) => {
-            return (
-              <input
-                id="otp-form"
-                aria-label="otp-form"
-                className="bg-[#E5E9F4] border-1 rounded-lg w-[3rem] h-[3rem] text-center mx-[0.625rem] mb-5 font-bold text-xl"
-                type="text"
-                name="otp"
-                maxLength="1"
-                key={index}
-                value={data}
-                onChange={(e) => handleOTP(e.target, index)}
-                onFocus={(e) => e.target.select()}
-              />
-            );
-          })}
+          {otp.map((data, index) => (
+            <input
+              key={index}
+              id={`otp-input-${index}`}
+              aria-label={`otp-input-${index}`}
+              className="bg-[#E5E9F4] border-1 rounded-lg w-[3rem] h-[3rem] text-center mx-[0.625rem] mb-5 font-bold text-xl"
+              type="text"
+              name="otp"
+              maxLength="1"
+              autoComplete="off"
+              value={data}
+              onChange={(e) => handleOTP(e.target, index)}
+              onFocus={(e) => e.target.select()}
+              autoFocus={index === 0}
+            />
+          ))}
           <p className="opacity-70">OTP Entered - {otp.join("")}</p>
-          <ButtonClick
-            label="Selanjutnya"
-            aria-label="btn-next-otp"
-            id="btn-next-otp"
-            className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2rem]"
-            onClick={handleNextClick}
-          />
+          <ButtonClick label="Selanjutnya" aria-label="btn-next-otp" id="btn-next-otp" className="w-full h-[3.25rem] bg-[#293066] hover:bg-[#293066] text-white mt-[2rem]" onClick={handleNextClick} />
         </div>
       </div>
     </LayoutLogin>

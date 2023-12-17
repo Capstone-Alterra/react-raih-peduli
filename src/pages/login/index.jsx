@@ -1,20 +1,34 @@
-import { ButtonClick } from "@/components/button";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import Swal from "sweetalert2";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToken } from "@/utils/context/token";
-import { loginSchema, userLogin } from "@/utils/api/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InputLabel } from "@/components/input-with-label";
-import iconEyeClose from "@/assets/logos/icon-eye-close.svg";
-import iconEyeOpen from "@/assets/logos/icon-eye-open.svg";
+import { Link, useNavigate } from "react-router-dom";
 import { LayoutLogin } from "@/components/card-login";
+import { login, loginSchema } from "@/utils/api/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ButtonClick } from "@/components/button";
+import { InputLabel } from "@/components/input-with-label";
+import iconEyeOpen from "@/assets/logos/icon-eye-open.svg";
+import iconEyeClose from "@/assets/logos/icon-eye-close.svg";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 5000,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
+
 function Login() {
-  const { changeToken } = useToken();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const { changeToken, changeProfile } = useToken();
   const [changeIcon, setChangeIcon] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -24,11 +38,23 @@ function Login() {
   });
 
   async function handleLogin(data) {
+    const { email, password } = data;
+
     try {
-      const result = await userLogin(data);
-      changeToken(JSON.stringify(result));
+      const response = await login(email, password);
+      const accessToken = response.access_token;
+      const refreshToken = response.refresh_token;
+      const profile = { role_id: response.role_id, fullname: response.fullname };
+
+      if (profile.role_id !== 2) {
+        Toast.fire({ icon: "info", title: "Hanya admin yang bisa mengakses halaman ini" });
+        throw new Error("Hanya admin yang bisa mengakses halaman ini");
+      }
+
+      Toast.fire({ icon: "success", title: "Login berhasil" });
+      changeProfile(profile);
+      changeToken(accessToken, refreshToken);
       navigate("/dashboard");
-      setErrorMessage(null);
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -40,13 +66,8 @@ function Login() {
   };
 
   return (
-    <LayoutLogin
-    label="Raih Peduli - Login"
-    id="raih-peduli-tittle"
-    route="/">
+    <LayoutLogin label="Raih Peduli - Login" route="/">
       <form aria-label="form-input" onSubmit={handleSubmit(handleLogin)}>
-
-        {/* input username */}
         <InputLabel
           id="email"
           aria-label="email"
@@ -59,7 +80,6 @@ function Login() {
           error={errors.email?.message}
         />
 
-        {/* input password */}
         <div className="flex justify-between items-center font-bold text-sm">
           <label htmlFor="password">Password</label>
           <Link to="/lupa-password" id="forgot-password">
@@ -93,9 +113,7 @@ function Login() {
         />
       </form>
       {errorMessage && (
-        <p className="text-[#FC544B] text-center font-base text-base">
-          {errorMessage}
-        </p>
+        <p className="text-[#FC544B] text-center font-base text-base">{errorMessage}</p>
       )}
     </LayoutLogin>
   );
