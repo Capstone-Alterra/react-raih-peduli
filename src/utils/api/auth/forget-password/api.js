@@ -1,5 +1,4 @@
-import axiosWithConfig from "../../axiosWithConfig";
-import AxiosWithConfig from "@/utils/setAxiosWithConfig";
+import axiosWithConfig from "@/utils/api/axiosWithConfig";
 
 export const ForgetPassword = async (email) => {
   try {
@@ -27,7 +26,7 @@ export const ResetPassword = async (password) => {
       throw new Error("Email not found in localStorage");
     }
 
-    const response = await AxiosWithConfig.post("/users/reset-password", {
+    const response = await axiosWithConfig.post("/users/reset-password", {
       email: email,
       password: password,
     });

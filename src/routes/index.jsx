@@ -15,9 +15,6 @@ import AddFundraise from "@/pages/fundraising/add-fundraise";
 import ResponseForm from "@/pages/list-registered/detail-registrant";
 import RepasswordSuccess from "@/pages/login/forgot-password/RepasswordSuccess";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { useEffect } from "react";
-import { setAxiosConfig } from "@/utils/setAxiosWithConfig";
-import { useToken } from "@/utils/context/token";
 import Fundraise from "@/pages/fundraising/index";
 import NewsDetail from "@/pages/news/detail-news";
 import LandingPage from "@/pages/landing-page";
@@ -28,11 +25,6 @@ import Page404 from "@/pages/404/index";
 import ProtectedRoutes from "./protected-routes";
 
 export default function Router() {
-  const { token } = useToken();
-  useEffect(() => {
-    setAxiosConfig(token, "https://raihpeduli.my.id");
-  }, [token]);
-
   const router = createBrowserRouter([
     {
       element: <ProtectedRoutes />,

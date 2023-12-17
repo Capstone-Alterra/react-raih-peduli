@@ -1,17 +1,35 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import dropdown from "@/assets/logos/DropDown.png";
 import hamburgerIcon from "@/assets/logos/hamburger.svg";
 import useStore from "@/utils/store/store";
 import { useToken } from "@/utils/context/token";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
 
 function Navbar() {
   const navigate = useNavigate();
-  const { token, changeToken } = useToken();
   const { toggleSidebar } = useStore();
+  const { token, profile, changeToken, changeProfile } = useToken();
 
   function handleLogout() {
-    changeToken();
+    changeToken("");
+    changeProfile("");
+    Toast.fire({ icon: "success", title: "Logout berhasil" });
     navigate("/login");
   }
 
@@ -23,7 +41,7 @@ function Navbar() {
           id="toggling-profile-dropdown"
           className="text-white flex items-center gap-x-2 mr-10"
         >
-          Hi, Admin!
+          Hei, {profile.fullname}
           <img src={dropdown} />
         </DropdownMenuTrigger>
 

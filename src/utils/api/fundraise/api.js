@@ -66,7 +66,7 @@ export const editFundraise = async (id, { ...data }) => {
     return "Berhasil mengedit penggalangan dana";
   } catch (error) {
     console.error(error);
-    throw error;
+    throw "Gagal mengedit penggalangan dana";
   }
 };
 
