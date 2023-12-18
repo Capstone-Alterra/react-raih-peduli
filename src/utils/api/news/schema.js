@@ -3,9 +3,13 @@ const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const addNewsSchema = z.object({
-  title: z.string().min(1, { message: "Kolom judul berita harus diisi" }).min(20, {
-    message: "Kolom judul berita harus memiliki minimal 20 karakter",
-  }),
+  title: z
+    .string()
+    .min(1, { message: "Kolom judul berita harus diisi" })
+    .min(20, {
+      message: "Kolom judul berita harus memiliki minimal 20 karakter",
+    })
+    .max(100, { message: "Judul berita maksimal 100 karakter" }),
   photo: z
     .any()
     .refine((file) => !!file, {
@@ -16,15 +20,23 @@ export const addNewsSchema = z.object({
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
       "Format gambar wajib JPG, JPEG, dan PNG"
     ),
-  description: z.string().min(1, { message: "Kolom deskripsi berita harus diisi" }).min(50, {
-    message: "Kolom deskripsi berita harus memiliki minimal 50 karakter",
-  }),
+  description: z
+    .string()
+    .min(1, { message: "Kolom deskripsi berita harus diisi" })
+    .min(50, {
+      message: "Kolom deskripsi berita harus memiliki minimal 50 karakter",
+    })
+    .max(1000, { message: " Kolom deskripsi berita maksimal 1000 karakter" }),
 });
 
 export const editNewsSchema = z.object({
-  title: z.string().min(1, { message: "Kolom judul berita harus diisi" }).min(20, {
-    message: "Kolom judul berita harus memiliki minimal 20 karakter",
-  }),
+  title: z
+    .string()
+    .min(1, { message: "Kolom judul berita harus diisi" })
+    .min(20, {
+      message: "Kolom judul berita harus memiliki minimal 20 karakter",
+    })
+    .max(100, { message: "Judul berita maksimal 100 karakter" }),
   photo: z
     .any()
     .refine((file) => !!file, {
@@ -36,7 +48,11 @@ export const editNewsSchema = z.object({
       "Format gambar wajib JPG, JPEG, dan PNG"
     )
     .optional(),
-  description: z.string().min(1, { message: "Kolom deskripsi berita harus diisi" }).min(50, {
-    message: "Kolom deskripsi berita harus memiliki minimal 50 karakter",
-  }),
+  description: z
+    .string()
+    .min(1, { message: "Kolom deskripsi berita harus diisi" })
+    .min(50, {
+      message: "Kolom deskripsi berita harus memiliki minimal 50 karakter",
+    })
+    .max(1000, { message: " Kolom deskripsi berita maksimal 1000 karakter" }),
 });

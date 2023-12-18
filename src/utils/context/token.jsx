@@ -35,13 +35,11 @@ function TokenProvider({ children }) {
     const refreshToken = newRefreshToken ?? "";
 
     if (accessToken && refreshToken) {
-      const oneDay = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
 
-      Cookies.set("accessToken", accessToken, { path: "/", expires: oneDay });
-      Cookies.set("refreshToken", refreshToken, { path: "/", expires: oneDay });
+      Cookies.set("accessToken", accessToken, { path: "/", expires: 1 });
+      Cookies.set("refreshToken", refreshToken, { path: "/", expires: 1 });
     } else {
       setAccessToken("");
       setRefreshToken("");
@@ -56,7 +54,7 @@ function TokenProvider({ children }) {
 
     if (newProfile) {
       setProfile(newProfile);
-      Cookies.set("profile", JSON.stringify(newProfile));
+      Cookies.set("profile", JSON.stringify(newProfile), { expires: 1 });
     } else {
       setProfile("");
       Cookies.remove("profile");

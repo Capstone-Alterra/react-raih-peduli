@@ -1,14 +1,14 @@
+import Swal from "sweetalert2";
+import useStore from "@/utils/store/store";
+import { useNavigate } from "react-router-dom";
+import { useToken } from "@/utils/context/token";
+import dropdown from "@/assets/logos/DropDown.png";
+import hamburgerIcon from "@/assets/logos/hamburger.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import dropdown from "@/assets/logos/DropDown.png";
-import hamburgerIcon from "@/assets/logos/hamburger.svg";
-import useStore from "@/utils/store/store";
-import { useToken } from "@/utils/context/token";
-import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -41,7 +41,7 @@ function Navbar() {
           id="toggling-profile-dropdown"
           className="text-white flex items-center gap-x-2 mr-10"
         >
-          Hei, {profile.fullname}
+          Hi, {typeof profile !== "object" ? JSON.parse(profile).fullname : "Admin"}
           <img src={dropdown} />
         </DropdownMenuTrigger>
 

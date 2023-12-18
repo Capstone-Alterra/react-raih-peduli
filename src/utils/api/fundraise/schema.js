@@ -5,20 +5,26 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const addFundraiseSchema = z
   .object({
-    title: z.string().min(1, { message: "Kolom judul penggalangan dana harus diisi" }).min(20, {
-      message: "Judul penggalangan dana minimal 20 karakter",
-    }),
+    title: z
+      .string()
+      .min(1, { message: "Kolom judul penggalangan dana harus diisi" })
+      .min(20, {
+        message: "Judul penggalangan dana minimal 20 karakter",
+      })
+      .max(100, { message: "Judul penggalangan dana maksimal 100 karakter" }),
     description: z
       .string()
       .min(1, { message: "Kolom deskripsi penggalangan dana harus diisi" })
       .min(50, {
         message: "Deskripsi penggalangan dana minimal 50 karakter",
-      }),
+      })
+      .max(500, { message: "Deskripsi penggalangan dana maksimal 500 karakter" }),
     target: z
       .number({ invalid_type_error: "Kolom target penggalangan dana harus diisi" })
       .min(100, {
         message: "Target penggalangan dana minimal 100 Rupiah",
-      }),
+      })
+      .max(1000000000, { message: "Target penggalangan dana maksimal Rp 1 miliar" }),
     start_date: z.date({
       required_error: "Kolom tanggal mulai penggalangan dana harus diisi",
       invalid_type_error: "Kolom tanggal mulai penggalangan dana harus diisi",
@@ -42,20 +48,26 @@ export const addFundraiseSchema = z
 
 export const editFundraiseSchema = z
   .object({
-    title: z.string().min(1, { message: "Kolom judul penggalangan dana harus diisi" }).min(20, {
-      message: "Judul penggalangan dana minimal 20 karakter",
-    }),
+    title: z
+      .string()
+      .min(1, { message: "Kolom judul penggalangan dana harus diisi" })
+      .min(20, {
+        message: "Judul penggalangan dana minimal 20 karakter",
+      })
+      .max(100, { message: "Judul penggalangan dana maksimal 100 karakter" }),
     description: z
       .string()
       .min(1, { message: "Kolom deskripsi penggalangan dana harus diisi" })
       .min(50, {
         message: "Deskripsi penggalangan dana minimal 50 karakter",
-      }),
+      })
+      .max(500, { message: "Deskripsi penggalangan dana maksimal 500 karakter" }),
     target: z
       .number({ invalid_type_error: "Kolom target penggalangan dana harus diisi" })
       .min(100, {
         message: "Target penggalangan dana minimal 100 Rupiah",
-      }),
+      })
+      .max(1000000000, { message: "Target penggalangan dana maksimal Rp 1 miliar" }),
     start_date: z.date({
       required_error: "Kolom tanggal mulai penggalangan dana harus diisi",
       invalid_type_error: "Kolom tanggal mulai penggalangan dana harus diisi",
