@@ -1,4 +1,13 @@
 import axiosWithConfig from "@/utils/api/axiosWithConfig";
+import axios from "axios";
+
+const axiosConfig = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+});
+
+export const setAuthorizationToken = (token) => {
+  axiosConfig.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+};
 
 export const ForgetPassword = async (email) => {
   try {
@@ -12,6 +21,8 @@ export const ForgetPassword = async (email) => {
 export const otpVerification = async (otp) => {
   try {
     const response = await axiosWithConfig.post("/users/verify-otp", { otp });
+    const accessToken = response.data.access_token;
+    setAuthorizationToken(accessToken);
     return response.data;
   } catch (error) {
     throw new Error("Kesalahan saat memverifikasi OTP. Silakan coba lagi nanti.");
@@ -26,7 +37,7 @@ export const ResetPassword = async (password) => {
       throw new Error("Email not found in localStorage");
     }
 
-    const response = await axiosWithConfig.post("/users/reset-password", {
+    const response = await axiosConfig.post("/users/reset-password", {
       email: email,
       password: password,
     });
