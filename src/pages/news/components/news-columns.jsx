@@ -11,7 +11,11 @@ export const columns = [
   },
   {
     header: "Judul",
-    accessorKey: "title",
+    cell: ({ row }) => {
+      const title = row.original.title;
+
+      return <div className="line-clamp-4 w-[200px]">{title}</div>;
+    },
   },
   {
     header: "Gambar",
@@ -29,7 +33,11 @@ export const columns = [
   },
   {
     header: "Deskripsi",
-    accessorKey: "description",
+    cell: ({ row }) => {
+      const description = row.original.description;
+
+      return <div className="line-clamp-5">{description}</div>;
+    },
   },
 
   {
