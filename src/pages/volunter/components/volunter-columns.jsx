@@ -16,7 +16,11 @@ export const columns = [
   },
   {
     header: "Deskripsi",
-    accessorKey: "description",
+    cell: ({ row }) => {
+      const description = row.original.description;
+
+      return <div className="line-clamp-3">{description}</div>;
+    },
   },
   {
     header: "Slot",

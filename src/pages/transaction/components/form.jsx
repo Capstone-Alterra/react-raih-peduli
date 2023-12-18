@@ -153,7 +153,6 @@ const TransactionForm = ({ action, id }) => {
                         id="form-transaction-address"
                         className="disabled:opacity-100"
                         disabled={action === "detail"}
-                        placeholder="Jalan mekarsari 5467"
                       />
                     </FormControl>
                     <FormMessage />
@@ -192,7 +191,6 @@ const TransactionForm = ({ action, id }) => {
                         id="form-transaction-phone-number"
                         className="disabled:opacity-100"
                         disabled={action === "detail"}
-                        placeholder="08677868954"
                       />
                     </FormControl>
                     <FormMessage />
@@ -213,7 +211,6 @@ const TransactionForm = ({ action, id }) => {
                         id="form-transaction-payment"
                         className="disabled:opacity-100"
                         disabled={action === "detail"}
-                        placeholder="Mandiri"
                       />
                     </FormControl>
                     <FormMessage />
@@ -236,7 +233,6 @@ const TransactionForm = ({ action, id }) => {
                         id="form-transaction-jumlah"
                         disabled={action === "detail"}
                         className="disabled:opacity-100"
-                        placeholder="Rp.500.000.00"
                         onValueChange={(v) => {
                           field.onChange(Number(v.value));
                         }}

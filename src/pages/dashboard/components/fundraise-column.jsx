@@ -7,7 +7,11 @@ export const fundraiseColumn = [
   },
   {
     header: "Judul Penggalangan Dana",
-    accessorKey: "title",
+    cell: ({ row }) => {
+      const title = row.original.title;
+
+      return <div className="line-clamp-2">{title}</div>;
+    },
   },
   {
     header: "Deskripsi",
@@ -15,7 +19,7 @@ export const fundraiseColumn = [
     cell: ({ row }) => {
       const description = row.original.description;
 
-      return <div className="flex items-center h-20 w-56">{description}</div>;
+      return <div className="line-clamp-3">{description}</div>;
     },
   },
   {

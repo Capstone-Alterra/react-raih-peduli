@@ -11,8 +11,12 @@ export const customerSchema = z.object({
   fullname: z
     .string()
     .min(1, { message: "Kolom Nama Lengkap harus diisi" })
-    .regex(/^[a-zA-Z\s]+$/, { message: "Nama lengkap harus alfabet" }),
-  address: z.string().min(1, { message: "Kolom Alamat harus diisi" }),
+    .regex(/^[a-zA-Z\s]+$/, { message: "Nama lengkap harus alfabet" })
+    .max(50, { message: "Kolom nama lengkap maksimal 50 karakter" }),
+  address: z
+    .string()
+    .min(1, { message: "Kolom Alamat harus diisi" })
+    .max(80, { message: "Kolom alamat maksimal 80 karakter" }),
   phone_number: z
     .string()
     .min(1, { message: "Kolom No. Handphone harus diisi" })
