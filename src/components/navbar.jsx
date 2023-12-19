@@ -41,7 +41,7 @@ function Navbar() {
           id="toggling-profile-dropdown"
           className="text-white flex items-center gap-x-2 mr-10"
         >
-          Hi, {typeof profile !== "object" ? JSON.parse(profile).fullname : "Admin"}
+          Hi, {profile && typeof profile !== "object" ? JSON.parse(profile).fullname : "Admin"}
           <img src={dropdown} />
         </DropdownMenuTrigger>
 
