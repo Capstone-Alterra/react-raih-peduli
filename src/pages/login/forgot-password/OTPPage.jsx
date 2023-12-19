@@ -42,7 +42,7 @@ function OTPPage() {
       navigate("/repassword");
     } catch (error) {
       const errorMessage = error.response?.data?.message;
-      Toast.fire({ icon: "error", title: `Error verifying OTP: ${errorMessage}` });
+      Toast.fire({ icon: "error", title: `Error verifikasi OTP: ${errorMessage}` });
     }
   };
 
