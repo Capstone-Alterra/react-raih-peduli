@@ -16,4 +16,7 @@ export const ConfirmationPassword = z.object({
     .string()
     .min(1, { message: "Konfirmasi Password tidak boleh kosong" })
     .min(8, { message: "Konfirmasi Password minimal 8 karakter" }),
-});
+}).refine((data) => data.password === data.repassword, {
+  message: "Kolom konfirmasi password tidak sama dengan kolom password",
+  path: ["repassword"],
+});;

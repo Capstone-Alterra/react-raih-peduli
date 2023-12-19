@@ -4,6 +4,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToken } from "@/utils/context/token";
 import { otpVerification } from "@/utils/api/auth/forget-password/api";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 5000,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
 
 function OTPPage() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -21,7 +33,7 @@ function OTPPage() {
   const handleNextClick = async () => {
     try {
       const response = await otpVerification(otp.join(""));
-
+      Toast.fire({ icon: "success", title: "OTP yang dimasukan benar" });
       const accessToken = response.access_token;
       const refreshToken = "";
 
@@ -29,8 +41,8 @@ function OTPPage() {
 
       navigate("/repassword");
     } catch (error) {
-      console.error("Error verifying OTP:", error.message);
-      alert(error.message);
+      const errorMessage = error.response?.data?.message;
+      Toast.fire({ icon: "error", title: `Error verifikasi OTP: ${errorMessage}` });
     }
   };
 
