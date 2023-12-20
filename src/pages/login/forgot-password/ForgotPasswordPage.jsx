@@ -7,6 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { ButtonClick } from "@/components/button";
 import { ForgetPassword } from "@/utils/api/auth/forget-password";
 import { ForgetPasswordSchema } from "@/utils/api/auth/forget-password";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 5000,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
 
 function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -25,6 +37,7 @@ function ForgotPasswordPage() {
     try {
       localStorage.setItem("email", email);
       const response = await ForgetPassword(email);
+      Toast.fire({ icon: "success", title: "OTP sudah dikirim ke email kamu" });
       navigate("/otp-password");
     } catch (error) {
       setErrorMessage(error.message);
